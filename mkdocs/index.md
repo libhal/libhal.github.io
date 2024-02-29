@@ -13,13 +13,12 @@ processors, microcontrollers, systems, and devices.
 The design philosophy of libhal is to be:
 
 1. Portable & Cross Platform
-2. Light Weight
-3. General
+2. General
+3. Fast & Compact
 4. Minimalist
-5. Safe & Reliable
-6. Tested & Testable
-7. Compiled Quickly
-8. OS Agnostic
+5. Safe, Reliable, Tested & Testable
+6. Fast Build TImes
+7. OS Agnostic
 
 ## The Basics
 
@@ -44,7 +43,6 @@ consider their implementation details and blink and LED at a specified interval.
 
 - [Conan](https://conan.io/center/libhal) package manager
 - Source code is hosted on [GitHub](https://github.com/libhal/libahl)
-- `vcpkg` package manager (planned for the future)
 
 # Sponsorships
 

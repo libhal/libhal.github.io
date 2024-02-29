@@ -153,7 +153,7 @@ conan's `settings.yml` file to include baremetal architectures. These additional
 architecture definitions are required for ALMOST ALL libhal applications.
 
 ```bash
-conan config install -sf profiles/baremetal https://github.com/libhal/conan-config.git
+conan config install -sf profiles/baremetal/v2 https://github.com/libhal/conan-config.git
 ```
 
 Next, setup the host profile. Host profiles define the compiler,
@@ -231,54 +231,65 @@ Now install the profile for your particular OS and CPU architecture.
 Clone the target library you would like to run the demos for. You can download
 just one or both if you have both devices.
 
+!!! warning
+
+    stm32f103 not ported to libhal 3.0.0 yet, please do not use these steps for
+    it. This will be fixed when the migration is complete. Thank you for your
+    patience.
+
 === "LPC4078"
 
     ```bash
     git clone https://github.com/libhal/libhal-lpc40
-    cd libhal-lpc40/demos
+    cd libhal-lpc40
     ```
 
 === "STM32F103"
 
     ```bash
     git clone https://github.com/libhal/libhal-stm32f1
-    cd libhal-stm32f1/demos
+    cd libhal-stm32f1
     ```
 
-This command will install the profiles for the ARM cortex processor and LPC40
-series microcontrollers. The LPC40 microcontrollers are: `lpc4072`, `lpc4074`,
+The next command will install the profiles for the and LPC40 series
+microcontrollers. For LPC40 microcontrollers there are: `lpc4072`, `lpc4074`,
 `lpc4076`, `lpc4078`, and `lpc4088`.
 
-The LPC40 profiles import `cortex-m4` and `cortex-m4f` profiles from the ARM
-cortex processor library `libhal-armcortex` and thus need to be installed as
-well.
-
 === "LPC4078"
 
     ```
-    conan config install -sf conan/profiles/ -tf profiles https://github.com/libhal/libhal-armcortex.git
-    conan config install -sf conan/profiles/ -tf profiles https://github.com/libhal/libhal-lpc40.git
+    conan config install -sf conan/profiles/v2 -tf profiles https://github.com/libhal/libhal-lpc40.git
     ```
 
 === "STM32F103"
 
     ```
-    conan config install -sf conan/profiles/ -tf profiles https://github.com/libhal/libhal-armcortex.git
-    conan config install -sf conan/profiles/ -tf profiles https://github.com/libhal/libhal-stm32f1.git
+    conan config install -sf conan/profiles/v2 -tf profiles https://github.com/libhal/libhal-stm32f1.git
     ```
 
-To build using conan and cmake, you just need to run the following:
+The compiler used to cross build application for the ARM Cortex M series is the
+Arm-Gnu-Toolchain. Profiles are provided that allow you to select which version
+of the compiler you want to use. These profiles set the compiler package as the
+global compiler ensuring that un0built dependencies use it for building
+libraries. It can be installed using:
+
+
+```bash
+conan config install -tf profiles -sf conan/profiles/v1 https://github.com/libhal/arm-gnu-toolchain.git
+```
+
+Now we have everything we need to build our project. To build using conan you just need to run the following:
 
 === "LPC4078"
 
     ```bash
-    conan build . -pr lpc4078 -s build_type=MinSizeRel
+    conan build demo -pr lpc4078 -pr arm-gcc-12.3
     ```
 
 === "STM32F103"
 
     ```bash
-    conan build . -pr stm32f103 -s build_type=MinSizeRel
+    conan build demo -pr stm32f103 -pr arm-gcc-12.3
     ```
 
 !!! note
@@ -289,30 +300,11 @@ To build using conan and cmake, you just need to run the following:
     libraries will be cached on your machine and you'll no longer need to
     include those arguments.
 
-To build a binary for a particular microcontroller, you need to specify the
-microcontroller you plan to target such as the `lpc4078` and the build type.
+When this completes you should have some applications in the
+`build/lpc4078/MinSizeRel/` with names such as `uart.elf` or `blinker.elf`.
 
 Each microcontroller has different properties such as more or less ram and
 the presence or lack of a floating point unit.
-
-The following build types, `build_type` argument are available:
-
-- ❌ **Debug**: No optimization, do not recommend, normally used for unit
-  testing.
-- 🧪 **RelWithDebInfo**: Turn on some optimizations to reduce binary size and
-  improve performance while still maintaining the structure to make
-  debugging easier. Recommended for testing and prototyping.
-- ⚡️ **Release**: Turn on optimizations and favor higher performance
-  optimizations over space saving optimizations.
-- 🗜️ **MinSizeRel**: Turn on optimizations and favor higher space saving
-  optimizations over higher performance.
-
-Note that `Release` and `MinSizeRel` build types both usually produce
-binaries faster and smaller than `RelWithDebInfo` and thus should definitely
-be used in production.
-
-When this completes you should have some applications in the
-`build/lpc4078/MinSizeRel/` with names such as `uart.elf` or `blinker.elf`.
 
 !!! error
 
@@ -394,6 +386,29 @@ In order to complete this tutorial you'll one of these devices:
 
     Use `demos/build/stm32f103c8/Debug/blinker.elf.bin` or replace it with any other
     application to be uploaded.
+
+## ⚡️ Changing Built Type
+
+The build type determins the optimization level of the project. The libhal default for everything is `MinSizeRel` because code size is one of the most important aspects of the project.
+
+You can also change the `build_type` to following build types:
+
+- ❌ **Debug**: No optimization, do not recommend, normally used for unit
+  testing.
+- 🧪 **RelWithDebInfo**: Turn on some optimizations to reduce binary size and
+  improve performance while still maintaining the structure to make
+  debugging easier. Recommended for testing and prototyping.
+- ⚡️ **Release**: Turn on optimizations and favor higher performance
+  optimizations over space saving optimizations.
+- 🗜️ **MinSizeRel**: Turn on optimizations and favor higher space saving
+  optimizations over higher performance.
+
+Note that `Release` and `MinSizeRel` build types both usually produce
+binaries faster and smaller than `RelWithDebInfo` and thus should definitely
+be used in production.
+
+To override the default and choose `Release` mode simply add the following to
+your conan command: `-s build_type=Release`
 
 ## 🎉 Creating a new Project
 

@@ -112,26 +112,15 @@ concrete class and use its methods in order to implement the interface APIs.
 
 In libhal, there is a common language policy for adaptors. To create them you
 must call a factory function called `make_<name of interface>()` and it will
-return a `hal::result<adaptor_object>`. There is an overload for every driver
+return an `adaptor_object`. There is an overload for every driver
 that implements a particular interface. For example, in order to generate a
 servo from an RMD X6 servo object, it would look like this:
 
 ```C++
-auto smart_servo_driver = HAL_CHECK(make_servo(rmd_x6_driver));
+auto smart_servo_driver = make_servo(rmd_x6_driver);
 ```
 
 This approach allows for a consistent and efficient way to create adaptors for
 various interfaces from a single concrete driver. It ensures that the concrete
 driver can be utilized to its full potential, providing access to all its
 capabilities through the appropriate interfaces.
-
-## Return Types `hal::result<T>` and `hal::status`
-
-`hal::result<T>` is an alias for the `boost::leaf::result<T>` type. This type
-can either be the value T or an error. `hal::status` is simply a concise alias
-for the type `boost::leaf::result<void>`. See
-[Boost.LEAF](https://boostorg.github.io/leaf/) for more details about it and
-how it works.
-
-`HAL_CHECK()` is a macro that takes an expression that evaluates to a
-`hal::result`.

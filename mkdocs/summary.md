@@ -4,8 +4,7 @@
   - [🧱 Fundamentals of libhal](user_guide/fundamentals.md)
   - [🔗 Interfaces in Software Development and libhal](user_guide/interfaces.md)
   - [🎯 Debugging Code with PyOCD](user_guide/debugging.md)
-  - [🎚️ Configuration](user_guide/configuration.md)
-  - [🪤 Error Handling in libhal using Boost.LEAF](user_guide/error_handling.md)
+  - [🪤 Error Handling in libhal](user_guide/error_handling.md)
   - [⚖️ Policies & FAQ](user_guide/policy.md)
 - 📚 Contributor Guides
   - [📜 Design Philosophy](contributor_guide/philosophy.md)
