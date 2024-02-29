@@ -43,5 +43,4 @@ LICENSE file.
 
 ## Third Party Library Licenses
 
-- [Boost.LEAF](https://github.com/boostorg/leaf), BOOST license
 - [tl-function-ref/1.0.0](https://github.com/TartanLlama/function_ref), CC0

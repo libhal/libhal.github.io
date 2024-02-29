@@ -99,6 +99,7 @@ code block that would effectively end or halt the execution of the program
 without giving control back to the application are prohibited.
 
 As an example drivers should never call:
+
   - `std::abort()`
   - `std::exit()`
   - `std::terminate()`
@@ -109,54 +110,7 @@ This includes placing an **infinite loop block** in a driver.
 An application should have control over how their application ends. A
 driver should report severe errors to the application and let the application
 decide the next steps. If a particular operation cannot be executed as intended,
-then `hal::new_error()` should be called.
-
-Constructors would be the only valid place to put an exit statement, because
-they cannot return errors only themselves.
-
-The solution to this is to use a factory function like so:
-
-=== "Device Driver Library"
-
-    ```C++
-    class device_driver {
-      public:
-        result<device_driver> create(/* ... */) {
-          // Perform operations that may fail here
-          return device_driver(/* ... */);
-        }
-
-      private:
-        device_driver(/* ... */) {
-          // Constructors should never fail and thus any work done here must not
-          // fail.
-        }
-    };
-    ```
-
-=== "Peripheral Driver Library"
-
-    ```C++
-    class peripheral_driver {
-      public:
-        // Since peripherals are constrained and have a finite set of values
-        // This also ensures that the driver is only constructed once and afterwards
-        // simply returns back a reference to that object.
-        template<size_t PortNumber>
-        // NOTE: Returns a reference not an object.
-        //       Objects are owned by the create function
-        result<peripheral_driver&> create(/* ... */) {
-          // Perform operations that may fail here
-          static peripheral_driver driver(/* ... */);
-          return driver;
-        }
-
-      private:
-        peripheral_driver(/* ... */) {
-          // ...
-        }
-    };
-    ```
+then an appropriate `hal::exception` type should be thrown.
 
 ## S.8 Drivers should not pollute the global namespace
 
@@ -198,16 +152,16 @@ class target {
 See [private virtual method](http://www.gotw.ca/publications/mill18.htm)
 for more details. Rationale can be found within that link as well.
 
-## S.10 Avoid using `bool`
+## S.10 Avoid using `bool` as ...
 
-### S.10.1 As an object member
+### S.10.1 an object member
 
 `bool` has very poor information density and takes up 8-bits per entry. If only
 one `bool` is needed, then a bool is a fine object member. If multiple `bool`s
 are needed, then use a `std::bitset` along with static `constexpr` index
 positions in order to keep the density down to the lowest amount possible.
 
-### S.10.2 As a parameter
+### S.10.2 a parameter
 
 See the article ["Clean code: The curse of a boolean
 parameter"](https://medium.com/@amlcurran/clean-code-the-curse-of-a-boolean-parameter-c237a830b7a3)
@@ -260,17 +214,15 @@ manage.
 
 ## S.12 Avoid `std::atomic`
 
-Avoid using `std::atomic` because of portability issues across devices in
-architectures. Especially when `std::atomic` is not fully supported by the
-compiler.
+Avoid using `std::atomic` in device libraries due to portability issues across
+architectures. Device libraries are designed to work across architectures
+meaning they cannot depend on platform specific constructs like this.
 
-!!! info
-
-    `target` and `processor` libraries are allowed to use `std::atomic` if it is
-    available with their cross compiler and toolchain. In this case, the we can
-    know which target devices the software is running on, either the target
-    itself, which we already know can support it, or on a host machine for unit
-    testing, which is very likely to have a compiler that supports atomics.
+Note that `target` and `processor` libraries are allowed to use `std::atomic`
+if it is available with their cross compiler and toolchain. In this case, the
+we can know which target devices the software is running on, either the target
+itself, which we already know can support it, or on a host machine for unit
+testing, which is very likely to have a compiler that supports atomics.
 
 ## S.13 Avoid `<thread>`
 

@@ -19,13 +19,14 @@ Interfaces MUST follow this layout:
 - Use `#pragma once` at the start of the file: Simpler than an include guard
 - All `virtual` functions must be private & each `virtual` functions is
   accompanied by a public API that is used to call the virtual API
-- The return type of each API MUST be a `result<T>` where `T` is a structure.
+- ~~The return type of each API MUST be a `result<T>` where `T` is a structure.~~ Amendment 1.0: Return types should never be a structure with the
+  expectation that it can be grown in the future. This is an ABI break.
 
-Pragma once is needed to ensure files are included once. Its also less error
-prone then hand writing include guards.
+Pragma once is needed to ensure files are included once. Its less error prone
+then hand writing include guards.
 
 The reasons for a private virtual with public API can be found in this
-[article]().
+article (TODO: add link to article).
 
 Returning a structure for each API means that, in the future, if the return type
 needs to be extended, it can be done without breaking down stream libraries. For
@@ -74,7 +75,7 @@ problematic in many situations and are advised against in the core C++
 guidelines. The benefits of tweak files can be found
 [here](https://vector-of-bool.github.io/2020/10/04/lib-configuration.html).
 
-## A.4 ❌ Header Only Implementations ➡️ (See Amendment A.21)
+## A.4 ❌ ~~Header Only Implementations~~ ➡️ (See Amendment A.21)
 
 libhal libraries and drivers are, in general, header-only. libhal uses header
 only implementations in order to enable the broadest set of package managers,
@@ -117,7 +118,7 @@ linker errors as the linker sees both `GPIO_TypeDef` from an STM library and
 Because of this we have style [S.x Encapsulated Memory Mapped classes]()
 guideline.
 
-## A.6 Using hal::function_ref over std::function
+## A.6 Using `hal::function_ref` over `std::function&`
 
 `std::function` has all of the flexibility and functionality needed, but it has
 the potential to allocate and requires potentially expensive copy operations
@@ -168,7 +169,7 @@ these package managers. The purpose of this design is to achieve:
 `libhal-util`, `libhal-mock` and `libhal-soft` were all apart of `libhal`
 originally, but due to the constant changes and API breaks in those categories
 of code, the version number of `libhal` would increment constantly, shifting the
-foundation of the ecosystem. To prevent constant churn and API breaks `libahl`
+foundation of the ecosystem. To prevent constant churn and API breaks `libhal`
 was split into those 4 libraries.
 
 The goal is to keep the version number for `libhal` constant for long periods of
@@ -205,7 +206,7 @@ quality. The workflow files can be found in `libhal/libhal/.github/workflows`.
 Boost.UT was chosen for its lack of macros, stunning compile time performance,
 and its ease of use.
 
-## A.13 Boost.LEAF for error handling
+## A.13 ❌ ~~Boost.LEAF for error handling~~ ➡️ (See Amendment A.22)
 
 One major issue with any project is handling errors. Because the `libhal`
 interfaces can be used in such broad environments, it is hard to determine what
@@ -260,7 +261,7 @@ if any of them. This can be used to capture an error code as well as s snapshot
 of the register map of a peripheral, the object's current state or even a debug
 message.
 
-## A.14 Using Statement Expressions with `HAL_CHECK()`
+## A.14 ~~Using Statement Expressions with `HAL_CHECK()`~~ ➡️ (See Amendment A.22)
 
 `HAL_CHECK()` is the only MACRO in `libhal`. It exists because there is nothing
 like Rust's `?` operator which either unwraps a value or returns an error from
@@ -341,7 +342,7 @@ detail about the usability issues faced by unit libraries. Because, at the time
 of writing `libhal` there is not a unit library that is easy to use and concise,
 `libhal` decided to simply stick with 32-bit floats and helper UDLs.
 
-## A.17 Always return `hal::result<T>` from every API
+## A.17 ~~Always return `hal::result<T>` from every API~~ ➡️ (See Amendment A.22)
 
 Every interface in libhal returns a `hal::result<T>` type.
 
@@ -421,7 +422,7 @@ the memory footprint of the `callback` small. In most cases, setting an
 callback is something that is either done once or done very infrequently, and
 thus does not get much of a benefit from higher performance function calls.
 
-## A.20 Why functions that setup events do not return `hal::status`
+## A.20 ~~Why functions that setup events do not return `hal::status`~~  ➡️ (See Amendment A.22)
 
 Functions like `hal::can::on_receive()` and `hal::interrupt_pin::on_trigger()`
 return void and not `hal::status` like other APIs. Thus these functions cannot
@@ -488,3 +489,42 @@ features of the platform, libhal emphasizes prebuilt libraries over header only.
     they propogate to all packages took time and was a complex process. And
     header-only libraries allowed the initial version of libhal to bypass all
     of this.
+
+## A.22 Use C++ Exception for Error handling
+
+libhal uses C++ exceptions for these reasons:
+
+1. Removes runtime cost of calling functions that error codes, result types,
+   and sentinel variables.
+2. Reduces code size greatly by:
+   1. Amortizing the error handling mechanism to a single set of functions
+      rather than distributing the workload across all functions that can error.
+   2. Unwind information is a compressed ISA that only needs 8 bits per
+      instruction in ARM (32 and 64), where as normal ARM or Thumb-2 which require 16 to 32 bits of information, resulting in code bloat.
+   3. GCC's Language Specific Data Area (LSDA) is a further compressed data
+      structure for determining if a frame contains a suitable catch block or cleanup routine.
+
+Issues regarding memory allocations can be overcome by simply overriding/
+wrapping `__cxa_allocate_exception` and using a statically allocated buffer.In
+the case of multiple threads, each thread can be given its own memory buffer
+through TLS or a circular pool of blocks with an `std::atomic<int>` for every
+thread to use.
+
+Exception throw runtime can be reduced by optimizing `__cxa_throw`'s
+implementation.
+
+The runtime is determinist because the grand majority of our code is statically
+linked. This means our code is not concerned with shared library locking the
+exception table down with a mutex to update it. This mutex lock will blocking
+threads from continuing to unwind, making the time non-determinist. Once you
+remove that, your unwind time is deterministic.
+
+The issue with massive code bloat when you enable `-fexceptions` only comes
+from the linux version of `std::terminate` which uses `<iostream>` and some
+other locale related stuff. Simply overriding this with your own implmentation
+fixes this issue and reduces code size by ~100kB.
+
+A link to a paper written by Khalil Estell will be linked here to describe in
+detail why C++ exception handling is the superior error handling mechanism for
+embedded systems and software in general when performance and code size are
+critical concerns.
