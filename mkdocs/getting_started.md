@@ -4,8 +4,6 @@
 
 What you will need in order to get started with libhal.
 
-- `make`: latest available version
-- `cmake`: 3.15 or above
 - `python`: 3.10 or above
 - `conan`: 2.0.13 or above
 - Suitable Compiler for running host tests (can be either of these):
@@ -32,10 +30,10 @@ What you will need in order to get started with libhal.
     sudo apt-get install clang-tidy-16
     ```
 
-    Installing conan & cmake:
+    Installing conan:
 
     ```
-    python3 -m pip install "conan>=2.0.13" cmake
+    python3 -m pip install "conan>=2.0.13"
     ```
 
 === "Ubuntu 20.04"
@@ -56,10 +54,10 @@ What you will need in order to get started with libhal.
     sudo apt-get install clang-tidy-16
     ```
 
-    Installing conan & cmake:
+    Installing conan:
 
     ```
-    python3.10 -m pip install "conan>=2.0.13" cmake
+    python3.10 -m pip install "conan>=2.0.13"
     ```
 
 === "MacOS X"
@@ -76,10 +74,10 @@ What you will need in order to get started with libhal.
     brew install python llvm
     ```
 
-    Install conan & cmake:
+    Install conan:
 
     ```
-    python3 -m pip install "conan>=2.0.9" cmake
+    python3 -m pip install "conan>=2.0.9"
     ```
 
     Make `clang-tidy` available on the command line:
@@ -88,10 +86,10 @@ What you will need in order to get started with libhal.
     sudo ln -s $(brew --prefix llvm)/bin/clang-tidy /usr/local/bin/
     ```
 
-    Install conan & cmake:
+    Install conan:
 
     ```
-    python3 -m pip install "conan>=2.0.13" cmake
+    python3 -m pip install "conan>=2.0.13"
     ```
 
     Install Rosetta (only required for M1 macs):
@@ -119,10 +117,10 @@ What you will need in order to get started with libhal.
         If the `choco` command doesn't work after running this script try
         closing and opening again PowerShell.
 
-    Now install `python`, `gcc` (via mingw), `make` (for cmake):
+    Now install `python`, `gcc` (via mingw):
 
     ```powershell
-    choco install python mingw make
+    choco install python mingw
     ```
 
     Install clang-tidy 16 (via llvm):
@@ -131,10 +129,10 @@ What you will need in order to get started with libhal.
     choco install llvm --version=16.0.6
     ```
 
-    Installing conan & cmake:
+    Installing conan:
 
     ```powershell
-    python3 -m pip install -U "conan>=2.0.13" cmake
+    python3 -m pip install -U "conan>=2.0.13"
     ```
 
 ---
