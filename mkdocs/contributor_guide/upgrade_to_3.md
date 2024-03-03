@@ -104,6 +104,24 @@ modified, Each header and cpp file that uses them will need to fixed up.
 This shouldn't be too hard. Apply the same techniques used in refactor code.
 Be sure to look at `libhal-util`, `libhal-soft` and `libhal-mock` to get an idea of what is needed for the refactor.
 
+## (6) Refactor test_package
+
+Remove any code needed for boost.
+
+```C++
+namespace boost {
+void throw_exception(std::exception const& e)
+{
+  hal::halt();
+}
+}  // namespace boost
+```
+
+Remove anything that is target specific in the test package such as cross
+compile flags. Those flags MUST be removed and only handled by the compiler.
+
+Update the test package to make the new APIs.
+
 ## Questions?
 
 If you have any questions please post them in the `discussions` channel in
