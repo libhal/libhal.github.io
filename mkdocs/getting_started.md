@@ -5,10 +5,10 @@
 What you will need in order to get started with libhal.
 
 - `python`: 3.10 or above
-- `conan`: 2.0.13 or above
+- `conan`: 2.1.0 or above
 - Suitable Compiler for running host tests (can be either of these):
-  - `gcc`: 11.3.0 or above
-  - `clang`: 14 and above
+  - `gcc`: 12.3.0 or above
+  - `clang`: 17 and above
 
 === "Ubuntu 22.04"
 
@@ -19,45 +19,21 @@ What you will need in order to get started with libhal.
     ```
     sudo apt update && sudo apt upgrade
     sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-    sudo apt install -y build-essential g++-11
+    sudo apt install -y build-essential g++-12
     ```
 
-    Install `clang-tidy-16`:
+    Install `clang-tidy-17`:
 
     ```
     wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-    sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-16 main"
-    sudo apt-get install clang-tidy-16
+    sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-17 main"
+    sudo apt-get install clang-tidy-17
     ```
 
     Installing conan:
 
     ```
-    python3 -m pip install "conan>=2.0.13"
-    ```
-
-=== "Ubuntu 20.04"
-
-    Install python3.10, GCC, and make (from build essentials):
-
-    ```
-    sudo apt update && sudo apt upgrade
-    sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-    sudo apt install -y build-essential g++-11 python3.10
-    ```
-
-    Install `clang-tidy-16`:
-
-    ```
-    wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-    sudo add-apt-repository "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-16 main"
-    sudo apt-get install clang-tidy-16
-    ```
-
-    Installing conan:
-
-    ```
-    python3.10 -m pip install "conan>=2.0.13"
+    python3 -m pip install "conan>=2.1.0"
     ```
 
 === "MacOS X"
@@ -77,7 +53,7 @@ What you will need in order to get started with libhal.
     Install conan:
 
     ```
-    python3 -m pip install "conan>=2.0.9"
+    python3 -m pip install "conan>=2.1.0"
     ```
 
     Make `clang-tidy` available on the command line:
@@ -86,19 +62,12 @@ What you will need in order to get started with libhal.
     sudo ln -s $(brew --prefix llvm)/bin/clang-tidy /usr/local/bin/
     ```
 
-    Install conan:
-
-    ```
-    python3 -m pip install "conan>=2.0.13"
-    ```
-
     Install Rosetta (only required for M1 macs):
 
     ```
     /usr/sbin/softwareupdate --install-rosetta --agree-to-license
     ```
 
-    Rosetta necessary for intel based cross compilers:
 
 === "Windows"
 
@@ -126,13 +95,13 @@ What you will need in order to get started with libhal.
     Install clang-tidy 16 (via llvm):
 
     ```powershell
-    choco install llvm --version=16.0.6
+    choco install llvm --version=17.0.6
     ```
 
     Installing conan:
 
     ```powershell
-    python3 -m pip install -U "conan>=2.0.13"
+    python3 -m pip install -U "conan>=2.1.0"
     ```
 
 ---
