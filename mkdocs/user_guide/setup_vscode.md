@@ -40,7 +40,7 @@ the following benefits:
 
 ## Enabling `clangd`
 
-### For a libhal project
+### For a libhal library projects
 
 If you are contributing to libhal project/repo, then those libraries and demos
 will already be using `libhal-cmake-util/[^4.0.5]` which will automatically enable the
@@ -51,6 +51,13 @@ conan build .
 ```
 
 And it will be generated.
+
+If you are attempting to do with is a demo or an application you will need to
+specify the platform and compiler like usual.
+
+```bash
+conan build . -pr lpc4078 -pr arm-gcc-12.3
+```
 
 ### For your own project
 
@@ -71,6 +78,12 @@ add_custom_target(copy_compile_commands ALL
 
 Now run `conan build .` (where `.` is the path to your project or library) and
 it should generate the `compile_commands.json` file.
+
+Ensure that you include the necessary profiles added to the build.
+
+```bash
+conan build . -pr stm32f103 -pr arm-gcc-12.3
+```
 
 ### Refreshing the LSP
 
