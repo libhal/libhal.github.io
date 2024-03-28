@@ -101,7 +101,7 @@ What you will need in order to get started with libhal.
     Installing conan:
 
     ```powershell
-    python3 -m pip install -U "conan>=2.1.0"
+    python -m pip install -U "conan>=2.1.0"
     ```
 
 ---
@@ -219,7 +219,7 @@ just one or both if you have both devices.
     ```
 
 The next command will install the profiles for the and LPC40 series
-microcontrollers. For LPC40 microcontrollers there are: `lpc4072`, `lpc4074`,
+micro-controllers. For LPC40 micro-controllers there are: `lpc4072`, `lpc4074`,
 `lpc4076`, `lpc4078`, and `lpc4088`.
 
 === "LPC4078"
@@ -250,13 +250,13 @@ Now we have everything we need to build our project. To build using conan you ju
 === "LPC4078"
 
     ```bash
-    conan build demo -pr lpc4078 -pr arm-gcc-12.3
+    conan build demos -pr lpc4078 -pr arm-gcc-12.3
     ```
 
 === "STM32F103"
 
     ```bash
-    conan build demo -pr stm32f103 -pr arm-gcc-12.3
+    conan build demos -pr stm32f103 -pr arm-gcc-12.3
     ```
 
 !!! note
@@ -270,7 +270,7 @@ Now we have everything we need to build our project. To build using conan you ju
 When this completes you should have some applications in the
 `build/lpc4078/MinSizeRel/` with names such as `uart.elf` or `blinker.elf`.
 
-Each microcontroller has different properties such as more or less ram and
+Each micro-controller has different properties such as more or less ram and
 the presence or lack of a floating point unit.
 
 !!! error
