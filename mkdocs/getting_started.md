@@ -6,7 +6,8 @@ What you will need in order to get started with libhal.
 
 - `python`: 3.10 or above
 - `conan`: 2.2.0 or above
-- `clang`: 17
+- `llvm`: 17
+- `git` (only needs to be installed on Windows)
 
 === "Ubuntu 20.04+"
 
@@ -91,23 +92,36 @@ What you will need in order to get started with libhal.
         If the `choco` command doesn't work after running this script try
         closing and opening again PowerShell.
 
-    Now install `python`:
+    When `choco` prompts you to run install scripts from the commands below
+    enter `all` so it can install everything.
+
+    Install `git` (must be in admin powershell):
 
     ```powershell
-    choco install python
+    choco install git
     ```
 
-    Install llvm:
+    Install `python` (must be in admin powershell):
+
+    ```powershell
+    choco install python --version=3.12.2
+    ```
+
+    Install llvm (must be in admin powershell):
 
     ```powershell
     choco install llvm --version=17.0.6
     ```
 
-    Installing conan:
+    Install conan (must be in admin powershell):
 
     ```powershell
     python -m pip install -U "conan>=2.2.2"
     ```
+
+    There is no more installation required at this point.
+
+    Close and reopen powershell as a normal user now.
 
 ---
 
@@ -240,7 +254,7 @@ micro-controllers. For LPC40 micro-controllers there are: `lpc4072`, `lpc4074`,
     ```
 
 The compiler used to cross build application for the ARM Cortex M series is the
-Arm-Gnu-Toolchain. Profiles are provided that allow you to select which version
+Arm GNU Toolchain. Profiles are provided that allow you to select which version
 of the compiler you want to use. These profiles set the compiler package as the
 global compiler ensuring that un0built dependencies use it for building
 libraries. It can be installed using:
@@ -361,7 +375,7 @@ In order to complete this tutorial you'll one of these devices:
 
 ## ⚡️ Changing Built Type
 
-The build type determins the optimization level of the project. The libhal default for everything is `MinSizeRel` because code size is one of the most important aspects of the project.
+The build type determines the optimization level of the project. The libhal default for everything is `MinSizeRel` because code size is one of the most important aspects of the project.
 
 You can also change the `build_type` to following build types:
 
