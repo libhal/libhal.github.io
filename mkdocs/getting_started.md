@@ -7,6 +7,7 @@ What you will need in order to get started with libhal.
 - `python`: 3.10 or above
 - `conan`: 2.2.0 or above
 - `llvm`: 17
+- `make`: (CMake is downloaded via conan and uses make to build)
 - `git` (only needs to be installed on Windows)
 
 === "Ubuntu 20.04+"
@@ -99,6 +100,13 @@ What you will need in order to get started with libhal.
 
     ```powershell
     choco install git
+    ```
+
+    Install mingw to get mingw-make for Windows CMake
+    (must be in admin powershell):
+
+    ```powershell
+    choco install mingw
     ```
 
     Install `python` (must be in admin powershell):
