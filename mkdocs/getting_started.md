@@ -5,35 +5,38 @@
 What you will need in order to get started with libhal.
 
 - `python`: 3.10 or above
-- `conan`: 2.1.0 or above
-- Suitable Compiler for running host tests (can be either of these):
-  - `gcc`: 12.3.0 or above
-  - `clang`: 17 and above
+- `conan`: 2.2.0 or above
+- `clang`: 17
 
-=== "Ubuntu 22.04"
+=== "Ubuntu 20.04+"
 
-    Python 3.10 is default installed, no need to install it.
-
-    Install GCC, make (from build essentials):
+    Install Python 3.10 (only required for 20.04):
 
     ```
-    sudo apt update && sudo apt upgrade
-    sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-    sudo apt install -y build-essential g++-12
+    sudo apt update
+    sudo apt install software-properties-common -y
+    sudo add-apt-repository ppa:deadsnakes/ppa
+    sudo apt install Python3.10
     ```
 
-    Install `clang-tidy-17`:
+    Install `llvm` toolchain & APT repos:
 
     ```
-    wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-    sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-17 main"
-    sudo apt-get install clang-tidy-17
+    wget https://apt.llvm.org/llvm.sh
+    chmod +x llvm.sh
+    sudo ./llvm.sh 17
+    ```
+
+    Install LLVM's C++ standard library (this will use the llvm apt repos):
+
+    ```
+    sudo apt install libc++-17-dev libc++abi-17-dev
     ```
 
     Installing conan:
 
     ```
-    python3 -m pip install "conan>=2.1.0"
+    python3 -m pip install "conan>=2.2.2"
     ```
 
 === "MacOS X"
@@ -44,16 +47,17 @@ What you will need in order to get started with libhal.
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     ```
 
-    Install latest version of Python 3.x && llvm:
+    Install latest version of Python && llvm:
 
     ```
-    brew install python llvm
+    brew install python
+    brew install llvm@17
     ```
 
     Install conan:
 
     ```
-    python3 -m pip install "conan>=2.1.0"
+    python3 -m pip install "conan>=2.2.2"
     ```
 
     Make `clang-tidy` available on the command line:
@@ -67,7 +71,6 @@ What you will need in order to get started with libhal.
     ```
     /usr/sbin/softwareupdate --install-rosetta --agree-to-license
     ```
-
 
 === "Windows"
 
@@ -86,13 +89,13 @@ What you will need in order to get started with libhal.
         If the `choco` command doesn't work after running this script try
         closing and opening again PowerShell.
 
-    Now install `python`, `gcc` (via mingw):
+    Now install `python`:
 
     ```powershell
-    choco install python mingw
+    choco install python
     ```
 
-    Install clang-tidy 16 (via llvm):
+    Install llvm:
 
     ```powershell
     choco install llvm --version=17.0.6
@@ -101,7 +104,7 @@ What you will need in order to get started with libhal.
     Installing conan:
 
     ```powershell
-    python -m pip install -U "conan>=2.1.0"
+    python -m pip install -U "conan>=2.2.2"
     ```
 
 ---
