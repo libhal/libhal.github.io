@@ -10,15 +10,6 @@ What you will need in order to get started with libhal.
 
 === "Ubuntu 20.04+"
 
-    Install Python 3.10 (only required for 20.04):
-
-    ```
-    sudo apt update
-    sudo apt install software-properties-common -y
-    sudo add-apt-repository ppa:deadsnakes/ppa
-    sudo apt install Python3.10
-    ```
-
     Install `llvm` toolchain & APT repos:
 
     ```
@@ -32,6 +23,17 @@ What you will need in order to get started with libhal.
     ```
     sudo apt install libc++-17-dev libc++abi-17-dev
     ```
+
+    !!! info
+
+        If you are using 20.04 you will need to upgrade Python to 3.10:
+
+        ```
+        sudo apt update
+        sudo apt install software-properties-common -y
+        sudo add-apt-repository ppa:deadsnakes/ppa
+        sudo apt install Python3.10
+        ```
 
     Installing conan:
 
