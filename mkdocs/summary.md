@@ -11,6 +11,7 @@
   - [📜 Design Philosophy](contributor_guide/philosophy.md)
   - [🗃️ Organization](contributor_guide/organization.md)
   - [🎨 Style Guide](contributor_guide/style.md)
+  - [🔗 Interface Design Philosophy](contributor_guide/interface_design.md)
   - [🔹 Library Development Guide](contributor_guide/library_guides.md)
   - [⬆️ Upgrade Device Library to 3.x.y](contributor_guide/upgrade_to_libhal_3_device_library.md)
   - [🏗️ Architectural Design Decisions](contributor_guide/architecture.md)
