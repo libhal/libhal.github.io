@@ -40,7 +40,7 @@ Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines).
 
 ## S.2 Refrain from performing manual bit manipulation
 
-Use `hal::bit` from `libhal-util` library to perform bitwise operations
+Use `hal::bit_modify` from `libhal-util` library to perform bitwise operations
 operations.
 
 ## S.3 Refrain from using MACROS
@@ -55,12 +55,13 @@ in writing out the boilerplate.
 Only use preprocessor `#if` and the like if it is impossible to use
 `if constexpr` to achieve the same behavior.
 
-## S.4 Never include C++ stream libraries
+## S.4 Never include C++ `<iostream>` libraries
 
 Applications incur an automatic 150kB space penalty for including any of the
 ostream headers that also statically generate the global `std::cout` and the
 like objects. This happens even if the application never uses any part of
-`<iostream>` library.
+`<iostream>` library. `<iostream>` can be used in libraries that will only be
+used for host side testing.
 
 ## S.5 Refrain from memory allocations
 
@@ -68,9 +69,9 @@ Interfaces and drivers should refrain from APIs that force memory allocations
 or implementations that allocate memory from heap. This means avoiding STL
 libraries that allocate such as `std::string` or `std::vector`.
 
-Many embedded system applications, especially the real time ones, do not allow
-dynamic memory allocations. There are many reasons for this that can be found
-MISRA C++ and AutoSAR.
+Many embedded system applications, especially the real time applications, do
+not allow dynamic memory allocations. There are many reasons for this that can
+be found MISRA C++ and AutoSAR.
 
 ## S.6 Drivers should not log to STDOUT or STDIN
 
@@ -100,10 +101,10 @@ without giving control back to the application are prohibited.
 
 As an example drivers should never call:
 
-  - `std::abort()`
-  - `std::exit()`
-  - `std::terminate()`
-  - any of their variants
+- `std::abort()`
+- `std::exit()`
+- `std::terminate()`
+- any of their variants
 
 This includes placing an **infinite loop block** in a driver.
 
@@ -152,7 +153,7 @@ class target {
 See [private virtual method](http://www.gotw.ca/publications/mill18.htm)
 for more details. Rationale can be found within that link as well.
 
-## S.10 Avoid using `bool` as ...
+## S.10 Avoid using `bool` as:
 
 ### S.10.1 an object member
 
