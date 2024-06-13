@@ -10,6 +10,17 @@ voltage depending on the device.
 The following guidelines describe what should be kept in mind when creating an
 interface.
 
+Here is an example of some interfaces in libhal. It is recommended to take a
+look at these to get an idea of how the interfaces are written.
+
+- [hal::adc](https://github.com/libhal/libhal/blob/main/include/libhal/adc.hpp)
+- [hal::serial](https://github.com/libhal/libhal/blob/main/include/libhal/serial.hpp)
+- [hal::i2c](https://github.com/libhal/libhal/blob/main/include/libhal/i2c.hpp)
+- [hal::spi](https://github.com/libhal/libhal/blob/main/include/libhal/spi.hpp)
+- [hal::can](https://github.com/libhal/libhal/blob/main/include/libhal/can.hpp)
+- [hal::dac](https://github.com/libhal/libhal/blob/main/include/libhal/dac.hpp)
+- [hal::stream_dac](https://github.com/libhal/libhal/blob/main/include/libhal/stream_dac.hpp)
+
 ## Smallest Possible v-table
 
 When designing an interface aim to have the least number of virtual functions

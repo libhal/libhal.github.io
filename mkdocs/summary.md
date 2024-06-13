@@ -13,6 +13,7 @@
   - [🎨 Style Guide](contributor_guide/style.md)
   - [🔗 Interface Design Philosophy](contributor_guide/interface_design.md)
   - [🔹 Library Development Guide](contributor_guide/library_guides.md)
+  - [🧠 ARM Cortex M Bring Up](contributor_guide/arm_cortex_m_bringup.md)
   - [⬆️ Upgrade Device Library to 3.x.y](contributor_guide/upgrade_to_libhal_3_device_library.md)
   - [🏗️ Architectural Design Decisions](contributor_guide/architecture.md)
 - 📊 Project Information
