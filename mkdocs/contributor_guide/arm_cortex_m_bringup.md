@@ -30,7 +30,7 @@ chips may deviate from standard architectures; in such cases, a fundamental
 understanding and sound judgment are essential to ensure your system functions
 effectively.
 
-## Getting Started
+## 🚀 Getting Started
 
 libhal provides a template repository for ARM Cortex-M series platforms. Begin
 by visiting
@@ -50,7 +50,7 @@ next phase.
     modify `update_name.yml` to accommodate this. Currently, we support only
     prefixed package names.
 
-## Conan Profiles
+## 🌐 Conan Profiles
 
 Libhal leverages Conan's robust profile system to specify the architecture and
 operating system for which an application is built. If you are new to libhal,
@@ -193,7 +193,7 @@ in a `v1` or `vN` directory. This way, if there is a significant change between
 the profiles into the future, code can still use the original profiles they
 used before.
 
-## Linker Scripts
+## 🔗 Linker Scripts
 
 Linker scripts play a crucial role in defining the memory layout of embedded systems. They are used to organize different types of data within the binary, such as code, initialized data, uninitialized data, read-only data, and thread local storage. These scripts also outline the memory regions available for the application.
 
@@ -387,7 +387,7 @@ RAM address. If these match, your implementation is successful.
     source demos/build/YOUR_PROFILE/MinSizeRel/generators/conanbuild.sh
     ```
 
-## Continuous Integration & Deployment
+## 🔄 Continuous Integration & Deployment
 
 Continuous Integration (CI) ensures that code in the main branch of any libhal
 library—or code intended for the main branch—builds successfully and passes all
@@ -490,7 +490,7 @@ Each `ci.yml` configuration should include these checks. If a package does not
 include demos, the demo check can be omitted, though it is generally
 recommended to include demos to demonstrate the library's capabilities.
 
-## Platform Constants
+## 📜 Platform Constants
 
 Now we've reached the point where we can start modifying the C++ source code. The first area to start with is defining the `peripheral` and `irq` enumeration
 class constants. These outline the set of peripherals and interrupt requests that can be used on the platform.
@@ -616,6 +616,6 @@ assigning them as corresponding values. Additionally, you may encounter
 **ISER**, or **Interrupt Set-Enable Register**, which is the ARM designation
 for the register controlling interrupt enabling.
 
-## Implementing the core APIs
+## 🧩 Implementing the core APIs
 
 ~~incomplete section~~.
