@@ -213,10 +213,13 @@ This section will not go into detail about linker scripts but will provide you a
 
 ### Standard Linker Script Template
 
-The `libhal-armcortex` library provides standardized linker script templates, which can be easily adapted for specific platforms. An example template is available at:
+The `libhal-armcortex` library provides standardized linker script templates,
+which can be easily adapted for specific platforms. An example template is
+available at:
 [`libhal-armcortex/linker_scripts/libhal-armcortex/standard.ld`](https://github.com/libhal/libhal-armcortex/blob/main/linker_scripts/libhal-armcortex/standard.ld).
 
-To utilize these templates, include the following definitions in your linker scripts directory:
+To utilize these templates, include the following definitions in your linker
+scripts directory:
 
 ```ld
 __flash = 0x00000000;
@@ -266,7 +269,9 @@ Similarly, the STM32F10x series has distinct linker scripts for each variant bas
 - [stm32f10xxf.ld](https://github.com/libhal/libhal-stm32f1/blob/main/linker_scripts/libhal-stm32f1/stm32f10xxf.ld)
 - [stm32f10xxg.ld](https://github.com/libhal/libhal-stm32f1/blob/main/linker_scripts/libhal-stm32f1/stm32f10xxg.ld)
 
-The STM32F103C8 belongs to the STM32F1 series of microcontrollers, which are part of the STM32 family of devices from STMicroelectronics. The naming scheme for this series can be broken down as follows:
+The STM32F103C8 belongs to the STM32F1 series of microcontrollers, which are
+part of the STM32 family of devices from STMicroelectronics. The naming scheme
+for this series can be broken down as follows:
 
 - **STM32**: Indicates the family of ARM Cortex-M microcontrollers.
 - **F1**: Indicates the series within the STM32 family, specifically the
@@ -381,6 +386,11 @@ def add_linker_scripts_to_link_flags(self):
 This adjustment allows you to use a single script for similar variants by
 replacing specific parts of the chip identifier with a 'don't care' symbol
 ('x'). Think of it like bit masking but for letters.
+
+For some devices with XIP (eXecute In Place) external flash memory interfaces
+packages can opt to conan's package "option" feature, allowing the user to
+specify the size in the command line, their own profile, or set the option
+directly in the final application `conanfile.py`.
 
 #### 6. Testing
 
@@ -526,18 +536,30 @@ recommended to include demos to demonstrate the library's capabilities.
 
 ## 📜 Platform Constants
 
-Now we've reached the point where we can start modifying the C++ source code. The first area to start with is defining the `peripheral` and `irq` enumeration
-class constants. These outline the set of peripherals and interrupt requests that can be used on the platform.
+Now we've reached the point where we can start modifying the C++ source code.
+The first area to start with is defining the `peripheral` and `irq` enumeration
+class constants. These outline the set of peripherals and interrupt requests
+that can be used on the platform.
 
-Here's a guide section for "Peripheral Constants" that you can use in your documentation. This section explains how to map peripheral identifiers to their respective power and clock control registers, tailored specifically for an API like the one you're designing for libhal.
+Here's a guide section for "Peripheral Constants" that you can use in your
+documentation. This section explains how to map peripheral identifiers to their
+respective power and clock control registers, tailored specifically for an API
+like the one you're designing for libhal.
 
 ### Peripheral Constants
 
-In the libhal ecosystem, peripheral constants play a crucial role in the power and clock management APIs. These constants uniquely identify each peripheral and correspond directly to control bits in the power and clock registers. This design ensures efficient and straightforward management of peripheral power states and clock frequencies.
+In the libhal ecosystem, peripheral constants play a crucial role in the power
+and clock management APIs. These constants uniquely identify each peripheral
+and correspond directly to control bits in the power and clock registers. This
+design ensures efficient and straightforward management of peripheral power
+states and clock frequencies.
 
 #### Defining Peripheral Constants
 
-Peripheral constants are defined in an enumeration where each constant corresponds to a specific bit in a device's power or clock enable registers. This method allows direct manipulation of these registers using bit operations, which are both fast and memory-efficient.
+Peripheral constants are defined in an enumeration where each constant
+corresponds to a specific bit in a device's power or clock enable registers.
+This method allows direct manipulation of these registers using bit operations,
+which are both fast and memory-efficient.
 
 ```C++
 namespace hal::your_platform {
@@ -588,7 +610,9 @@ namespace hal::your_platform {
 
 #### Example Usage
 
-Consider a scenario where the ADC peripheral is mapped to bit 12 in the power control register. By defining the `adc` constant as 12 in the enum, you enable straightforward manipulation:
+Consider a scenario where the ADC peripheral is mapped to bit 12 in the power
+control register. By defining the `adc` constant as 12 in the enum, you enable
+straightforward manipulation:
 
 - **Power On:** `power_register |= (1 << static_cast<int>(peripheral::adc));`
 - **Check Power State:** `bool isPowered = power_register & (1 << static_cast<int>(peripheral::adc));`
@@ -613,9 +637,36 @@ managing device resources effectively.
 
 ### IRQ Constants
 
-**IRQ** stands for **Interrupt Request Number**. Every MCU supports at least
-the default range of interrupts, numbered from -16 to -1. Additional interrupts
-are unique to each microcontroller.
+**IRQ** stands for **Interrupt Request Number**. Every ARM Cortex M processor
+supports the core interrupts from, numbered from -16 to -1. MCU manufacturers
+are allowed to add additional interrupts that start from 0 to up to a limit.
+
+The maximum number of interrupts for Cortex-M series CPUs varies depending on
+the specific model within the Cortex-M family. Here is a breakdown of the
+maximum interrupt numbers for different Cortex-M series processors:
+
+1. **Cortex-M0/M0+**:
+   - These processors support up to 32 interrupts, excluding the system
+      exceptions (such as NMI and hard fault).
+2. **Cortex-M3**:
+   - Supports up to 240 interrupts
+3. **Cortex-M4**:
+   - Supports up to 240 interrupts
+4. **Cortex-M7**:
+   - Supports up to 240 interrupts
+5. **Cortex-M23**:
+   - Similar to the Cortex-M0/M0+, supports up to 32 interrupts
+6. **Cortex-M33**:
+   - Supports up to 240 interrupts
+7. **Cortex-M35P**:
+   - Supports up to 240 interrupts
+
+The exact number of interrupts available in a specific microcontroller will
+also depend on the chip and the specific features they have included.
+
+If you are working with a specific microcontroller, you should consult its
+technical reference manual or datasheet for the precise number of interrupts
+supported.
 
 ```C++
 // The enum class type must always be `std::int16_t`, representing the
@@ -652,9 +703,13 @@ for the register controlling interrupt enabling.
 
 ## 🧩 Implementing the core APIs
 
+TBD
+
+<!--
 Here are documents that go over how to implement the following core APIs
 
 - [Implementing Power Control]()
 - [Implementing Direct Memory Access]()
 - [Implementing a Clock Tree & Clock Configuration]()
 - [Implementing Pin Multiplexing]()
+-->
