@@ -637,36 +637,22 @@ managing device resources effectively.
 
 ### IRQ Constants
 
-**IRQ** stands for **Interrupt Request Number**. Every ARM Cortex M processor
-supports the core interrupts from, numbered from -16 to -1. MCU manufacturers
-are allowed to add additional interrupts that start from 0 to up to a limit.
+It may be useful to understand how ARM Cortex M exceptions work. To learn these
+details, we'd highly recommend reading
+[A Practical guide to ARM Cortex-M Exception Handling by Chris Coleman of Memfault](https://interrupt.memfault.com/blog/arm-cortex-m-exceptions-and-nvic).
 
 The maximum number of interrupts for Cortex-M series CPUs varies depending on
 the specific model within the Cortex-M family. Here is a breakdown of the
 maximum interrupt numbers for different Cortex-M series processors:
 
-1. **Cortex-M0/M0+**:
-   - These processors support up to 32 interrupts, excluding the system
-      exceptions (such as NMI and hard fault).
-2. **Cortex-M3**:
-   - Supports up to 240 interrupts
-3. **Cortex-M4**:
-   - Supports up to 240 interrupts
-4. **Cortex-M7**:
-   - Supports up to 240 interrupts
-5. **Cortex-M23**:
-   - Similar to the Cortex-M0/M0+, supports up to 32 interrupts
-6. **Cortex-M33**:
-   - Supports up to 240 interrupts
-7. **Cortex-M35P**:
-   - Supports up to 240 interrupts
+1. **Cortex-M0/M0+**: Supports up to 32 external interrupts.
+2. **Cortex-M3/M4/M7/M33/M35P**: Supports up to 240 external interrupts.
+3. **Cortex-M23**: Supports up to 32 external interrupts.
 
 The exact number of interrupts available in a specific microcontroller will
-also depend on the chip and the specific features they have included.
-
-If you are working with a specific microcontroller, you should consult its
-technical reference manual or datasheet for the precise number of interrupts
-supported.
+also depend on the chip and the specific features they have included. Consult
+the technical reference manual or datasheet for the mcu to get the precise
+number of interrupts supported and what they map to.
 
 ```C++
 // The enum class type must always be `std::int16_t`, representing the
@@ -694,16 +680,16 @@ enum class irq : std::int16_t
 ```
 
 When referencing your user manual, look for the term **NVIC**, which stands for
-**Nested Vector Interrupt Controller**. This is how ARM refers to their
-interrupt controller. The NVIC section in the manual typically includes IRQ
-numbers for each peripheral. Integrate these numbers into the enum class,
-assigning them as corresponding values. Additionally, you may encounter
-**ISER**, or **Interrupt Set-Enable Register**, which is the ARM designation
-for the register controlling interrupt enabling.
+**Nested Vector Interrupt Controller**. This is a typical title in ARM MCU
+data sheets for where the interrupts IRQs are defined. The NVIC section in the
+manual typically includes IRQ numbers for each peripheral. Integrate these
+numbers into the enum class, assigning them as corresponding values.
+Additionally, you may encounter **ISER**, or **Interrupt Set-Enable Register**,
+which is the ARM designation for the register controlling interrupt enabling.
 
 ## 🧩 Implementing the core APIs
 
-TBD
+To be written.
 
 <!--
 Here are documents that go over how to implement the following core APIs
