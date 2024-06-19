@@ -195,7 +195,21 @@ used before.
 
 ## 🔗 Linker Scripts
 
-Linker scripts play a crucial role in defining the memory layout of embedded systems. They are used to organize different types of data within the binary, such as code, initialized data, uninitialized data, read-only data, and thread local storage. These scripts also outline the memory regions available for the application.
+Linker scripts play a crucial role in defining the memory layout of embedded
+systems. They are used to organize different types of data within the binary,
+such as code, initialized data, uninitialized data, read-only data, and thread
+local storage. These scripts also outline the memory regions available for the
+application.
+
+The finer details about linker scripts and how they work can be found in the
+resources below:
+
+- [Mastering the GNU linker script by AllThingsEmbeddd](https://allthingsembedded.com/post/2020-04-11-mastering-the-gnu-linker-script/): Easy to learn 13 min read
+- ["The most thoroughly commented linker script (probably)" by Thea "Stargirl" Flowers](https://blog.thea.codes/the-most-thoroughly-commented-linker-script/):
+  A very thoroughly documented and easy read on linker scripts
+- [GNU Linker Scripts](https://ftp.gnu.org/old-gnu/Manuals/ld-2.9.1/html_chapter/ld_3.html): Full user specification, if you need or want those details
+
+This section will not go into detail about linker scripts but will provide you all of the steps to port your device to libhal platform library.
 
 ### Standard Linker Script Template
 
@@ -214,7 +228,9 @@ __stack_size = 1K;
 INCLUDE "libhal-armcortex/standard.ld"
 ```
 
-The above configuration is an example from the [`lpc4072`](https://github.com/libhal/libhal-lpc40/blob/main/linker_scripts/libhal-lpc40/lpc4072.ld) script.
+The above configuration is an example from the
+[`lpc4072`](https://github.com/libhal/libhal-lpc40/blob/main/linker_scripts/libhal-lpc40/lpc4072.ld)
+script.
 
 ### Customizing Linker Scripts
 
@@ -222,9 +238,11 @@ You need to specify:
 
 - The location and size of the flash memory within the device's address space.
 - The location and size of the main RAM.
-- The minimum stack size before the build should fail, typically set to `1K` for libhal. Adjust this based on available RAM.
+- The minimum stack size before the build should fail, typically set to `1K`
+  for libhal. Adjust this based on available RAM.
 
-Each variation within a chip family, such as those in the LPC40xx series, requires its own linker script due to differences in flash and RAM sizes:
+Each variation within a chip family, such as those in the LPC40xx series,
+requires its own linker script due to differences in flash and RAM sizes:
 
 For example the chips in the LPC40xx series are:
 
@@ -233,6 +251,8 @@ For example the chips in the LPC40xx series are:
 - [lpc4076](https://github.com/libhal/libhal-lpc40/blob/main/linker_scripts/libhal-lpc40/lpc4076.ld)
 - [lpc4078](https://github.com/libhal/libhal-lpc40/blob/main/linker_scripts/libhal-lpc40/lpc4078.ld)
 - [lpc4088](https://github.com/libhal/libhal-lpc40/blob/main/linker_scripts/libhal-lpc40/lpc4088.ld)
+
+Each has their own unique ram and flash amounts.
 
 Similarly, the STM32F10x series has distinct linker scripts for each variant based on flash and RAM requirements, such as:
 
@@ -246,7 +266,26 @@ Similarly, the STM32F10x series has distinct linker scripts for each variant bas
 - [stm32f10xxf.ld](https://github.com/libhal/libhal-stm32f1/blob/main/linker_scripts/libhal-stm32f1/stm32f10xxf.ld)
 - [stm32f10xxg.ld](https://github.com/libhal/libhal-stm32f1/blob/main/linker_scripts/libhal-stm32f1/stm32f10xxg.ld)
 
-The last digit of the chip name defines its flash and ram requirements and thus, each is given its own linker script.
+The STM32F103C8 belongs to the STM32F1 series of microcontrollers, which are part of the STM32 family of devices from STMicroelectronics. The naming scheme for this series can be broken down as follows:
+
+- **STM32**: Indicates the family of ARM Cortex-M microcontrollers.
+- **F1**: Indicates the series within the STM32 family, specifically the
+  STM32F1 series.
+- **03**: Indicates the sub-family, which in this case is the STM32F103
+  sub-family. The '1' before '03' generally represents the sub-category within
+  the series.
+- **C**: Indicates the package type and number of pins (e.g., 'C' typically
+  indicates an LQFP48 package with 48 pins).
+- **8**: Indicates the memory size, specifically the Flash memory size, in this
+  case, 64 KB of Flash memory.
+
+All devices in this family have just 20kB of RAM. Thus the only part of the
+profile name that matters in terms of determining the appropriate flash size is
+the last digit. That digits can be `4`, `6`, `8`, `b`, `c`, `d`, `e`, `f`, `g`,
+which is why we have that many linker scripts above. The exact reason why each
+number and letter is used is not known to the writer, but is also not
+important. All that we need to do is map those profile names to the correct
+`.ld` file.
 
 ### Handling Multiple Flash and RAM Configurations
 
@@ -278,11 +317,6 @@ def add_linker_scripts_to_link_flags(self):
         "-T" + os.path.join("libhal-__platform__", platform + ".ld"),
     ]
 ```
-
-This section of the documentation provides clear guidelines on using and
-customizing linker scripts within the libhal framework, ensuring that
-developers can effectively manage memory layouts for their ARM Cortex-M
-microcontrollers.
 
 ### Implementing Linker Scripts for Your Platform
 
@@ -346,7 +380,7 @@ def add_linker_scripts_to_link_flags(self):
 
 This adjustment allows you to use a single script for similar variants by
 replacing specific parts of the chip identifier with a 'don't care' symbol
-('x').
+('x'). Think of it like bit masking but for letters.
 
 #### 6. Testing
 
@@ -618,4 +652,9 @@ for the register controlling interrupt enabling.
 
 ## 🧩 Implementing the core APIs
 
-~~incomplete section~~.
+Here are documents that go over how to implement the following core APIs
+
+- [Implementing Power Control]()
+- [Implementing Direct Memory Access]()
+- [Implementing a Clock Tree & Clock Configuration]()
+- [Implementing Pin Multiplexing]()
