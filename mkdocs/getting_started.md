@@ -267,7 +267,6 @@ of the compiler you want to use. These profiles set the compiler package as the
 global compiler ensuring that un0built dependencies use it for building
 libraries. It can be installed using:
 
-
 ```bash
 conan config install -tf profiles -sf conan/profiles/v1 https://github.com/libhal/arm-gnu-toolchain.git
 ```
@@ -295,7 +294,8 @@ Now we have everything we need to build our project. To build using conan you ju
     include those arguments.
 
 When this completes you should have some applications in the
-`build/lpc4078/MinSizeRel/` with names such as `uart.elf` or `blinker.elf`.
+`demos/build/lpc4078/MinSizeRel/` with names such as `uart.elf` or
+`blinker.elf`.
 
 Each micro-controller has different properties such as more or less ram and
 the presence or lack of a floating point unit.
@@ -313,7 +313,7 @@ the presence or lack of a floating point unit.
       is not a full path to an existing compiler tool.
     ```
 
-    Fix this by deleting the `build/` in the `demo` directory like so:
+    Fix this by deleting the `demos/build/` like so:
 
     ```
     rm -r demos/build
@@ -355,7 +355,7 @@ In order to complete this tutorial you'll one of these devices:
         ```
 
     ```bash
-    nxpprog --control --binary "build/lpc4078/MinSizeRel/uart.elf.bin" --device "/dev/tty.usbserial-140"
+    nxpprog --control --binary demos/build/lpc4078/MinSizeRel/uart.elf.bin --device /dev/tty.usbserial-140
     ```
 
     - Replace `/dev/tty.usbserial-140` with the correct port.
@@ -373,7 +373,7 @@ In order to complete this tutorial you'll one of these devices:
     then
 
     ```bash
-    stm32loader -p /dev/tty.usbserial-10 -e -w -v demos/build/stm32f103c8/Debug/blinker.elf.bin
+    stm32loader -e -w -v -p /dev/tty.usbserial-10 demos/build/stm32f103c8/Debug/blinker.elf.bin
     ```
 
     Replace `/dev/tty.usbserial-10` with the correct port.
