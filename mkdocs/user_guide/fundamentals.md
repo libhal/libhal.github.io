@@ -95,27 +95,27 @@ your code to be more flexible and reusable.
   platform, system, development board, or operating system. For
   micro-controllers these peripherals  therefore cannot be removed from the
   chip and is generally fixed in number.
-  - output pin
-  - i2c
-  - can
-  - serial/uart
+    - output pin
+    - i2c
+    - can
+    - serial/uart
 - **Device Drivers**: Drivers for devices external to a platform. Device
   drivers have constructors accepting libhal interface implementations. In
   order to construct the device driver all of the interface requirements of the
   driver must be met, either by a peripheral driver or a device driver that is
   capable of generating additional drivers.
-  - temperature sensor
-  - motor controller
-  - smart servo
-  - gps
+    - temperature sensor
+    - motor controller
+    - smart servo
+    - gps
 - **Soft Drivers**: Drivers that do not have any specific underlying hardware
   associated with them. They are used to emulate, give context to, or alter the
   behavior of a driver or interface implementation.
-  - bit bang i2c using two output pins (that are open drain capable)
-  - input pin inverter
-  - output pin inverter
-  - minimum speed i2c (a wrapper for i2c that ensures the i2c configuration
-    speed is the minimum required to work for all devices using it.)
+    - bit bang i2c using two output pins (that are open drain capable)
+    - input pin inverter
+    - output pin inverter
+    - minimum speed i2c (a wrapper for i2c that ensures the i2c configuration
+      speed is the minimum required to work for all devices using it.)
 
 ## libhal libraries/package categories
 
