@@ -328,14 +328,6 @@ In order to complete this tutorial you'll one of these devices:
 - STM32F103 MicroMod with SparkFun ATP board
 - STM32 Blue Pill along with USB to serial adapter
 
-!!! question
-
-    Don't know which serial port to use? Use this guide [Find Arduino Port
-    on Windows, Mac, and
-    Linux](https://www.mathworks.com/help/supportpkg/arduinoio/ug/find-arduino-port-on-windows-mac-and-linux.html)
-    from the MATLAB docs to help. Simply ignore that its made for Arduino, this
-    guide will work for any serial USB device.
-
 === "LPC4078"
 
     Install the [`nxpprog`](https://pypi.org/project/nxpprog/) flashing software
@@ -358,7 +350,8 @@ In order to complete this tutorial you'll one of these devices:
     nxpprog --control --binary demos/build/lpc4078/MinSizeRel/uart.elf.bin --device /dev/tty.usbserial-140
     ```
 
-    - Replace `/dev/tty.usbserial-140` with the correct port.
+    - Replace `/dev/tty.usbserial-140` with the correct port
+      name of the device plugged into your computer via USB.
     - Replace `uart.elf.bin` with any other application found in the
       `demos/applications/` directory.
 
@@ -376,10 +369,58 @@ In order to complete this tutorial you'll one of these devices:
     stm32loader -e -w -v -p /dev/tty.usbserial-10 demos/build/stm32f103c8/Debug/blinker.elf.bin
     ```
 
-    Replace `/dev/tty.usbserial-10` with the correct port.
+    Replace `/dev/tty.usbserial-10` with the correct port 
+    name of the device plugged into your computer via USB.
 
     Use `demos/build/stm32f103c8/Debug/blinker.elf.bin` or replace it with any other
     application to be uploaded.
+
+
+!!! question
+
+    Don't know which serial port to use?
+    ### On Linux
+    With the device unplugged, run the below command
+    ```
+    $ ls /dev/ttyUSB*
+    ls: cannot access '/dev/ttyUSB*': No such file or directory
+    ```
+    Plug the device into the USB port, then rerun the command, the device should appear in the result:
+    ```
+    $ ls /dev/ttyUSB*
+    /dev/ttyUSB0
+    ```
+    The device may also be under the name `/dev/ttyACM*`, like below
+    ```
+    $ ls /dev/ttyACM*
+    /dev/ttyACM0
+    ```
+    From the above 2 examples for device name, the port name in the `stm32loader` command would be
+    replaced with `/dev/ttyUSB0` or `/dev/ttyACM0` respectively.
+
+    ### On Mac
+    With the device unplugged, run the below command
+    ```
+    $ ls /dev/tty.usbserial-*
+    zsh: no matches found: /dev/tty.usbserial-*
+    ```
+    Plug the device into the USB port, then rerun the command, the device should appear in the result:
+    ```
+    $ ls /dev/tty.usbserial-*
+    /dev/tty.usbserial-14240
+    ```
+
+    From the above example for the device name, the port name in the `stm32loader` command would be
+    replaced with `/dev/tty.usbserial-14240`.
+    ### On Windows
+    Open Device Manager, by pressing the Windows key and typing "Device Manager", then pressing enter.
+
+    Once the Device Manager window is open, plug the device in to your computer via USB and expand
+    the `Ports (COM & LPT)` menu. The device should be visible in the list with a COM port like below:
+
+    ![image](./assets/device-manager.png)
+    From the above screenshot, the port name in the `stm32loader` command would be
+    replaced with `COM3`.
 
 ## ⚡️ Changing Built Type
 
