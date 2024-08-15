@@ -107,7 +107,11 @@ in number.
 
 ### Device Drivers
 
-Drivers for devices external to a platform. Device drivers have constructors accepting libhal interface implementations. In order to construct the device driver all of the interface requirements of the driver must be met, either by a peripheral driver or a device driver that is capable of generating additional drivers.
+Drivers for devices external to a platform. Device drivers have constructors
+accepting libhal interface implementations. In order to construct the device
+driver all of the interface requirements of the driver must be met, either by a
+peripheral driver or a device driver that is capable of generating additional
+drivers.
 
 - temperature sensor
 - motor controller
