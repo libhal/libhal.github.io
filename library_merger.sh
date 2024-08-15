@@ -5,24 +5,22 @@ set -e
 LIBHAL_LIBRARIES=(
   "libhal"
 
-  # Processors
-  #"libhal-armcortex"
+  ## platforms
+  "libhal-arm-mcu"
 
-  # platforms
-  #"libhal-lpc40"
-  #"libhal-stm32f1"
-
-  # Devices
- # "libhal-esp8266"
- # "libhal-rmd"
+  ## Devices
   "libhal-soft"
- # "libhal-mpl"
+  "libhal-actuator"
+  "libhal-sensor"
+  "libhal-expander"
 
-  # Utility
+  ## Utility
   "libhal-util"
- # "libhal-canrouter"
- # "libhal-micromod"
-  #"libhal-mock"
+  "libhal-canrouter"
+  "libhal-mock"
+
+  ## Board Library
+  "libhal-micromod"
 )
 
 rm -rf libraries

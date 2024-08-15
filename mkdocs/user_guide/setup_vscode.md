@@ -27,6 +27,12 @@ should also work for non-vscode users as well.
    1. Ubuntu/Debian: `sudo apt install clang`
    2. MacOS: `brew install llvm`
    3. Windows: `choco install llvm`
+6. Add `--query-driver=**/arm-none-eabi-g++` to the clangd command arguments in
+   the clangd settings.
+   1. Go the the extensions page
+   2. Find clangd and press the GEAR icon and open up settings.
+   3. Find the settings `clangd: Arguments` and add the above code there. It is
+      comma delimitated so you can add additional compiler patterns as well.
 
 ## How `clangd` works
 
@@ -99,16 +105,3 @@ you just need to refresh your LSP.
 
 Now your LSP should be active and your C++ files should be able to find your
 includes as well as infer the types of your objects.
-
-## Having Issues?
-
-When you are cross compiling to ARM Cortex-M, you may need to add:
-
-```plaintext
---query-driver=**/arm-none-eabi-g++
-```
-
-To your clangd command arguments for it to work. Go the the extensions page,
-find clangd and press the GEAR icon and open up settings. Find the settings
-`clangd: Arguments` and add the above code there. It is comma delimitated so you
-can add additional compiler patterns as well.
