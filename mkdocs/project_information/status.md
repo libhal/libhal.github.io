@@ -9,130 +9,81 @@
       <p>CI State</p>
     </th>
     <th>
-      <p>Coverage</p>
-    </th>
-    <th>
       <p>Latest Version</p>
     </th>
   </tr>
 
   <tr>
     <td>
-      <a href="https://github.com/libhal/libhal-__platform__/">libhal/libhal-__platform__</a>
+      <a href="https://github.com/libhal/libhal-arm-mcu/">libhal/libhal-arm-mcu</a>
     </td>
     <td>
-      <a href="https://github.com/libhal/libhal-__platform__/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-__platform__/actions/workflows/ci.yml/badge.svg" /></a>
+      <a href="https://github.com/libhal/libhal-arm-mcu/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-arm-mcu/actions/workflows/ci.yml/badge.svg" /></a>
     </td>
     <td>
-      <img src="https://libhal.github.io/libhal-__platform__/coverage/coverage.svg">
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-__platform__/blob/main/conanfile.py"><img src="https://libhal.github.io/libhal-__platform__/latest_version.svg" /></a>
-    </td>
-  </tr>
-
-  <tr>
-    <td>
-      <a href="https://github.com/libhal/libhal-stm32f1/">libhal/libhal-stm32f1</a>
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-stm32f1/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-stm32f1/actions/workflows/ci.yml/badge.svg" /></a>
-    </td>
-    <td>
-      <img src="https://libhal.github.io/libhal-stm32f1/coverage/coverage.svg">
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-stm32f1/blob/main/conanfile.py"><img src="https://libhal.github.io/libhal-stm32f1/latest_version.svg" /></a>
+      <a href="https://github.com/libhal/libhal-arm-mcu/releases">
+      <img src="https://img.shields.io/github/v/release/libhal/libhal-arm-mcu" />
+      </a>
     </td>
   </tr>
 
   <tr>
     <td>
-      <a href="https://github.com/libhal/libhal-esp8266/">libhal/libhal-esp8266</a>
+      <a href="https://github.com/libhal/libhal-iot/">libhal/libhal-iot</a>
     </td>
     <td>
-      <a href="https://github.com/libhal/libhal-esp8266/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-esp8266/actions/workflows/ci.yml/badge.svg" /></a>
+      <a href="https://github.com/libhal/libhal-iot/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-iot/actions/workflows/ci.yml/badge.svg" /></a>
     </td>
     <td>
-      <img src="https://libhal.github.io/libhal-esp8266/coverage/coverage.svg">
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-esp8266/blob/main/conanfile.py"><img src="https://libhal.github.io/libhal-esp8266/latest_version.svg" /></a>
+      <a href="https://github.com/libhal/libhal-iot/releases"><img src="https://img.shields.io/github/v/release/libhal/libhal-iot" /></a>
     </td>
   </tr>
 
   <tr>
     <td>
-      <a href="https://github.com/libhal/libhal-__device__/">libhal/libhal-__device__</a>
+      <a href="https://github.com/libhal/libhal-sensor/">libhal/libhal-sensor</a>
     </td>
     <td>
-      <a href="https://github.com/libhal/libhal-__device__/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-__device__/actions/workflows/ci.yml/badge.svg" /></a>
+      <a href="https://github.com/libhal/libhal-sensor/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-sensor/actions/workflows/ci.yml/badge.svg" /></a>
     </td>
     <td>
-      <img src="https://libhal.github.io/libhal-__device__/coverage/coverage.svg">
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-__device__/blob/main/conanfile.py"><img src="https://libhal.github.io/libhal-__device__/latest_version.svg" /></a>
+      <a href="https://github.com/libhal/libhal-sensor/releases"><img src="https://img.shields.io/github/v/release/libhal/libhal-sensor" /></a>
     </td>
   </tr>
 
   <tr>
     <td>
-      <a href="https://github.com/libhal/libhal-mpu/">libhal/libhal-mpu</a>
+      <a href="https://github.com/libhal/libhal-expander/">libhal/libhal-expander</a>
     </td>
     <td>
-      <a href="https://github.com/libhal/libhal-mpu/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-mpu/actions/workflows/ci.yml/badge.svg" /></a>
+      <a href="https://github.com/libhal/libhal-expander/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-expander/actions/workflows/ci.yml/badge.svg" /></a>
     </td>
     <td>
-      <img src="https://libhal.github.io/libhal-mpu/coverage/coverage.svg">
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-mpu/blob/main/conanfile.py"><img src="https://libhal.github.io/libhal-mpu/latest_version.svg" /></a>
+      <a href="https://github.com/libhal/libhal-expander/releases"><img src="https://img.shields.io/github/v/release/libhal/libhal-expander" /></a>
     </td>
   </tr>
 
   <tr>
     <td>
-      <a href="https://github.com/libhal/libhal-pca/">libhal/libhal-pca</a>
+      <a href="https://github.com/libhal/libhal-actuator/">libhal/libhal-actuator</a>
     </td>
     <td>
-      <a href="https://github.com/libhal/libhal-pca/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-pca/actions/workflows/ci.yml/badge.svg" /></a>
+      <a href="https://github.com/libhal/libhal-actuator/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-actuator/actions/workflows/ci.yml/badge.svg" /></a>
     </td>
     <td>
-      <img src="https://libhal.github.io/libhal-pca/coverage/coverage.svg">
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-pca/blob/main/conanfile.py"><img src="https://libhal.github.io/libhal-pca/latest_version.svg" /></a>
+      <a href="https://github.com/libhal/libhal-actuator/releases"><img src="https://img.shields.io/github/v/release/libhal/libhal-actuator" /></a>
     </td>
   </tr>
 
   <tr>
     <td>
-      <a href="https://github.com/libhal/libhal-rmd/">libhal/libhal-rmd</a>
+      <a href="https://github.com/libhal/libhal-display/">libhal/libhal-display</a>
     </td>
     <td>
-      <a href="https://github.com/libhal/libhal-rmd/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-rmd/actions/workflows/ci.yml/badge.svg" /></a>
+      <a href="https://github.com/libhal/libhal-display/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-display/actions/workflows/ci.yml/badge.svg" /></a>
     </td>
     <td>
-      <img src="https://libhal.github.io/libhal-rmd/coverage/coverage.svg">
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-rmd/blob/main/conanfile.py"><img src="https://libhal.github.io/libhal-rmd/latest_version.svg" /></a>
-    </td>
-  </tr>
-
-  <tr>
-    <td>
-      <a href="https://github.com/libhal/libhal-tmp/">libhal/libhal-tmp</a>
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-tmp/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-tmp/actions/workflows/ci.yml/badge.svg" /></a>
-    </td>
-    <td>
-      <img src="https://libhal.github.io/libhal-tmp/coverage/coverage.svg">
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-tmp/blob/main/conanfile.py"><img src="https://libhal.github.io/libhal-tmp/latest_version.svg" /></a>
+      <a href="https://github.com/libhal/libhal-display/releases"><img src="https://img.shields.io/github/v/release/libhal/libhal-display" /></a>
     </td>
   </tr>
 
@@ -144,10 +95,7 @@
       <a href="https://github.com/libhal/libhal-mock/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-mock/actions/workflows/ci.yml/badge.svg" /></a>
     </td>
     <td>
-      <img src="https://libhal.github.io/libhal-mock/coverage/coverage.svg">
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-mock/blob/main/conanfile.py"><img src="https://libhal.github.io/libhal-mock/latest_version.svg" /></a>
+      <a href="https://github.com/libhal/libhal-mock/releases"><img src="https://img.shields.io/github/v/release/libhal/libhal-mock" /></a>
     </td>
   </tr>
 
@@ -159,25 +107,7 @@
       <a href="https://github.com/libhal/libhal-soft/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-soft/actions/workflows/ci.yml/badge.svg" /></a>
     </td>
     <td>
-      <img src="https://libhal.github.io/libhal-soft/coverage/coverage.svg">
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-soft/blob/main/conanfile.py"><img src="https://libhal.github.io/libhal-soft/latest_version.svg" /></a>
-    </td>
-  </tr>
-
-  <tr>
-    <td>
-      <a href="https://github.com/libhal/libhal-lpc40/">libhal/libhal-lpc40</a>
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-lpc40/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-lpc40/actions/workflows/ci.yml/badge.svg" /></a>
-    </td>
-    <td>
-      <img src="https://libhal.github.io/libhal-lpc40/coverage/coverage.svg">
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-lpc40/blob/main/conanfile.py"><img src="https://libhal.github.io/libhal-lpc40/latest_version.svg" /></a>
+      <a href="https://github.com/libhal/libhal-soft/releases"><img src="https://img.shields.io/github/v/release/libhal/libhal-soft" /></a>
     </td>
   </tr>
 
@@ -189,10 +119,7 @@
       <a href="https://github.com/libhal/libhal-util/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-util/actions/workflows/ci.yml/badge.svg" /></a>
     </td>
     <td>
-      <img src="https://libhal.github.io/libhal-util/coverage/coverage.svg">
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-util/blob/main/conanfile.py"><img src="https://libhal.github.io/libhal-util/latest_version.svg" /></a>
+      <a href="https://github.com/libhal/libhal-util/releases"><img src="https://img.shields.io/github/v/release/libhal/libhal-util" /></a>
     </td>
   </tr>
 
@@ -204,25 +131,19 @@
       <a href="https://github.com/libhal/libhal/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal/actions/workflows/ci.yml/badge.svg" /></a>
     </td>
     <td>
-      <img src="https://libhal.github.io/libhal/coverage/coverage.svg">
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal/blob/main/conanfile.py"><img src="https://libhal.github.io/libhal/latest_version.svg" /></a>
+      <a href="https://github.com/libhal/libhal/releases"><img src="https://img.shields.io/github/v/release/libhal/libhal" /></a>
     </td>
   </tr>
 
   <tr>
     <td>
-      <a href="https://github.com/libhal/libhal-armcortex/">libhal/libhal-armcortex</a>
+      <a href="https://github.com/libhal/libhal-storage/">libhal/libhal-storage</a>
     </td>
     <td>
-      <a href="https://github.com/libhal/libhal-armcortex/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-armcortex/actions/workflows/ci.yml/badge.svg" /></a>
+      <a href="https://github.com/libhal/libhal-storage/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-storage/actions/workflows/ci.yml/badge.svg" /></a>
     </td>
     <td>
-      <img src="https://libhal.github.io/libhal-armcortex/coverage/coverage.svg">
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-armcortex/blob/main/conanfile.py"><img src="https://libhal.github.io/libhal-armcortex/latest_version.svg" /></a>
+      <a href="https://github.com/libhal/libhal-storage/releases"><img src="https://img.shields.io/github/v/release/libhal/libhal-storage" /></a>
     </td>
   </tr>
 
@@ -234,10 +155,7 @@
       <a href="https://github.com/libhal/libhal-canrouter/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-canrouter/actions/workflows/ci.yml/badge.svg" /></a>
     </td>
     <td>
-      <img src="https://libhal.github.io/libhal-canrouter/coverage/coverage.svg">
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-canrouter/blob/main/conanfile.py"><img src="https://libhal.github.io/libhal-canrouter/latest_version.svg" /></a>
+      <a href="https://github.com/libhal/libhal-canrouter/releases"><img src="https://img.shields.io/github/v/release/libhal/libhal-canrouter" /></a>
     </td>
   </tr>
 
@@ -249,25 +167,19 @@
       <a href="https://github.com/libhal/libhal-micromod/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-micromod/actions/workflows/ci.yml/badge.svg" /></a>
     </td>
     <td>
-      <img src="https://libhal.github.io/libhal-micromod/coverage/coverage.svg">
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-micromod/blob/main/conanfile.py"><img src="https://libhal.github.io/libhal-micromod/latest_version.svg" /></a>
+      <a href="https://github.com/libhal/libhal-micromod/releases"><img src="https://img.shields.io/github/v/release/libhal/libhal-micromod" /></a>
     </td>
   </tr>
 
   <tr>
     <td>
-      <a href="https://github.com/libhal/libhal-mpl/">libhal/libhal-mpl</a>
+      <a href="https://github.com/libhal/libhal-input/">libhal/libhal-input</a>
     </td>
     <td>
-      <a href="https://github.com/libhal/libhal-mpl/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-mpl/actions/workflows/ci.yml/badge.svg" /></a>
+      <a href="https://github.com/libhal/libhal-input/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-input/actions/workflows/ci.yml/badge.svg" /></a>
     </td>
     <td>
-      <img src="https://libhal.github.io/libhal-mpl/coverage/coverage.svg">
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-mpl/blob/main/conanfile.py"><img src="https://libhal.github.io/libhal-mpl/latest_version.svg" /></a>
+      <a href="https://github.com/libhal/libhal-input/releases"><img src="https://img.shields.io/github/v/release/libhal/libhal-input" /></a>
     </td>
   </tr>
 
@@ -279,10 +191,7 @@
       <a href="https://github.com/libhal/libhal-freertos/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-freertos/actions/workflows/ci.yml/badge.svg" /></a>
     </td>
     <td>
-      <img src="https://libhal.github.io/libhal-freertos/coverage/coverage.svg">
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-freertos/blob/main/conanfile.py"><img src="https://libhal.github.io/libhal-freertos/latest_version.svg" /></a>
+      <a href="https://github.com/libhal/libhal-freertos/releases"><img src="https://img.shields.io/github/v/release/libhal/libhal-freertos" /></a>
     </td>
   </tr>
 
