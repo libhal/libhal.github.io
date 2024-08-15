@@ -1,33 +1,35 @@
 # 🧱 Fundamentals of libhal
 
-libhal stands for "Hardware Abstraction Layer Library". libhal itself simply
-contains a set of interfaces for the various common hardware devices. If a
+libhal stands for "Hardware Abstraction Layer Library". The libhal library just
+contains a set of C++ interfaces for the various common hardware devices. If a
 developer wants to turn off and on an LED, then the user can simply construct a
-`hal::output_pin` and use the `level(bool)` API to turn the GPIO pin's voltage
-from high to low. The developer using that output pin does not need to know:
+`hal::output_pin` and use the `level(bool)` API to turn the pin's voltage from
+high to low. The developer using that output pin does not need to know:
 
-1. How to power on the GPIO peripheral
+1. How to power-on/enable the pin for the platform or device it comes from
 2. How to enable timing for the peripheral (if relevant)
-3. Which registers need to be modified to change pin direction
+3. Which registers need to be modified to change the pin direction
 4. Which registers need to be modified to change the pin state
 
 All of the above in the list be taken care of by the driver implementation.
-This allows applications and drivers to be decoupled from the inner workings of
-the output pin. The application and drivers can simply use it as specified by
-the output pin API documentation.
+This allows applications and driver implementations to be decoupled from each
+other, allowing them to follow the semantics of the interface. The application
+and drivers can simply use it as specified by the output pin API documentation.
 
 ## Interfaces
 
 Interfaces are the basic building blocks of libhal and enable the flexibility
-needed to be portable and flexible. An interface is a set of required functions
-that an implementing class must adhere to. Any software that implements
-(inherits) an interface must provide implementations for each function in the
-interface, otherwise the compiler will generate a compiler error. The
-implementation must follow the rules of the interface as specified in the
-interface's API comments. These comments explain in detail how exactly an
-operation is support to work.
+needed to be portable. An interface is a set of required functions that an
+implementing class must adhere to. Any software that implements (inherits) an
+interface must provide implementations for each function in the interface,
+otherwise the compiler will generate a compiler error. The implementation must
+follow the rules of the interface as specified in the interface's API
+documentation. These API documentation represents the semantics and behavior of
+the driver.
 
-Lets consider an input pin, which is a pin on the controller that can be read by software. The state of the pin can be TRUE or FALSE, which corresponds to a HIGH or LOW voltage.
+Lets consider an input pin, which is a pin on the controller that can be read
+by software. The state of the pin can be TRUE or FALSE, which corresponds to a
+HIGH or LOW voltage.
 
 ```C++
 class input_pin
@@ -69,7 +71,7 @@ takes a pointer or reference to the base class `input_pin`:
 ```C++
 void process_pin(input_pin& pin)
 {
-  pin.configure({ pin_resistor::pull_up });
+  pin.configure({ .resistor pin_resistor::pull_up });
 
   if (pin.level()) {
     // Do something when the pin is HIGH
@@ -91,31 +93,38 @@ your code to be more flexible and reusable.
 
 ## Driver Types
 
-- **Peripheral Drivers**: Drivers for a platform that is embedded within the
-  platform, system, development board, or operating system. For
-  micro-controllers these peripherals  therefore cannot be removed from the
-  chip and is generally fixed in number.
-    - output pin
-    - i2c
-    - can
-    - serial/uart
-- **Device Drivers**: Drivers for devices external to a platform. Device
-  drivers have constructors accepting libhal interface implementations. In
-  order to construct the device driver all of the interface requirements of the
-  driver must be met, either by a peripheral driver or a device driver that is
-  capable of generating additional drivers.
-    - temperature sensor
-    - motor controller
-    - smart servo
-    - gps
-- **Soft Drivers**: Drivers that do not have any specific underlying hardware
-  associated with them. They are used to emulate, give context to, or alter the
-  behavior of a driver or interface implementation.
-    - bit bang i2c using two output pins (that are open drain capable)
-    - input pin inverter
-    - output pin inverter
-    - minimum speed i2c (a wrapper for i2c that ensures the i2c configuration
-      speed is the minimum required to work for all devices using it.)
+### Peripheral Drivers
+
+Drivers for a platform that is embedded within the platform, system,
+development board, or operating system. For micro-controllers these
+peripherals  therefore cannot be removed from the chip and is generally fixed
+in number.
+
+- output pin
+- i2c
+- can
+- serial/uart
+
+### Device Drivers
+
+Drivers for devices external to a platform. Device drivers have constructors accepting libhal interface implementations. In order to construct the device driver all of the interface requirements of the driver must be met, either by a peripheral driver or a device driver that is capable of generating additional drivers.
+
+- temperature sensor
+- motor controller
+- smart servo
+- gps
+
+### Soft Drivers
+
+Drivers that do not have any specific underlying hardware associated with them.
+They are used to emulate, give context to, or alter the behavior of a driver or
+interface implementation.
+
+- bit bang i2c using two output pins (that are open drain capable)
+- input pin inverter
+- output pin inverter
+- minimum speed i2c (a wrapper for i2c that ensures the i2c configuration
+  speed is the minimum required to work for all devices using it.)
 
 ## libhal libraries/package categories
 
@@ -129,37 +138,36 @@ application. libhal's provides a compiler package for the ARM GNU toolchain
 which provides all of the GNU GCC compiler commands for building application,
 binaries and library files.
 
-### Processor Library
+### Platform Library
 
 Contain the drivers and APIs specific to a processor. For example, ARM Cortex M
 processors have a common way to manage interrupts, so that code should be put
 into the processor library. Almost all Cortex M processors have a SysTick
 Timer, so such a driver should exist in the processor library.
 
-### Platform Library
-
-Platform libraries contain peripheral driver implementations as well as platform
-specific APIs for operations such as DMA transfers, pin configuration and
-function selection, clock control, etc, for a specific family of devices.
+Platform libraries also contain peripheral driver implementations as well as
+target specific APIs for operations such as DMA transfers, pin configuration
+and function selection, clock control, etc, for a specific family of devices.
 
 Peripherals are devices within a microcontroller or computer system that allows
 the controller:
 
-1. To interact with the world
-   1. output pin
-   2. input pin
-   3. i2c
-   4. serial
-   5. can
-   6. usb
-2. Interrupt the CPU when an programmable event has occurred
-   1. timers
-   2. interrupt pin
-   3. watchdog
+1. To interact with the world in a particular way such as:
+    1. output pin
+    2. input pin
+    3. i2c
+    4. serial
+    5. can
+    6. usb
+2. Interrupt the CPU when an event has occurred
+    1. timers
+    2. interrupt pin
+    3. watchdog
 3. Perform work for the CPU/application
-   1. real time clocks
-   2. crc generators
-   3. display graphics accelerator
+    1. real time clocks
+    2. crc generators
+    3. random number generator
+    4. display graphics accelerator
 
 The hardware implementations of a peripheral in a controller is typically
 unique to that controller's device family. The peripheral drivers provide an
@@ -190,12 +198,22 @@ is a device driver if its constructor takes one or more libhal interfaces.
 
 #### Soft Device Library
 
-Soft device libraries generally contain soft drivers. libhal-soft is interesting
-in that it does contain a few device drivers, but the choice to put such device
-drivers into soft come from the fact that the interfaces are so generic. For
-example, `hal::soft::rc_servo` is a soft library because rc pwm control is
-pretty generic in its design and didn't fit anywhere else. This could change in
-the future.
+Soft drivers are drivers that do not have any specific underlying hardware
+associated with them. They are used to emulate, give context to, or alter the
+behavior of interfaces. For a driver to be a soft driver it must implement or
+have a way to generate, construct or create implementations of hardware
+interfaces.
+
+For example, one could emulate i2c by using two output_pins set to the open
+drain configuration to enable bi-directional communication.
+
+Another example would be an input_pin inverter that takes a `hal::input_pin`
+and simply inverts the logic of the values read from the input pin to suite the
+needs of another library that expects the values to be a certain logic level.
+
+And finally, thread-safe variants of `hal::i2c` can be made by passing a
+`hal::i2c` and a lock to the thread safe i2c implementation and allowing that
+implementation to lock the i2c resource while a thread is using it.
 
 ### Utility Library
 
@@ -279,15 +297,20 @@ They simply do not implement an interface.
 
 ### Multi-Interface Support
 
-Many Concrete Drivers can actually support multiple interfaces at once. For
-example, a driver for the RMD-X6 smart motor can act as a servo, a motor, a
-temperature sensor (for itself), a voltage sensor (for the bus it is connected
-to), a current sensor (for how much current it's consuming), and a rotation
-sensor (for its output shaft's position). To create these drivers from the
-concrete driver, an adaptor class must be used. These adaptor classes take the
-concrete class and use its methods in order to implement the interface APIs.
+Many concrete drivers have the capability to support multiple interfaces at
+once. For example, a driver for the RMD-X6 smart motor can act as a servo, a
+motor, a temperature sensor (for itself), a voltage sensor (for the bus it is
+connected to), a current sensor (for how much current it's consuming), and a
+rotation sensor (for its output shaft's position). To create these drivers from
+the concrete driver, an adaptor class must be used. These adaptor classes take
+a reference to the concrete class and use its methods in order to implement the
+interface APIs.
 
-### Adaptor Factory Functions
+Multi-inheritance MUST NEVER BE USED TO ACHIEVE THIS. This has to do with how
+multi-inheritance of polymorphic types effects the vtable of a type and how the
+interfaces put additional requirements on the exposed APIs of a clas.
+
+#### Adaptor Factory Functions
 
 In libhal, there is a common language policy for adaptors. To create them you
 must call a factory function called `make_<name of interface>()` and it will
