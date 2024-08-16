@@ -25,10 +25,11 @@ should also work for non-vscode users as well.
 4. Search for the extension `clangd` and install the extension.
 5. Install `clang`
     1. Ubuntu/Debian: `sudo apt install clang`
-    1. MacOS: `brew install llvm`
-    2. Windows: `choco install llvm`
-6. Add `--query-driver=**/arm-none-eabi-g++` to the clangd command arguments in
-   the clangd settings.
+    2. MacOS: `brew install llvm`
+    3. Windows: `choco install llvm`
+6. Add `--query-driver=**/arm-none-eabi-g++` (for Linux & Mac) or
+   `--query-driver=**/arm-none-eabi-g++.exe` (for Windows) to the clangd command
+   arguments in the clangd settings.
     1. Go the the extensions page
     2. Find clangd and press the GEAR icon and open up settings.
     3. Find the settings `clangd: Arguments` and add the above code there. It is
