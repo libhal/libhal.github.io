@@ -253,7 +253,7 @@ just need to run the following:
 === "STM32F103"
 
     ```bash
-    conan build demos -pr stm32f103 -pr arm-gcc-12.3
+    conan build demos -pr stm32f103c8 -pr arm-gcc-12.3
     ```
 
 When you build for the `lpc4078` you should have a `uart.elf` and `blinker.elf`
