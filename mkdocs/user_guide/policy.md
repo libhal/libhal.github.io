@@ -49,12 +49,12 @@ and will handle them case-by-case.
 
 Currently, libhal steers clear of SDKs with confining licenses or those
 misaligned with Apache 2.0 or its equivalents. This includes licenses from NXP
-and STM. However, SDKs from Espressif Systems (with Apache 2.0) are potentially
-usable.
+and STM. However, SDKs from Espressif Systems (with Apache 2.0) and Pico SDK
+are potentially usable so long as they reach our quality bar.
 
 ## 5. **Dealing with Devices Lacking Public Manuals**
 
-Devices without public user manuals typically don't get a libhal library. Here's
+Devices without public user manuals will not get a libhal library. Here's
 why:
 
 1. It risks unintentional exposure of proprietary device information.
@@ -62,4 +62,5 @@ why:
    a reverse-engineering puzzle.
 
 We can craft drivers for such devices, but their source code would remain
-confidential. Libhal predominantly focuses on fostering open-source libraries.
+confidential. The libhal organization may perform such work on a contract basis
+but such work would not make it to the open source ecosystem.
