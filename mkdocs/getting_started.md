@@ -383,6 +383,20 @@ In order to complete this tutorial you'll one of these devices:
     From the above screenshot, the port name in the `stm32loader` command would be
     replaced with `COM3`.
 
+!!! question
+
+    stm32loader command faild because it doesn't have permission?
+
+    ### On Linux
+
+    Add yourself to the dialout user group to give yourself the permission. 
+    This group has the permission to talk to serial ports.
+
+    ```
+    $ usermod -a -G dialout $USER
+    ```
+    
+
 ## ⚡️ Changing Built Type
 
 The build type determines the optimization level of the project. The libhal default for everything is `MinSizeRel` because code size is one of the most important aspects of the project.
