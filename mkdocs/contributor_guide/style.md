@@ -232,3 +232,93 @@ because the choice of which threading model or multi-threading operating system
 is left to the developer.
 
 In general, `#include <thread>` will almost never work when cross compiling.
+
+## S.14 Headers
+
+Header files should be self-contained (compile on their own) and end in `.hpp`
+for C++ files and `.h` for C files.
+
+When a header declares inline functions or templates that clients of the header
+will instantiate, the inline functions and templates must also have definitions
+in the header. When all instantiations of a template occur in one .cc file,
+either because they're explicit or because the definition is accessible to only
+the .cc file, the template definition can be kept in that file.
+
+### S.14.1 Include Guards
+
+For ease of use, use `#pragma once` as your include guard. Usage of classic
+include guards like:
+
+```
+#ifndef FOO_BAR_BAZ_H_
+#define FOO_BAR_BAZ_H_
+
+...
+
+#endif  // FOO_BAR_BAZ_H_
+```
+
+Are annoying and error prone. Do not use these!
+
+### S.14.2 Include What You Use
+
+If a source or header file refers to a symbol defined elsewhere, the file
+should directly include a header file which properly intends to provide a
+declaration or definition of that symbol. It should not include header files
+for any other reason.
+
+Do not rely on transitive inclusions. This allows people to remove
+no-longer-needed #include statements from their headers without breaking
+clients. This also applies to related headers - foo.cc should include bar.h if
+it uses a symbol from it even if foo.h includes bar.h.
+
+### S.14.3 Include Order
+
+Headers should be included in your headers and source files in the following
+order:
+
+- C standard library headers. Include using chevrons: `<>`.
+- C 3rd party library packages. Include using chevrons: `<>`.
+- C++ standard library headers. Include using chevrons: `<>`.
+- C++ 3rd party Libraries' headers (`libhal`, `libhal-arm-mcu`, `libhal-util`,
+  etc...). Include using chevrons: `<>`
+- Local package/project headers. Include using quotes: `""`
+
+For standard C headers use the C++ `<cstdio>` style over the C `<stdio.h>`
+style.
+
+Headers should be sorted alphabetically. `clang-format` will perform this work
+for you. Rely on it vs doing it yourself.
+
+Here is an example of how this should look:
+
+```C++
+// License at the top of the file with newline between the start of pragma once
+
+#pragma once
+
+// C headers first
+#include <cstdio>
+#include <cstdint>
+
+// C library headers
+#include <minimp3.h>
+
+// C++ headers
+#include <string_view>
+#include <span>
+
+// C++ Library headers
+#include <libhal-util/output_pin.hpp>
+#include <libhal-util/serial.hpp>
+#include <libhal-util/steady_clock.hpp>
+#include <libhal-util/stream_dac.hpp>
+
+// Local Project
+#include "resource_list.hpp"
+
+// leave a blank line for the actual code
+```
+
+**Exception:** `boost.ut` must ALWAYS be the last include in the code in order
+to allow `ostream` `operator<<` overloading to work.
