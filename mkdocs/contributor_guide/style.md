@@ -29,7 +29,7 @@ Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines).
 - Every file must end with a newline character.
 - Every line in a file must stay within a 80 character limit.
   - Exceptions to this rule are allowed. Use `// NOLINT` in these cases.
-- Radix for bit manipulation:
+- Allowed number radix's for bit manipulation:
   - Only use binary (`0b1000'0011`) or hex (`0x0FF0`) for bit manipulation.
   - Never use decimal or octal as this is harder to reason about for most
     programmers.
@@ -322,3 +322,36 @@ Here is an example of how this should look:
 
 **Exception:** `boost.ut` must ALWAYS be the last include in the code in order
 to allow `ostream` `operator<<` overloading to work.
+
+## S.15 Classes
+
+### S.15.1 Declaration Order
+
+A class's visibility specifiers and member sections should appear in the
+following order:
+
+1. Public
+2. Protected
+3. Private
+
+Omit any sections that would be empty.
+
+Within each section, group similar declarations together and follow this order:
+
+1. Types and type aliases:
+    - Using directives (`using`)
+    - Enum classes
+    - Nested structs and classes
+    - Friend classes and structs
+2. Static constants
+3. Factory functions (if applicable)
+4. Constructors and assignment operators
+5. Destructor
+6. All other member functions (static and non-static member functions, as well
+   as friend functions)
+7. All other data members (static and non-static)
+
+Do not put large method definitions inline within the class definition.
+Typically, only trivial or performance-critical methods that are very short may
+be defined inline. If the class is a template, then all functions must be
+defined inline in the header file.

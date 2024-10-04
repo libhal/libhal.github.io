@@ -306,3 +306,32 @@ each function call. What we are allowed to do is the following:
 3. Add additional non-pure virtual APIs below the current set of virtual APIs
    (should avoid this).
 4. Add additional fields to a settings `struct` that is passed by reference.
+
+## Interface Independence Principle
+
+Interfaces should not be designed to have a relationship with each other
+outside of an IS-A or inheritance relationship. An allowable relationship is
+one where an interface inherits from another, such as `hal::advanced_can`
+inheriting from `hal::can` because it has all the same requirements and some
+additional ones.
+
+An example of a relationship that is not acceptable would be if there existed a
+`wifi` interface and a network `socket` interface. Technically, there is a
+relationship between these two interfaces. One could even consider that
+the wifi interface could be a "producer" or "provider" of sockets once a wifi
+connection is established. An API from the `wifi` interface could be added that
+returns a reference to an available `socket`. This couples `socket` to `wifi`
+and complicates the implementation of wifi, ensuring that sockets can be
+returned. The memory and lifetime of that socket then becomes a concern of
+`wifi` as well as any of its users. Overall, this results in more complex code
+and more coupling than necessary. A better option is to keep everything
+independent from each other.
+
+To follow this rule, refrain from:
+
+1. Returning an interface from a function in any way
+2. Taking another interface as an input parameter
+
+Instead, if there needs to be some sort of relationship between interfaces,
+then this type of relationship should be managed by concrete classes that can
+take dependent objects with a relationship and manage that relationship.
