@@ -38,10 +38,116 @@ Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines).
 - Include the C++ header version of C headers such as `<cstdint>` vs
   `<stdint.h>`.
 
-## S.2 Refrain from performing manual bit manipulation
+## S.2 Refrain from performing manual bit set, clear, insertion, and extraction
 
-Use `hal::bit_modify` from `libhal-util` library to perform bitwise operations
+Bit setting, clearing, and, more importantly, multi-bit insertion and multi-bit
+extraction can be error prone and problematic. To solve this issue, we
+recommend using `hal::bit_modify` or `hal::bit_value` from the `libhal-util`
+library.
+
+`hal::bit_modify` takes a reference to a volatile unsigned integer, copies its
+value to a temporary variable, performs the operations on that temporary
+variable, and, on destruction, assigns the temporary value to the referenced
+volatile unsigned integer.
+
+```C++
+// For exposition:
+reg_t* reg = get_peripheral_register();
+
+hal::bit_modify(reg->control)
+  .insert<pre_scalar>(freq() / desired_frequency)
+  .clear<lower_power_mode>()
+  .set<enable>();
+```
+
+`hal::bit_value` performs bit modifications on an integer. These are useful for
+creating `constexpr` register values that already known at compile time, but
+want to express the value with a combination of bit mask and modification.
+
+```C++
+constexpr auto default_pin_config = hal::bit_value(0U)
+  .insert<mode>(0x04) // GPIO mode = 0x04
+  .clear<high_slew_rate>()
+  .set<high_speed_mode>()
+  .to<std::uint32_t>();
+```
+
+Use `hal::bit_extract` from `libhal-util` library to perform bitwise extraction
 operations.
+
+```C++
+while (hal::bit_extract<state>(reg->status) == states::busy) {
+  continue;
+}
+
+// ... OR ...
+
+float my_adc::driver_read() {
+  constexpr auto capture_value = hal::bit_mask::from(4, 11);
+  return hal::bit_extract<capture_value>(reg->status);
+}
+```
+
+### S.2.1 Prefer named compile time bit-mask APIs
+
+Always prefer giving names to bit masks as it makes it easier to understand
+what its impact is on the hardware.
+
+Always prefer using the APIs that take a bit masks as templates rather than an
+input parameters unless the bit mask is not known at compile time. For a bit
+mask to be used in a template means its `constexpr` or defined at compile time,
+allowing the compiler more information about the operation, which it can use to
+greatly optimize the operation.
+
+```C++
+constexpr auto state = hal::bit_mask::from(4, 5);
+constexpr auto enable = hal::bit_mask::from(3);
+constexpr auto prescale = hal::bit_mask::from(6, 13);
+```
+
+### S.2.1 Use temporary tail chaining when possible on `hal::bit_modify` and `hal::bit_value`
+
+Temporary tail chaining looks like the following:
+
+```C++
+hal::bit_value(0U)
+  .insert<hal::nibble_m<1, 2>>(7)
+  .insert<hal::nibble_m<0>>(5)
+  .to<std::uint32_t>();
+```
+
+Tail chaining allows you to all another API of the class from the return type.
+GCC seems to perform better when it can see the whole lifetime of the object as
+well as all of the operations performed on it. This tends to result in very
+optimal codegen.
+
+### S.2.2 [exception] Concatenation can use native syntax
+
+In a lot of cases, using `hal::bit_modify` or `hal::bit_value` can be less
+expressive than just using left and right shifts. So concatenating integers
+together using `<<` and `|` is acceptable.
+
+```C++
+// auto == std::array<hal::byte, 2>
+auto data = hal::write_then_read<2>(m_i2c, 0x11, addr, timeout);
+// data[0] holds bits 4:11 and data[1] holds bits 0:3
+std::uint32_t val = data[0] << 4 | data[1] >> 4;
+return val;
+```
+
+vs
+
+```C++
+// auto == std::array<hal::byte, 2>
+auto data = hal::write_then_read<2>(m_i2c, 0x11, addr, timeout);
+auto value = hal::bit_value(0U)
+  .insert<hal::nibble_m<1, 2>>(data[0])
+  .insert<hal::nibble_m<0>>(hal::bit_extract<hal::nibble_m<1>>(data[1]))
+  .to<std::uint32_t>();
+return val;
+```
+
+Either of these is fine. Choose what you think is cleaner.
 
 ## S.3 Refrain from using MACROS
 
@@ -153,7 +259,7 @@ class target {
 See [private virtual method](http://www.gotw.ca/publications/mill18.htm)
 for more details. Rationale can be found within that link as well.
 
-## S.10 Avoid using `bool` as:
+## S.10 Avoid using `bool` as
 
 ### S.10.1 an object member
 
@@ -161,6 +267,9 @@ for more details. Rationale can be found within that link as well.
 one `bool` is needed, then a bool is a fine object member. If multiple `bool`s
 are needed, then use a `std::bitset` along with static `constexpr` index
 positions in order to keep the density down to the lowest amount possible.
+
+!!! note
+    `std::bitset` seems to default to building blocks of size `int` meaning, on 32-bit architectures, this is 4-bytes for a bitset between 1 to 32.
 
 ### S.10.2 a parameter
 
@@ -355,3 +464,9 @@ Do not put large method definitions inline within the class definition.
 Typically, only trivial or performance-critical methods that are very short may
 be defined inline. If the class is a template, then all functions must be
 defined inline in the header file.
+
+!!! note
+    If a friend is a class or class function, then the friend should appear
+    under the same visibility specifier as the friend. For example, if you are
+    friending a private class function, then the friend function declaration
+    should also appear in the private section of the friending class.
