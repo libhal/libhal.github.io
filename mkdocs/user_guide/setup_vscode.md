@@ -25,29 +25,28 @@ should also work for non-vscode users as well.
 4. Search for the extension `clangd` and install the extension.
 5. Install `clang`
     1. Ubuntu/Debian: `sudo apt install clang`
-    2. MacOS: `brew install llvm`
+    2. MacOS: `brew install llvm@18`
     3. Windows: `choco install llvm`
-6. Add `--query-driver=**/arm-none-eabi-g++` (for Linux & Mac) or
-   `--query-driver=**/arm-none-eabi-g++.exe` (for Windows) to the clangd command
-   arguments in the clangd settings.
+6. Add `--query-driver=**/*g++` (for Linux & Mac) or
+   `--query-driver=**/*g++.exe` (for Windows) to the clangd command arguments
+   in the clangd settings.
     1. Go the the extensions page
     2. Find clangd and press the GEAR icon and open up settings.
     3. Find the settings `clangd: Arguments` and add the above code there. It is
        comma delimitated so you can add additional compiler patterns as well.
+7. On Mac change `Clangd: Path` to `/opt/homebrew/opt/llvm@18/bin/clangd` in
+   the clangd settings menu.
 
-## How `clangd` works
+### Refreshing the Language Server
 
-You are almost done, but we need to discuss what is needed to make `clangd`
-work. A workspace will need a `compile_commands.json` file to be present
-in your root directory or to use a `.clangd` file at the root of the repo
-that configures where to look for the `.json` file. `compile_commands.json`
-tells `clangd` what commands you are using in order to determine exactly how
-your files are built and what commands are used to build them, which provides
-the following benefits:
+Now that you should have your `compile_commands.json` in the right location,
+you just need to refresh your LSP.
 
-1. More accurate warnings and error messages in the IDE
-2. Faster response time because only the necessary includes for the specific
-   version you are targeted will be used in the evaluation.
+1. In VSCode Press: `⌘+shift+P` on Mac or `Ctrl+Shift+P` on everything else.
+2. Select the following command: `clangd: restart language server`
+
+Now your LSP should be active and your C++ files should be able to find your
+includes as well as infer the types of your objects.
 
 ## Enabling `clangd`
 
@@ -96,13 +95,16 @@ Ensure that you include the necessary profiles added to the build.
 conan build . -pr stm32f103 -pr arm-gcc-12.3
 ```
 
-### Refreshing the LSP
+## How `clangd` works
 
-Now that you should have your `compile_commands.json` in the right location,
-you just need to refresh your LSP.
+You are almost done, but we need to discuss what is needed to make `clangd`
+work. A workspace will need a `compile_commands.json` file to be present
+in your root directory or to use a `.clangd` file at the root of the repo
+that configures where to look for the `.json` file. `compile_commands.json`
+tells `clangd` what commands you are using in order to determine exactly how
+your files are built and what commands are used to build them, which provides
+the following benefits:
 
-1. In VSCode Press: `⌘+shift+P` on Mac or `Ctrl+Shift+P` on everything else.
-2. Select the following command: `clangd: restart language server`
-
-Now your LSP should be active and your C++ files should be able to find your
-includes as well as infer the types of your objects.
+1. More accurate warnings and error messages in the IDE
+2. Faster response time because only the necessary includes for the specific
+   version you are targeted will be used in the evaluation.
