@@ -470,3 +470,35 @@ defined inline in the header file.
     under the same visibility specifier as the friend. For example, if you are
     friending a private class function, then the friend function declaration
     should also appear in the private section of the friending class.
+
+### S.15.2 Storing references
+
+libhal drivers classes should not have reference member variables like so:
+
+```C++
+class my_driver {
+public:
+  my_driver(hal::adc16& p_adc): m_adc(p_adc) {
+  }
+
+private:
+  hal::adc16& m_adc;  // ❌ Bad! Do not do this.
+}
+```
+
+Reference members implicitly delete the copy and move constructors of a class
+they are within because they themselves are not copyable. You cannot reassign
+a reference after it is made.
+
+Instead take the parameter as a reference but save its address as a pointer:
+
+```C++
+class my_driver {
+public:
+  my_driver(hal::adc16& p_adc): m_adc(&p_adc) {
+  }
+
+private:
+  hal::adc16* m_adc = nullptr;  // ✅ Good!
+}
+```
