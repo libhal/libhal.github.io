@@ -247,9 +247,20 @@ And thats about it. You can use the adc as much as you like in your APIs. The
 only concern is ensuring that you do not get integer overflows when performing
 math on the ADC values.
 
-## Implementing an ADC device driver
+## Implementing the ADC interface
 
-## Implementing an ADC peripheral driver
+!!! warning
+    This section is incomplete!
+
+ADCs can appear in different locations such as:
+
+- Embedded into the silicon of a microcontroller
+- Discrete devices that a controller to speak to over protocols like i2c and
+  spi.
+
+ADCs typically come with multiple channels. Each ADC object should manage and
+control a singular ADC channel. Initializing an ADC object may require that it
+setup the whole.
 
 ## Why this design choice?
 
@@ -363,3 +374,455 @@ Using upscaled values eliminates operations that would otherwise be reproduced
 throughout a code base and across drivers. Scaling within each of the `adcN`
 interface buckets ensures that only a single left shift and OR operation is
 required to upscale the data.
+
+### Benchmarks against other options
+
+```C++
+#include <cinttypes>
+#include <climits>
+#include <concepts>
+#include <cstdint>
+#include <cstdio>
+#include <limits>
+
+#include <libhal-exceptions/control.hpp>
+#include <libhal-util/serial.hpp>
+#include <libhal-util/steady_clock.hpp>
+#include <libhal/error.hpp>
+
+#include <resource_list.hpp>
+
+// This is only global so that the terminate handler can use the resources
+// provided.
+resource_list resources{};
+
+[[noreturn]] void terminate_handler() noexcept
+{
+  bool valid = resources.status_led && resources.clock;
+
+  if (not valid) {
+    // spin here until debugger is connected
+    while (true) {
+      continue;
+    }
+  }
+
+  // Otherwise, blink the led in a pattern, and wait for the debugger.
+  // In GDB, use the `where` command to see if you have the `terminate_handler`
+  // in your stack trace.
+
+  auto& led = *resources.status_led.value();
+  auto& clock = *resources.clock.value();
+
+  while (true) {
+    using namespace std::chrono_literals;
+    led.level(false);
+    hal::delay(clock, 100ms);
+    led.level(true);
+    hal::delay(clock, 100ms);
+    led.level(false);
+    hal::delay(clock, 100ms);
+    led.level(true);
+    hal::delay(clock, 1000ms);
+  }
+}
+
+void application();
+
+int main()
+{
+  // Setup the terminate handler before we call anything that can throw
+  hal::set_terminate(terminate_handler);
+
+  // Initialize the platform and set as many resources as available for this the
+  // supported platforms.
+  initialize_platform(resources);
+
+  try {
+    application();
+  } catch (std::bad_optional_access const& e) {
+    if (resources.console) {
+      hal::print(*resources.console.value(),
+                 "A resource required by the application was not available!\n"
+                 "Calling terminate!\n");
+    }
+  }  // Allow any other exceptions to terminate the application
+
+  // Terminate if the code reaches this point.
+  std::terminate();
+}
+
+namespace hal {
+
+using integral_type = std::uint16_t;
+constexpr auto integral_type_bit_width = sizeof(integral_type) * CHAR_BIT;
+
+struct adc_scaled
+{
+  virtual integral_type read() = 0;
+};
+
+struct adc_float
+{
+  virtual float read() = 0;
+};
+
+struct adc_piecewise
+{
+  struct read_t
+  {
+    integral_type value;
+    std::uint8_t bit_width;
+  };
+  virtual read_t read() = 0;
+};
+
+struct adc_piecewise_max
+{
+  struct read_t
+  {
+    integral_type value;
+    integral_type full_scale;
+  };
+  virtual read_t read() = 0;
+};
+
+struct adc_split
+{
+  virtual std::uint8_t bit_width() = 0;
+  virtual integral_type read() = 0;
+};
+
+constexpr std::uint8_t test_bit_width = 7;
+std::uint16_t adc_data = 31;
+
+template<std::unsigned_integral int_t, std::size_t bit_width>
+constexpr int_t upscale(int_t p_value)
+{
+  constexpr std::size_t resultant_bit_width = sizeof(int_t) * CHAR_BIT;
+  static_assert(bit_width > 0 && bit_width <= resultant_bit_width,
+                "Bit width must be between 1 and 32");
+  // If already 32 bits, return as-is
+  if constexpr (bit_width == resultant_bit_width) {
+    return p_value;
+  }
+
+  // Create mask for the input bits
+  constexpr int_t mask = (1u << bit_width) - 1;
+
+  // Calculate number of iterations needed (ceiling(32/bit_width) - 1)
+  constexpr auto iterations =
+    (resultant_bit_width + bit_width - 1) / bit_width - 1;
+
+  // Place cleaned input value in MSB position
+  constexpr auto shift_distance = resultant_bit_width - bit_width;
+  int_t result = (p_value & mask) << shift_distance;
+
+  // Replicate the pattern for the calculated number of iterations
+  for (auto i = 0U; i < iterations; ++i) {
+    result |= (result >> bit_width);
+  }
+  return result;
+}
+
+struct adc_scaled_impl : public adc_scaled
+{
+  integral_type read() override
+  {
+    return upscale<integral_type, test_bit_width>(adc_data);
+  }
+};
+
+struct adc_piecewise_impl : public adc_piecewise
+{
+  read_t read() override
+  {
+    return { adc_data, test_bit_width };
+  }
+};
+
+struct adc_split_impl : public adc_split
+{
+  std::uint8_t bit_width() override
+  {
+    return test_bit_width;
+  }
+
+  integral_type read() override
+  {
+    return adc_data;
+  }
+};
+
+struct adc_float_impl : public hal::adc_float
+{
+  float read() override
+  {
+    constexpr auto max = (1 << test_bit_width) - 1;
+    return float(adc_data) / max;
+  }
+};
+
+struct adc_piecewise_max_impl : public adc_piecewise_max
+{
+  read_t read() override
+  {
+    constexpr auto max = (1 << test_bit_width) - 1;
+    return { adc_data, max };
+  }
+};
+}  // namespace hal
+
+constexpr std::uint16_t max_degrees = 360;
+constexpr std::uint16_t u16_max = std::numeric_limits<std::uint16_t>::max();
+constexpr auto shift_amount = hal::integral_type_bit_width - 16;
+
+[[gnu::noinline]]
+std::uint32_t scale_to_degrees(hal::adc_scaled& impl)
+{
+  auto const response = impl.read();
+  auto const response_u16 =
+    static_cast<std::uint16_t>(response >> shift_amount);
+  auto const up_scaled = response_u16 * max_degrees;
+  auto const final_value = up_scaled / u16_max;
+  return final_value;
+}
+
+[[gnu::noinline]]
+std::uint32_t scale_to_degrees(hal::adc_piecewise& impl)
+{
+  auto const [response, bit_width] = impl.read();
+  auto const max_scale = (1 << bit_width) - 1;
+  auto const up_scaled = response * max_degrees;
+  auto const final_value = up_scaled / max_scale;
+  return final_value;
+}
+
+[[gnu::noinline]]
+std::uint32_t scale_to_degrees(hal::adc_split& impl)
+{
+  auto const bit_width = impl.bit_width();
+  auto const response = impl.read();
+  auto const max_scale = (1 << bit_width) - 1;
+  auto const up_scaled = response * max_degrees;
+  auto const final_value = up_scaled / max_scale;
+  return final_value;
+}
+
+[[gnu::noinline]]
+std::uint32_t scale_to_degrees(hal::adc_piecewise_max& impl)
+{
+  auto const [response, max_scale] = impl.read();
+  auto const up_scaled = response * max_degrees;
+  auto const final_value = up_scaled / max_scale;
+  return final_value;
+}
+
+[[gnu::noinline]]
+std::uint32_t scale_to_degrees(hal::adc_float& impl)
+{
+  auto const response = impl.read();
+  auto const final_value = response * max_degrees;
+  return final_value;
+}
+
+[[gnu::noinline]]
+std::uint32_t scale_to_degrees2(hal::adc_split& impl)
+{
+  auto bit_width = impl.bit_width();
+  auto response = impl.read();
+
+  if (bit_width > 16) {
+    auto const shift_amount = bit_width - 16;
+    response >>= shift_amount;
+    bit_width = 16;
+  }
+
+  auto const max_scale = (1 << bit_width) - 1;
+  auto const up_scaled = response * max_degrees;
+  auto const final_value = up_scaled / max_scale;
+  return final_value;
+}
+
+template<typename T>
+void use(T&& t)
+{
+  __asm__ __volatile__("" ::"g"(t));
+}
+
+void application()
+{
+  using namespace std::chrono_literals;
+  constexpr auto sample_count = 2'000'000;
+
+  // Calling `value()` on the optional resources will perform a check and if the
+  // resource is not set, it will throw a std::bad_optional_access exception.
+  // If it is set, dereference it and store the address in the references below.
+  // When std::optional<T&> is in the standard, we will change to use that.
+  auto& led = *resources.status_led.value();
+  auto& clock = *resources.clock.value();
+  auto& console = *resources.console.value();
+
+  hal::print(console, "Starting ADC benchmark!\n");
+
+  hal::adc_piecewise_impl piecewise;
+  auto const start_piecewise = clock.uptime();
+  for (int i = 0; i < sample_count; i++) {
+    auto const value = scale_to_degrees(piecewise);
+    use(value);
+  }
+  auto const volatile end_piecewise = clock.uptime();
+  auto const volatile delta_piecewise = end_piecewise - start_piecewise;
+
+  auto const volatile start_split = clock.uptime();
+  hal::adc_split_impl split;
+  for (int i = 0; i < sample_count; i++) {
+    auto const value = scale_to_degrees(split);
+    use(value);
+  }
+  auto const volatile end_split = clock.uptime();
+  auto const volatile delta_split = end_split - start_split;
+
+  auto const start_scaled = clock.uptime();
+  hal::adc_scaled_impl scaled;
+  for (int i = 0; i < sample_count; i++) {
+    auto const value = scale_to_degrees(scaled);
+    use(value);
+  }
+  auto const volatile end_scaled = clock.uptime();
+  auto const volatile delta_scaled = end_scaled - start_scaled;
+
+  auto const start_max = clock.uptime();
+  hal::adc_piecewise_max_impl max;
+  for (int i = 0; i < sample_count; i++) {
+    auto const value = scale_to_degrees(max);
+    use(value);
+  }
+  auto const volatile end_max = clock.uptime();
+  auto const volatile delta_max = end_max - start_max;
+
+  auto const volatile start_float = clock.uptime();
+  hal::adc_float_impl float_adc;
+  for (int i = 0; i < sample_count; i++) {
+    auto const value = scale_to_degrees(float_adc);
+    use(value);
+  }
+  auto const volatile end_float = clock.uptime();
+  auto const volatile delta_float = end_float - start_float;
+
+  hal::print<64>(console, "   start_scaled = %" PRIu64 "\n", start_scaled);
+  hal::print<64>(console, "     end_scaled = %" PRIu64 "\n", end_scaled);
+  hal::print<64>(console, "start_piecewise = %" PRIu64 "\n", start_piecewise);
+  hal::print<64>(console, "  end_piecewise = %" PRIu64 "\n", end_piecewise);
+  hal::print<64>(console, "    start_split = %" PRIu64 "\n", start_split);
+  hal::print<64>(console, "      end_split = %" PRIu64 "\n", end_split);
+  hal::print<64>(console, "      start_max = %" PRIu64 "\n", start_max);
+  hal::print<64>(console, "        end_max = %" PRIu64 "\n", end_max);
+  hal::print<64>(console, "    start_float = %" PRIu64 "\n", start_float);
+  hal::print<64>(console, "      end_float = %" PRIu64 "\n", end_float);
+  hal::print(console, "\n");
+  hal::print<64>(console, "delta_piecewise = %" PRIu64 "\n", delta_piecewise);
+  hal::print<64>(console, "   delta_scaled = %" PRIu64 "\n", delta_scaled);
+  hal::print<64>(console, "    delta_split = %" PRIu64 "\n", delta_split);
+  hal::print<64>(console, "      delta_max = %" PRIu64 "\n", delta_max);
+  hal::print<64>(console, "    delta_float = %" PRIu64 "\n", delta_float);
+
+  hal::print(console, "Resetting in 10s!\n");
+  hal::delay(clock, 10s);
+
+  resources.reset();
+}
+```
+
+All tests executed on an stm32f103c8 which featues a Cortex-M3 processor which
+does not include a floating point unit. Using GCC 12.3.1.
+
+Built using the following commands:
+
+```bash
+# Defaults to min size build
+conan build . -pr stm32f103c8 -pr arm-gcc-12.3
+# For release
+conan build . -pr stm32f103c8 -pr arm-gcc-12.3 -s build_type=Release
+```
+
+```bash
+nm --demangle --size-sort build/stm32f103c8/MinSizeRel/app.elf | grep "::read"
+0000000c W hal::adc_split_impl::read()
+00000014 W hal::adc_piecewise_max_impl::read()
+00000018 W hal::adc_scaled_impl::read()
+0000001c W hal::adc_float_impl::read()
+00000024 W hal::adc_piecewise_impl::read()
+
+nm --demangle --size-sort build/stm32f103c8/MinSizeRel/app.elf | grep "::bit_width"
+00000004 W hal::adc_split_impl::bit_width()
+```
+
+Above we see that the scaled is in the middle in terms of code size. But
+we will go over why this isn't an issue in the next block.
+
+```bash
+nm --demangle --size-sort build/stm32f103c8/MinSizeRel/app.elf | grep scale_to_degrees
+00000018 T scale_to_degrees(hal::adc_scaled&)
+0000001a T scale_to_degrees(hal::adc_float&)
+0000001c T scale_to_degrees(hal::adc_piecewise_max&)
+00000024 T scale_to_degrees(hal::adc_piecewise&)
+00000026 T scale_to_degrees(hal::adc_split&)
+00000036 T scale_to_degrees2(hal::adc_split&)
+```
+
+In a minimum sized build, using `adc_scaled` results in the smallest code size for the same results. In this case, the `adc_scaled::read` API takes up
+more memory than the cost of its usage. We believe that it makes sense to optimize for the usages as those are more likely to be more numerous than ADC implementations.
+
+```bash
+ nm --demangle --size-sort build/stm32f103c8/Release/app.elf | grep "::read"
+0000000c W hal::adc_split_impl::read()
+00000014 W hal::adc_piecewise_max_impl::read()
+00000018 W hal::adc_scaled_impl::read()
+0000001c W hal::adc_float_impl::read()
+00000024 W hal::adc_piecewise_impl::read()
+
+nm --demangle --size-sort build/stm32f103c8/Release/app.elf | grep scale_to_degrees
+00000024 t scale_to_degrees(hal::adc_piecewise&) (.constprop.0)
+00000024 t scale_to_degrees(hal::adc_piecewise_max&) (.constprop.0)
+00000024 t scale_to_degrees(hal::adc_split&) (.constprop.0)
+00000028 t scale_to_degrees(hal::adc_float&) (.constprop.0)
+0000002c t scale_to_degrees(hal::adc_scaled&) (.constprop.0)
+
+00000040 T scale_to_degrees(hal::adc_scaled&)
+00000044 T scale_to_degrees(hal::adc_piecewise_max&)
+00000044 T scale_to_degrees(hal::adc_float&)
+0000004c T scale_to_degrees(hal::adc_piecewise&)
+0000005c T scale_to_degrees(hal::adc_split&)
+00000088 T scale_to_degrees2(hal::adc_split&)
+```
+
+In the above Release build, the results are similar. `(.constprop.0)` in GCC
+means that the symbol is a duplicate of another function but optimized to
+perform around the same. In the optimized code scaled fairs the worst by an
+additional 8 bytes compared to the lowest code size functions. But on the other
+hand, for the original symbol, the scaled ADC code is the smallest in terms of
+code size.
+
+```plaintext
+# Release Build Cycles
+
+delta_piecewise = 12000075
+   delta_scaled = 12000084
+    delta_split = 12000084
+      delta_max = 12000081
+    delta_float = 12000443
+
+# Min Size Build Cycles
+delta_piecewise = 156000044
+   delta_scaled = 134000059
+    delta_split = 176000052
+      delta_max = 136000052
+    delta_float = 844000052
+```
+
+As you can see the cycles for almost all of these benchmarks are almost
+identical. So much so that there isn't really a clear winner. Some seem to
+perform worse off in specific builds. But overall they are about the same. And
+if all else is the same in performance, then code size should be the deciding
+factor.
