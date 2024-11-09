@@ -11,7 +11,7 @@ PyOCD stands out for its user-friendly approach compared to other On-Chip
 Debugging (OCD) tools like OpenOCD, despite being slightly limited in terms of
 the range of processors it supports.
 
-For the full documentation for PyOCD see https://pyocd.io/.
+For the full documentation for PyOCD see [https://pyocd.io/](https://pyocd.io/).
 
 ## Installation
 
@@ -33,19 +33,16 @@ guide. A connection to ground (`GND`) must be made between the debugger and the
 development board in order for the devices to communicate.
 
 !!! Danger
-
     DOUBLE AND TRIPLE CHECK YOUR CONNECTIONS! Incorrect connects can result in
     breaking a board, debugger or possible your computer.
 
 === "Connecting SWD"
-
     Connect jumpers from `GND`, `SWDIO` and `SWDCLK` to the pins on the board.
     If the board supports both `SWD` and `JTAG` like many arm cortex boards do,
     then connect the pins in the following way: `SWDIO` --> `TMS` and
     `SWDCLK` --> `TCK`.
 
 === "Connecting JTAG"
-
     Connect jumpers from the `GND`, `TDI`, `TMS`, `TCK`, and `TDO` pins on the
     JTAG debugger to the headers on the development board of the same name.
 
@@ -55,13 +52,11 @@ The following commands will use `pyocd` and your debugger to connect to your
 target platform.
 
 === "lpc40"
-
     ```bash
     pyocd gdbserver --target=lpc4088 --persist
     ```
 
 === "stm32f1"
-
     ```bash
     pyocd gdbserver --target=stm32f103rc --persist
     ```
@@ -119,7 +114,6 @@ firmware testing, the `run` command is not needed as the code is already
 "running" on the remote microcontroller.
 
 !!! info
-
     On boards with a factory bootloader, when you start debugging, you will
     notice that you cannot see the source code lines in the gdb shell. This is
     because the bootloader instructions are not associated with any addresses in
@@ -156,7 +150,6 @@ You can inspect the state of your program by examining variables and registers:
 - `print gpio_reg->CTRL`: Shows the value of a register
 
 !!! tip
-
     If you get an error like:
 
     ```
