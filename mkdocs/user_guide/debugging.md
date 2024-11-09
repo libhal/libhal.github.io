@@ -1,4 +1,4 @@
-# 🎯 Debugging Code with PyOCD
+# 🎯 Debugging Firmware with PyOCD
 
 ## Introduction
 
