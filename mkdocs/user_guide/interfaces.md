@@ -94,6 +94,7 @@ work with any microcontroller that provides an implementation of that interface.
     [`hal::timer`](https://libhal.github.io/4.1/api/libhal/timer.html)
 
     Schedules future events. Used for:
+
     - Delayed operations
     - Periodic tasks
     - Timeout management
@@ -103,6 +104,7 @@ work with any microcontroller that provides an implementation of that interface.
     [`hal::steady_clock`](https://libhal.github.io/4.1/api/libhal/steady_clock.html)
 
     Provides consistent time measurements. Used for:
+
     - Measuring durations
     - Timing operations
     - Creating delays
@@ -232,7 +234,7 @@ work with any microcontroller that provides an implementation of that interface.
     - Device orientation tracking
     - Angle measurement
 
-### Coming Soon
+### ⏳ Coming Soon
 
 === "Current Sensor"
     **API not available yet**
@@ -243,12 +245,12 @@ work with any microcontroller that provides an implementation of that interface.
     - Measuring system power consumption
     - Measure motor torque/force
 
-=== "⏳ Voltage Sensor"
+=== "Voltage Sensor"
     **API not available yet**
 
     Will measure voltage differences in circuits.
 
-=== "⏳ GPS"
+=== "GPS"
     **API not available yet**
 
     Will provide location, time, and velocity data from GPS signals.
@@ -257,14 +259,17 @@ work with any microcontroller that provides an implementation of that interface.
 
 A quick note about virtual functions (which libhal uses extensively):
 
-1. **They don't require heap memory**: Virtual functions work fine with stack-allocated objects.
-2. **Performance impact is minimal**: The overhead is usually just one pointer lookup.
-3. **Memory overhead is small**: Each class with virtual functions needs only one vtable (shared between all instances).
+1. **They don't require heap memory**: Virtual functions work fine with
+   stack-allocated objects.
+2. **Performance impact is minimal**: The overhead is usually just one pointer
+   lookup.
+3. **Memory overhead is small**: Each class with virtual functions needs only
+   one vtable (shared between all instances).
 
 Example of using virtual functions efficiently:
 
 ```cpp
 // This works fine - no heap allocation needed
-hal::stm32f103::input_pin my_pin('B', 2);  // Stack allocated
-read_pin_state(my_pin);  // Uses virtual functions, but still efficient
+hal::lpc4078::i2c i2c2(2);  // Stack allocated
+initialize_display(i2c2);   // Uses virtual functions, but still efficient
 ```
