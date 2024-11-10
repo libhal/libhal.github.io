@@ -1,198 +1,157 @@
-# 🎯 Debugging Firmware with PyOCD
+# 🎯 Debugging Firmware with PyOCD - A Beginner's Guide
 
-## Introduction
+## What is PyOCD?
 
-PyOCD is an open-source Python package for programming and debugging Arm
-Cortex-M microcontrollers using CMSIS-DAP. It's a highly flexible and
-easy-to-use tool, but it's important to note that it only supports ARM
-processors.
+PyOCD is a Python-based debugging tool specifically designed for ARM Cortex-M microcontrollers. Think of it as a bridge between your computer and your microcontroller that lets you inspect and control your program while it's running. While it only works with ARM processors, it's much more user-friendly than alternatives like OpenOCD.
 
-PyOCD stands out for its user-friendly approach compared to other On-Chip
-Debugging (OCD) tools like OpenOCD, despite being slightly limited in terms of
-the range of processors it supports.
+## Setting Up Your Environment
 
-For the full documentation for PyOCD see [https://pyocd.io/](https://pyocd.io/).
-
-## Installation
-
-To install PyOCD, run the following command in your terminal:
+### 1. Install PyOCD
 
 ```bash
 python3 -m pip install pyocd
 ```
 
-## Connecting a Debugger to your Device
+### 2. Connect Your Hardware
 
-Connect the debugger (STLinkV2) to your MicroMod Carrier board using the STLink
-to SWD connector adapter. Before connecting and powering everything check that
-the the ribbon connector is connected to the port with the glowing LED. That is
-the correct connection. Using the incorrect connection could cause part damage.
+1. You'll need:
+    - Your development board
+    - A debugger (like STLinkV2)
+    - Appropriate connecting cables
 
-If you are using another type of device with different connections follow this
-guide. A connection to ground (`GND`) must be made between the debugger and the
-development board in order for the devices to communicate.
+2. Make the physical connections:
+    - For SWD (most common):
+        - Connect GND (Ground)
+        - Connect SWDIO (Data line)
+        - Connect SWDCLK (Clock line)
+    - If your board uses JTAG:
+        - Connect GND, TDI, TMS, TCK, and TDO pins
+    - If you have a JTAG device that supports SWD
+        - Connect GND
+        - Connect JTAG TMS to MCU SWDIO
+        - Connect JTAG TCK to MCU SWDCLCK
 
-!!! Danger
-    DOUBLE AND TRIPLE CHECK YOUR CONNECTIONS! Incorrect connects can result in
-    breaking a board, debugger or possible your computer.
+!!! important
+    Double-check all connections! Incorrect wiring can damage your board,
+    debugger, or computer.
 
-=== "Connecting SWD"
-    Connect jumpers from `GND`, `SWDIO` and `SWDCLK` to the pins on the board.
-    If the board supports both `SWD` and `JTAG` like many arm cortex boards do,
-    then connect the pins in the following way: `SWDIO` --> `TMS` and
-    `SWDCLK` --> `TCK`.
+## Starting a Debug Session
 
-=== "Connecting JTAG"
-    Connect jumpers from the `GND`, `TDI`, `TMS`, `TCK`, and `TDO` pins on the
-    JTAG debugger to the headers on the development board of the same name.
+### 1. Launch PyOCD Server
 
-## Connecting to device using PyOCD
-
-The following commands will use `pyocd` and your debugger to connect to your
-target platform.
-
-=== "lpc40"
-    ```bash
-    pyocd gdbserver --target=lpc4088 --persist
-    ```
-
-=== "stm32f1"
-    ```bash
-    pyocd gdbserver --target=stm32f103rc --persist
-    ```
-
-To find all of the available platforms use `pyocd list --targets`.
-
-## Using arm-none-eabi-gdb
-
-`arm-none-eabi-gdb` is a version of GDB (GNU Debugger) configured for debugging
-Arm Cortex-M devices.
-
-To start a GDB debugging session, open an additional terminal or terminal
-window. Then execute the following command:
+First, start the PyOCD server for your specific device:
 
 ```bash
-arm-none-eabi-gdb -ex "target remote :3333" -tui path/to/yourfile.elf
+# For LPC40xx boards:
+pyocd gdbserver --target=lpc4088 --persist
+
+# For STM32F103xx boards:
+pyocd gdbserver --target=stm32f103rc --persist
 ```
 
-- `-tui`: GDB TUI provides a text window interface for debugging. To start GDB
-  in TUI mode, use the `-tui` option
-- `-ex "target remote :3333"`: `-ex` executes a GDB command. And the command
-  `target remote :3333` connects to a remote gdb server, in this case, the pyocd
-  server (with default port `:3333`).
+Not sure about your target? Run `pyocd list --targets` to see all options.
 
-## Starting the Debugging Process
+### 2. Connect GDB
 
-Here is a cheat sheet for using [GDB Cheat
-Sheet](http://darkdust.net/files/GDB%20Cheat%20Sheet.pdf).
+Open a new terminal and launch GDB:
 
-A typical first breakpoint for a program is to set a breakpoint on main.
-
-```gdb
-b main
+```bash
+arm-none-eabi-gdb -ex "target remote :3333" -tui your_program.elf
 ```
 
-Next you will want to reset the program back to the start and halt the CPU using
-the following command.
+This command:
 
-```gdb
-monitor reset halt
-```
-
-To begin running through the program use the `continue` or `c` command.
-
-```gdb
-c
-```
-
-At this point you should see the source code of your `main.cpp` show up. Now you
-can step through your code and set breakpoints using `step`, `next`, `finish`
-and `continue`, `break`, etc.
-
-Typically you would use the `run` command to start the code. When performing
-firmware testing, the `run` command is not needed as the code is already
-"running" on the remote microcontroller.
-
-!!! info
-    On boards with a factory bootloader, when you start debugging, you will
-    notice that you cannot see the source code lines in the gdb shell. This is
-    because the bootloader instructions are not associated with any addresses in
-    your code, thus you will not see source code. This is fine. Continue with
-    the guide. The LPC40xx family of microcontrollers has such a bootloader.
-
-## Stepping Through Code
-
-Once in a GDB session, you can step through your code using the following
-commands:
-
-- `next` or `n`: Executes the next line in the source code. If the line contains
-  a function call, it treats the entire function as one instruction and executes
-  it in one go.
-- `step` or `s`: Executes the next line, but if it contains a function call,
-  `step` will go into that function so you can continue debugging inside it.
-- `finish`: Runs until the current function is finished.
-- `continue` or `c`: Continues execution until the next breakpoint or
-  watchpoint.
-- `until lineno`: Continues execution until a line number greater than the
-  current one is reached. Useful for loops.
-
-Remember that you can use the `help` command in GDB to get information about any
-other command.
-
-## Inspecting Variables and Registers
-
-You can inspect the state of your program by examining variables and registers:
-
-- `print variable` or `p variable`: Prints the current value of the specified
-  variable.
-- `info registers`: Shows the current state of all CPU registers.
-- `info register regname`: Shows the current state of a specific CPU register.
-- `print gpio_reg->CTRL`: Shows the value of a register
+- Opens GDB with a text-based UI (`-tui`)
+- Connects to PyOCD (`target remote :3333`)
+- Loads your program (`your_program.elf`)
 
 !!! tip
-    If you get an error like:
+    `arm-none-eabi-gdb` command not found? No worries, build an project for an
+    arm based device like so `conan build . -pr stm32f103c8 -pr arm-gcc-12.3`.
+    There is a file called `generators/conanbuild.sh` which provides your
+    command line access to the paths to the ARM compiler toolchain where GDB
+    resides. Sourcing those environment variables would look like this, but
+    replace `stm32f103c8` with your platform and `MinSizeRel` with your build
+    type:
 
-    ```
-    Cannot access memory at address ???
-    ```
-
-    This happens because GDB is limiting access to memory that is known at
-    link time and is apart of the binary's structure. But if a user wants to
-    access peripheral memory not associated with RAM or Flash memory then they
-    can execute this command:
-
-    ```gdb
-    set mem inaccessible-by-default off
+    ```bash
+    source build/stm32f103c8/MinSizeRel/generators/conanbuild.sh
     ```
 
-## Setting Breakpoints and Watchpoints
+## Basic Debugging Commands
 
-Breakpoints allow you to pause program execution at a particular point, and
-watchpoints let you pause execution whenever a particular variable changes:
-
-- `break function` or `b function`: Sets a breakpoint at the beginning of the
-  specified function.
-- `break filename:lineno` or `b filename:lineno`: Sets a breakpoint at a
-  specific line in a specific file.
-- `watch variable`: Sets a watchpoint on a variable. The program will stop
-  executing whenever the variable's value changes.
-- `info breakpoints`: Lists all the breakpoints that are currently set.
-- `delete n`: Deletes breakpoint number `n`. Use `info breakpoints` to see
-  breakpoint numbers.
-- `delete`: Deletes all breakpoints if used without a number.
-
-## Flashing a Device using GDB
-
-In GDB, you can also use the `load` command to flash your device. The `load`
-command automatically uses the target specified when you started the GDB
-session.
+### Essential GDB Commands
 
 ```gdb
-(gdb) load
+# Start your debug session
+b main                   # Set breakpoint at main()
+monitor reset halt       # Reset the CPU and stop at the beginning
+c                        # Continue execution
+
+# Navigate through code
+n (or next)              # Execute next line (skip function details)
+s (or step)              # Step into functions
+finish                   # Run until current function returns
+c (or continue)          # Run until next breakpoint
+
+# Inspect values
+p variable_name          # Print variable value
+info registers           # View all CPU registers
 ```
 
-This command will load the program onto your device.
+!!! tip
+    If you are familiar with GDB, you notice that the command "run" was not
+    used. In this context, there is no program, just the CPU. The debugger is
+    controlling and stopping the CPU from executing. So there is no need to
+    "run" the program, its already running. You simply have to continue.
 
-You can build the elf file in another terminal, then run `load` again to update
-the program. It may or may not reset the core back to the start so
-`monitor reset halt` may be needed.
+### Viewing Memory and Registers
+
+To access hardware registers and memory:
+
+```gdb
+# Enable access to all memory
+set mem inaccessible-by-default off
+
+# View register values
+p gpio_reg->CTRL         # View specific register
+```
+
+### Managing Breakpoints
+
+```gdb
+b function_name         # Break at function start
+b filename.cpp:123      # Break at specific line
+info breakpoints        # List all breakpoints
+delete 1                # Remove breakpoint #1
+delete                  # Remove all breakpoints
+```
+
+### Updating Your Program
+
+If you make changes to your code:
+
+1. Build your program in another terminal
+2. In GDB:
+
+   ```gdb
+   monitor erase         # Erase current firmware image
+   load                  # Flash the new program
+   monitor reset halt    # Reset to start and halt CPU
+   ```
+
+## Tips for Beginners
+
+- Start with simple programs to get comfortable with the debugging process
+- Use frequent breakpoints to understand program flow
+- `-s build_type=Debug` builds are easy to debug with a debugger than
+  `-s build_type=MinSizeRel` or `-s build_type=Release` builds
+- Remember that embedded debugging is different from regular program debugging
+  because your code is running on actual hardware and you are controlling the
+  cpu
+- If you can't see source code lines initially, don't worry - this is normal
+  with bootloaders (like on LPC40xx boards), proceed with the `continue`
+  command and you should end up at your first breakpoint whenever it is reached
+
+For a complete reference of GDB commands, check out this
+[GDB Cheat Sheet](http://darkdust.net/files/GDB%20Cheat%20Sheet.pdf).
