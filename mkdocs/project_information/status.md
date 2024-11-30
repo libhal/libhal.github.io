@@ -89,30 +89,6 @@
 
   <tr>
     <td>
-      <a href="https://github.com/libhal/libhal-mock/">libhal/libhal-mock</a>
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-mock/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-mock/actions/workflows/ci.yml/badge.svg" /></a>
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-mock/releases"><img src="https://img.shields.io/github/v/release/libhal/libhal-mock" /></a>
-    </td>
-  </tr>
-
-  <tr>
-    <td>
-      <a href="https://github.com/libhal/libhal-soft/">libhal/libhal-soft</a>
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-soft/actions/workflows/ci.yml"><img src="https://github.com/libhal/libhal-soft/actions/workflows/ci.yml/badge.svg" /></a>
-    </td>
-    <td>
-      <a href="https://github.com/libhal/libhal-soft/releases"><img src="https://img.shields.io/github/v/release/libhal/libhal-soft" /></a>
-    </td>
-  </tr>
-
-  <tr>
-    <td>
       <a href="https://github.com/libhal/libhal-util/">libhal/libhal-util</a>
     </td>
     <td>
