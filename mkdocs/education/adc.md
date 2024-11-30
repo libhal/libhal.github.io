@@ -9,8 +9,7 @@ the world .
 
 ## Learning about ADCs
 
-This article will not explain how ADCs work as there are many lovely tutorials out there on line already. We but will provide a list of resources to learn
-about ADCs:
+To learn more about ADCs we have made a list of online resources to learn:
 
 - [Sparkfun Tutorial](https://learn.sparkfun.com/tutorials/analog-to-digital-conversion/all):
   (RECOMMENDED) Quick and easy to understand.

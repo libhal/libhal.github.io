@@ -17,14 +17,15 @@ In order to proceed to the rest of this article, you must understand the
 fundamentals of i2c and how it works. Rather than rehash what is already out
 there, please read one of the following:
 
-- [Sparkfun I2C](https://learn.sparkfun.com/tutorials/i2c/all): Recommended as
-  it is concise and provides enough information to be ready for the rest of
-  this article.
-- [i2c-bus.org](https://www.i2c-bus.org/): If you want to get into the depths
-  of I2C, this website does a great job of going into how the I2C protocol
-  works as well as some of its other less known features such as
-  multi-controller and clock stretching.
-- [TI's A Basic Guide to I2C](https://www.ti.com/lit/an/sbaa565/sbaa565.pdf):
+- [🎥 Understanding I2C by Rohde Schwarz](https://www.youtube.com/watch?v=CAvawEcxoPU): 10min 57sec A great video describing how I2C works.
+- [📄 Sparkfun I2C](https://learn.sparkfun.com/tutorials/i2c/all): A quick and
+  concise article that provides enough information to be ready for the rest of
+  this tutorial.
+- [🌐 i2c-bus.org](https://www.i2c-bus.org/): Website dedicated to documenting
+  how i2c works. If you want to get into the depths of I2C, this website does a
+  great job of going into how the I2C protocol works as well as some of its
+  other less known features such as multi-controller and clock stretching.
+- [📄 TI's A Basic Guide to I2C](https://www.ti.com/lit/an/sbaa565/sbaa565.pdf):
   Detailed and contains examples of how an i2c transaction works with concrete
   examples with actual i2c device register maps.
 
