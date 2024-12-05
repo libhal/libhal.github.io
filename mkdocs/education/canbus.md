@@ -3,18 +3,16 @@
 !!! warning
     This document describes the CAN for libhal 5.0.0 which is not available yet.
 
-Welcome to the libhal controller area network (CAN) tutorial. CAN BUS is used as a reliable broadcast communication
-
- are used to sample analog voltage
-signals and convert them into a number that can be used by controllers to sense
-the world .
+Welcome to the libhal controller area network (CAN) tutorial. CAN BUS is used
+as a reliable broadcast communication.
 
 ## Learning about CAN BUS
 
 To learn more about CAN BUS we recommend these online resources:
 
 - [🎥 CAN Bus: Serial Communication - How It Works?](https://www.youtube.com/watch?v=JZSCzRT9TTo)
-  11m 24s video going over the basics of CAN BUS. It does not go over message ID arbitration which is quite important to understand with CAN BUS, but not necessary to use CAN APIs.
+  11m 24s video going over the basics of CAN BUS. It does not go over message
+  ID arbitration which is quite important to understand with CAN BUS, but not necessary to use CAN APIs.
 - [📄 Introduction to the Controller Area Network (CAN) by Texas Instruments](https://www.ti.com/lit/an/sloa101b/sloa101b.pdf):
   A fully featured document going over most of the important aspects of CAN
   bus. You'll learn everything you need to know about CAN with this document.
@@ -47,45 +45,21 @@ various capabilities of hardware. For example, the number of filters of each
 type can vary wildly between different devices, but the predominately fit in
 these three categories.
 
-### Using `hal::can_transceiver`
+### The `hal::can_message`
 
-For now, lets set aside how we acquire a `hal::can_transceiver` and consider
-what you can do once you have one.
+The `hal::can_message` struct contains all of the information stored within a
+typical message. The object `hal::can_message` represents a standard CAN
+message in libhal. It provides all of the information you'd need in a typical
+CAN message. It is used for sending and receiving messages on the can bus. Note
+that the remote request and extended fields utilize bits 29th and 30th,
+respectively, within the of the 32-bit `id_flags` field. The 31st bit is
+reserved for now and must remain 0.
 
-```C++
-u32 baud_rate() = 0;
-```
-
-This function returns the baud rate in hertz of the CAN BUS. The baud rate represents the communication rate. Common baud rates for CAN BUS are:
-
-- 100 kHz or Kbit/s
-- 125 kHz or Kbit/s
-- 250 kHz or Kbit/s
-- 500 kHz or Kbit/s
-- 800 kHz or Kbit/s
-- 1 MHz or Mbit/s
-
-This function exists to ensure that drivers that share a `hal::can_transceiver`
-can detect if the baud rate doesn't match a fixed baud rate required by another
-device on the bus. CAN BUS driver may provide an out-of-interface function for
-setting the baud rate, but this interface does not allow such control.
-
-When a can driver is constructed it is passed a baud rate it should set itself
-to. If the baud rate cannot be achieved the constructor will throw
-`hal::argument_out_of_domain`. Note when setting up a CAN BUS network that
-every device on the bus must have the same baud rate. The baud rate is not
-changeable via the `hal::can_transceiver`.
+The can message and its APIs are defined below.
 
 ```C++
-/**
- * @brief A standard CAN message
- *
- */
 struct can_message
 {
-  static constexpr u32 id_mask = (1 << 29) - 1;
-  static constexpr u32 remote_request_mask = (1 << 29);
-  static constexpr u32 extended_mask = (1 << 30);
   /**
    * @brief Memory containing the ID and remote request and extended flags
    *
@@ -153,11 +127,35 @@ struct can_message
 };
 ```
 
-`hal::can_message` presents a standard CAN message in libhal. It provides all
-of the information you'd need in a typical CAN message. Note that the remote
-request and extended fields utilize bits 29th and 30th, respectively, within
-the of the 32-bit `id_flags` field. The 31st bit is reserved for now and must
-remain 0.
+### Using `hal::can_transceiver`
+
+For now, lets set aside how we acquire a `hal::can_transceiver` and consider
+what you can do once you have one.
+
+```C++
+u32 baud_rate() = 0;
+```
+
+This function returns the baud rate in hertz of the CAN BUS. The baud rate
+represents the communication rate. Common baud rates for CAN BUS are:
+
+- 100 kHz or Kbit/s
+- 125 kHz or Kbit/s
+- 250 kHz or Kbit/s
+- 500 kHz or Kbit/s
+- 800 kHz or Kbit/s
+- 1 MHz or Mbit/s
+
+This function exists to ensure that drivers that share a `hal::can_transceiver`
+can detect if the baud rate doesn't match a fixed baud rate required by another
+device on the bus. CAN BUS driver may provide an out-of-interface function for
+setting the baud rate, but this interface does not allow such control.
+
+When a can driver is constructed it is passed a baud rate it should set itself
+to. If the baud rate cannot be achieved the constructor will throw
+`hal::argument_out_of_domain`. Note when setting up a CAN BUS network that
+every device on the bus must have the same baud rate. The baud rate is not
+changeable via the `hal::can_transceiver`.
 
 ```C++
 void send(can_message const& p_message) = 0;
@@ -174,7 +172,13 @@ std::span<can_message const> receive_buffer() = 0;
 std::size_t receive_cursor() = 0;
 ```
 
-`hal::can_transceiver` are mandated to hold a buffer can messages received over the bus. The user is allowed, at object construction to provide buffer memory for the driver. That buffer is then exposed by the `receive_buffer()` API to allow applications and drivers to scan it and to find messages meant for them. The buffer returned from `receive_buffer()` updated as a circular buffer where the `receive_cursor()` API indicates where the driver's write cursor position is located. Any value returned from `receive_cursor()` will always work like so:
+`hal::can_transceiver` are mandated to hold a buffer can messages received over
+the bus. The user is allowed, at object construction to provide buffer memory
+for the driver. That buffer is then exposed by the `receive_buffer()` API to
+allow applications and drivers to scan it and to find messages meant for them.
+The buffer returned from `receive_buffer()` updated as a circular buffer where
+the `receive_cursor()` API indicates where the driver's write cursor position
+is located. Any value returned from `receive_cursor()` will always work like so:
 
 ```C++
 // `can.receive_cursor()` always returns a value between 0 and
@@ -185,7 +189,8 @@ can.receive_buffer()[can.receive_cursor()];
 
 See [⛓️‍💥how interface circular buffers in libhal work](.).
 
-Using the circular buffer APIs directly can be tedious and error prone, so we provide some utility classes in `libhal-util/can.hpp`.
+Using the circular buffer APIs directly can be tedious and error prone, so we
+provide some utility classes in `libhal-util/can.hpp`.
 
 #### `hal::can_message_finder`
 
@@ -248,7 +253,8 @@ if (new_messages) {
 }
 ```
 
-The lifetime of the `hal::can_message_reader` is bound to the `hal::can_transceiver` passed to it and must not exceed the lifetime of that
+The lifetime of the `hal::can_message_reader` is bound to the
+`hal::can_transceiver` passed to it and must not exceed the lifetime of that
 `hal::can_transceiver`.
 
 ### CAN BUS device manager
@@ -262,14 +268,17 @@ namespace hal::stm32f1 {
 class can {
 public:
    // Constructor
-  can(can_pins p_pins = can_pins::pa11_pa12, hal::u32 baud_rate = 100_kHz);
+  can(std::span<hal::can_message> p_receive_buffer,
+      can_pins p_pins = can_pins::pa11_pa12,
+      hal::u32 baud_rate = 100_kHz);
   // The rest...
 }
 }
 
 // Constructing a can object using pins PB9 & PB8 on the stm32f103c8 and
 // setting the bus baud rate to 1MHz.
-hal::stm32f1::can can(hal::stm32f1::can_pins::pb9_pb8, 1_MHz);
+std::array<hal::can_message, 16> receive_buffer;
+hal::stm32f1::can can(receive_buffer, hal::stm32f1::can_pins::pb9_pb8, 1_MHz);
 
 // Acquiring resources from device manager...
 
@@ -383,7 +392,8 @@ In general, filters do not need to be captured. Filters can be set at driver
 construction and then given back to the caller. Capturing a filter is only
 necessary if the filter will have its ID modified at runtime.
 
-The example above assumes that the driver only ever needs to write can messages and never needs to receive them.
+The example above assumes that the driver only ever needs to write can messages
+and never needs to receive them.
 
 ### Interfaces to Avoid
 
@@ -441,6 +451,66 @@ private:
 ```
 
 The transceiver can be accessed using the `transceiver()` API.
+
+### Selecting the right filter type
+
+1. Select `hal::can_identifier_filter` if the device driver only needs to
+   filter a single standard message ID.
+2. Select `hal::can_extended_identifier_filter` if the device driver only needs
+   to filter a single extended message ID.
+3. Select `hal::can_range_filter` if the device driver expects to see messages
+   in a range of standard message IDs.
+4. Select `hal::can_extended_range_filter` if the device driver expects to see
+   messages in a range of standard message IDs.
+5. Select `hal::can_mask_filter` if the device driver expects to see messages
+   that fit a standard identifier with some bits that can change. In general,
+   this filter type isn't particular useful for device drivers.
+6. Select `hal::can_extended_mask_filter` if the device driver expects to see
+   messages that fit an extended identifier with some bits that can change. In
+   general, this filter type isn't particular useful for device drivers.
+
+### Filter adaptors
+
+Can peripherals may not provide all of the filters needed by device drivers or
+application. In these cases, we can use an adaptor from `libhal-util` to
+convert one filter to another.
+
+### Range to identifier filter
+
+libhal provides `hal::range_to_identifier_can_adaptor` which can take a
+`hal::can_range_filter` and generate multiple `hal::can_identifier_filters`.
+This can be beneficial when the set of IDs is contiguous OR close enough
+together.
+
+```C++
+hal::can_range_filter& range_filter = /* ... */;
+hal::range_to_identifier_can_adaptor id_generator(range_filter);
+auto id_filter_1 = id_generator.create();
+auto id_filter_2 = id_generator.create();
+auto id_filter_3 = id_generator.create();
+
+id_filter_1.allow(0x111); // range 0x111 ↔ 0x111
+id_filter_2.allow(0x112); // range 0x111 ↔ 0x112
+id_filter_3.allow(0x117); // range 0x111 ↔ 0x117
+id_filter_3.allow(0x110); // range 0x110 ↔ 0x115
+id_filter_3.allow(0x116); // range 0x110 ↔ 0x115 (no change)
+```
+
+Each id generated links back to the `hal::range_to_identifier_can_adaptor`
+object. They are bound by its lifetime. Each time a filter calls `allow()`, it
+expands the range to fit the max and min values passed previously.
+
+The filter is not as useful if the range between IDs is large and there are
+messages within that ID range.
+
+There exist an equivalent for extended IDs.
+
+### Mask to identifier filter
+
+libhal provides `hal::mask_to_identifier_can_adaptor` which can take a
+`hal::can_mask_filter` and generate multiple `hal::can_identifier_filters`.
+
+TBD...
 
 ## Making a CAN driver
 
