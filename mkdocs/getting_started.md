@@ -37,10 +37,16 @@ What you will need in order to get started with libhal.
         sudo apt install Python3.10
         ```
 
+    Install `pipx` which is used to install conan:
+
+    ```
+    sudo apt install pipx
+    ```
+
     Installing conan:
 
     ```
-    python3 -m pip install "conan>=2.2.2"
+    pipx install "conan>=2.10.1"
     ```
 
 === "MacOS X"
@@ -56,12 +62,13 @@ What you will need in order to get started with libhal.
     ```
     brew install python
     brew install llvm@17
+    brew install pipx
     ```
 
     Install conan:
 
     ```
-    python3 -m pip install "conan>=2.2.2"
+    pipx install "conan>=2.10.1"
     ```
 
     Make `clang-tidy` available on the command line:
@@ -124,7 +131,7 @@ What you will need in order to get started with libhal.
     Install conan (must be in admin powershell):
 
     ```powershell
-    python -m pip install -U "conan>=2.2.2"
+    python -m pip install -U "conan>=2.10.1"
     ```
 
     There is no more installation required at this point.
@@ -182,24 +189,6 @@ Now install the profile for your particular OS and CPU architecture.
     conan config install -sf profiles/armv8/linux/ -tf profiles https://github.com/libhal/conan-config.git
     ```
 
-=== "M1 Mac"
-
-    If your Mac Book uses an M1 processor then you'll want to use this default
-    configuration.
-
-    ```bash
-    conan config install -sf profiles/armv8/mac/ -tf profiles https://github.com/libhal/conan-config.git
-    ```
-
-=== "Intel Mac"
-
-    If your Mac Book uses an Intel processor then you'll want to use this default
-    configuration.
-
-    ```bash
-    conan config install -sf profiles/x86_64/mac/ -tf profiles https://github.com/libhal/conan-config.git
-    ```
-
 === "Intel Windows"
 
     If your Windows machine uses an Intel processor then you'll want to use this
@@ -216,6 +205,68 @@ Now install the profile for your particular OS and CPU architecture.
 
     ```bash
     conan config install -sf profiles/armv8/windows/ -tf profiles https://github.com/libhal/conan-config.git
+    ```
+
+---
+
+For M1 Mac users:
+
+=== "M1 Mac 13 (Ventura)"
+
+    If your Mac Book uses an M1 processor then you'll want to use this default
+    configuration.
+
+    ```bash
+    conan config install -sf profiles/armv8/mac-13/ -tf profiles https://github.com/libhal/conan-config.git
+    ```
+
+=== "M1 Mac 14 (Sonoma)"
+
+    If your Mac Book uses an M1 processor then you'll want to use this default
+    configuration.
+
+    ```bash
+    conan config install -sf profiles/armv8/mac-14/ -tf profiles https://github.com/libhal/conan-config.git
+    ```
+
+=== "M1 Mac 15 (Sequoia)"
+
+    If your Mac Book uses an M1 processor then you'll want to use this default
+    configuration.
+
+    ```bash
+    conan config install -sf profiles/armv8/mac-15/ -tf profiles https://github.com/libhal/conan-config.git
+    ```
+
+---
+
+For Intel Mac users:
+
+=== "Intel Mac 13 (Ventura)"
+
+    If your Mac Book uses an Intel processor then you'll want to use this default
+    configuration.
+
+    ```bash
+    conan config install -sf profiles/x86_64/mac-13/ -tf profiles https://github.com/libhal/conan-config.git
+    ```
+
+=== "Intel Mac 14 (Sonoma)"
+
+    If your Mac Book uses an Intel processor then you'll want to use this default
+    configuration.
+
+    ```bash
+    conan config install -sf profiles/x86_64/mac-14/ -tf profiles https://github.com/libhal/conan-config.git
+    ```
+
+=== "Intel Mac 15 (Sequoia)"
+
+    If your Mac Book uses an Intel processor then you'll want to use this default
+    configuration.
+
+    ```bash
+    conan config install -sf profiles/x86_64/mac-15/ -tf profiles https://github.com/libhal/conan-config.git
     ```
 
 ---
@@ -308,6 +359,8 @@ In order to complete this tutorial you'll one of these devices:
         python3.10 -m pip install nxpprog
         ```
 
+        On other systems you may have to just use `python` as the command.
+
     ```bash
     nxpprog --control --binary demos/build/lpc4078/MinSizeRel/uart.elf.bin --device /dev/tty.usbserial-140
     ```
@@ -389,13 +442,12 @@ In order to complete this tutorial you'll one of these devices:
 
     ### On Linux
 
-    Add yourself to the dialout user group to give yourself the permission. 
+    Add yourself to the dialout user group to give yourself the permission.
     This group has the permission to talk to serial ports.
 
     ```
     $ usermod -a -G dialout $USER
     ```
-    
 
 ## ⚡️ Changing Built Type
 
