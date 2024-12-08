@@ -186,7 +186,7 @@ write-then-read operations without asserting and de-asserting the chip select
 each time, add the `hal::no_cs` token as the first parameter of the utility
 APIs.
 
-### `hal::write(hal::spi_channel& p_spi, ...)`
+### `hal::write()`
 
 ```C++
 #include <mutex>
@@ -239,7 +239,7 @@ void hal_write_spi_example(hal::spi_channel& p_spi,
 }
 ```
 
-### `hal::read(hal::spi_channel& p_spi, ...)`
+### `hal::read()`
 
 ```C++
 #include <mutex>
@@ -289,7 +289,7 @@ void hal_read_spi_example(hal::spi_channel& p_spi) {
 }
 ```
 
-### `hal::write_then_read(hal::spi_channel& p_spi, ...)`
+### `hal::write_then_read()`
 
 ```C++
 #include <mutex>
