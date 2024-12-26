@@ -4,15 +4,14 @@ Most of our users use VSCode so we made a guide for them. These guidelines
 should also work for non-vscode users as well.
 
 !!! info
-
-      The default "C/C++" extension by VSCode is nice that it can figure a ton
-      of things out about your system automatically. But the way we write code
-      for `libhal` using `conan` makes the extension difficult and slow to use.
-      This is due to the fact that we need to point the extension to the
-      `.conan2/p/` (conan 2 package directory). Because that directory could
-      have a large number of files and multiple version of the same project, it
-      tends to get confused, stop working, or get very slow. We recommend
-      `clangd` because it is fast, helpful, and easy to use.
+    The default "C/C++" extension by VSCode is nice that it can figure a ton
+    of things out about your system automatically. But the way we write code
+    for `libhal` using `conan` makes the extension difficult and slow to use.
+    This is due to the fact that we need to point the extension to the
+    `.conan2/p/` (conan 2 package directory). Because that directory could
+    have a large number of files and multiple version of the same project, it
+    tends to get confused, stop working, or get very slow. We recommend
+    `clangd` because it is fast, helpful, and easy to use.
 
 ## Setup Steps
 
@@ -30,11 +29,11 @@ Make sure you have already installed clang via the
 5. Go the the `clangd` extension settings page. Find the clangd extension and
    press the GEAR ⚙️ icon to open up it settings.
 6. Find the settings `clangd: Arguments` and add:
-   1. Linux & Mac: `--query-driver=**/g++,**/*-g++`
-   2. Windows: `--query-driver=**/g++.exe,**/*-g++.exe`
+    1. Linux & Mac: `--query-driver=**/g++,**/*-g++`
+    2. Windows: `--query-driver=**/g++.exe,**/*-g++.exe`
 7. On Mac change `Clangd: Path` to:
-   1. Intel Mac 13: `/usr/local/opt/llvm@17/bin/clang++`
-   2. All other versions: `/opt/homebrew/opt/llvm@17/bin/clangd`
+    1. Intel Mac 13: `/usr/local/opt/llvm@17/bin/clang++`
+    2. All other versions: `/opt/homebrew/opt/llvm@17/bin/clangd`
 
 Clangd arguments should look like this:
 
