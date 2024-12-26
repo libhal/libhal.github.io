@@ -16,26 +16,29 @@ should also work for non-vscode users as well.
 
 ## Setup Steps
 
+Make sure you have already installed clang via the
+[🚀 Getting Started](../getting_started.md) guide.
+
 1. Install [VSCode](https://code.visualstudio.com/) if you don't already have
    it installed.
-2. Go the the "Extensions" section on the left side bar. Hover over the icons
-   to get their name.
-3. Search for "C/C++" and disable the extension if it is already installed and
-   enabled.
+2. Go the the "Extensions" section on the left side bar. It looks like 4 blocks
+   with the upper right hand block disconnected from the other 3.  Hover over
+   the icons to get their name.
+3. Search for "C/C++" and disable the Windows intellisense extension if it is
+   already installed and enabled.
 4. Search for the extension `clangd` and install the extension.
-5. Install `clang`
-    1. Ubuntu/Debian: `sudo apt install clang`
-    2. MacOS: `brew install llvm@18`
-    3. Windows: `choco install llvm`
-6. Add `--query-driver=**/g++,**/*-g++` (for Linux & Mac) or
-   `--query-driver=**/g++.exe,**/*-g++.exe` (for Windows) to the clangd command
-   arguments in the `clangd` settings.
-    1. Go the the extensions page
-    2. Find clangd and press the GEAR icon and open up settings.
-    3. Find the settings `clangd: Arguments` and add the above code there. It is
-       comma delimitated so you can add additional compiler patterns as well.
-7. On Mac change `Clangd: Path` to `/opt/homebrew/opt/llvm@18/bin/clangd` in
-   the clangd settings menu.
+5. Go the the `clangd` extension settings page. Find the clangd extension and
+   press the GEAR ⚙️ icon to open up it settings.
+6. Find the settings `clangd: Arguments` and add:
+   1. Linux & Mac: `--query-driver=**/g++,**/*-g++`
+   2. Windows: `--query-driver=**/g++.exe,**/*-g++.exe`
+7. On Mac change `Clangd: Path` to:
+   1. Intel Mac 13: `/usr/local/opt/llvm@17/bin/clang++`
+   2. All other versions: `/opt/homebrew/opt/llvm@17/bin/clangd`
+
+Clangd arguments should look like this:
+
+![clangd arguments](../assets/clangd-arguments.png "Clangd Arguments")
 
 ### Refreshing the Language Server
 
