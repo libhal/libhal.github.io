@@ -27,9 +27,9 @@ should also work for non-vscode users as well.
     1. Ubuntu/Debian: `sudo apt install clang`
     2. MacOS: `brew install llvm@18`
     3. Windows: `choco install llvm`
-6. Add `--query-driver=**/*g++` (for Linux & Mac) or
-   `--query-driver=**/*g++.exe` (for Windows) to the clangd command arguments
-   in the clangd settings.
+6. Add `--query-driver=**/g++,**/*-g++` (for Linux & Mac) or
+   `--query-driver=**/g++.exe,**/*-g++.exe` (for Windows) to the clangd command
+   arguments in the `clangd` settings.
     1. Go the the extensions page
     2. Find clangd and press the GEAR icon and open up settings.
     3. Find the settings `clangd: Arguments` and add the above code there. It is
