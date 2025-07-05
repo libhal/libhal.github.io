@@ -78,7 +78,7 @@ jobs:
 Replace the contents of the file with the data below:
 
 ```python
-# Copyright 2024 Khalil Estell
+# Copyright 2024 - 2025 Khalil Estell and the libhal contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -147,7 +147,7 @@ are now automatically linked against your library when you use
 Replace it with this, update `__device__` to the correct library name:
 
 ```cmake
-# Copyright 2024 Khalil Estell
+# Copyright 2024 - 2025 Khalil Estell and the libhal contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -177,7 +177,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE libhal::__device__)
 Replace it with this:
 
 ```python
-# Copyright 2024 Khalil Estell
+# Copyright 2024 - 2025 Khalil Estell and the libhal contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -209,7 +209,7 @@ class TestPackageConan(ConanFile):
 Replace it with the following:
 
 ```python
-# Copyright 2024 Khalil Estell
+# Copyright 2024 - 2025 Khalil Estell and the libhal contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -246,7 +246,7 @@ class demos(ConanFile):
 ## (6) Replace `demos/CMakeLists.txt`
 
 ```cmake
-# Copyright 2024 Khalil Estell
+# Copyright 2024 - 2025 Khalil Estell and the libhal contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

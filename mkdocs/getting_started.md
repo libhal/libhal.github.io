@@ -46,7 +46,7 @@ What you will need in order to get started with libhal.
     Installing conan:
 
     ```
-    pipx install "conan>=2.10.1"
+    pipx install "conan>=2.18.0"
     ```
 
 === "MacOS X"
@@ -68,7 +68,7 @@ What you will need in order to get started with libhal.
     Install conan:
 
     ```
-    pipx install "conan>=2.10.1"
+    pipx install "conan>=2.18.0"
     ```
 
     Make `clang-tidy` available on the command line:
@@ -131,7 +131,7 @@ What you will need in order to get started with libhal.
     Install conan (must be in admin powershell):
 
     ```powershell
-    python -m pip install -U "conan>=2.10.1"
+    python -m pip install -U "conan>=2.18.0"
     ```
 
     There is no more installation required at this point.
