@@ -1,0 +1,2542 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../timers_and_counters/">
+      
+      
+        <link rel="next" href="../pwm/">
+      
+      
+      <link rel="icon" href="../../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.16">
+    
+    
+      
+        <title>ADC - libhal</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#adc-analog-to-digital-converter" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+          <aside class="md-banner md-banner--warning">
+            <div class="md-banner__inner md-grid md-typeset">
+              
+You're not viewing the latest version.
+<a href="../../..">
+  <strong>Click here to go to latest.</strong>
+</a>
+
+            </div>
+            <script>var el=document.querySelector("[data-md-component=outdated]"),base=new URL("../.."),outdated=__md_get("__outdated",sessionStorage,base);!0===outdated&&el&&(el.hidden=!1)</script>
+          </aside>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="libhal" class="md-header__button md-logo" aria-label="libhal" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            libhal
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ADC
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/libhal/libhal/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    libhal
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  🏡 Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../getting_started/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🚀 Getting Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../user_guide/setup_vscode/" class="md-tabs__link">
+          
+  
+  
+  📖 User Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../embedded_systems/" class="md-tabs__link">
+          
+  
+  
+  🏫 Education
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../contributor_guide/philosophy/" class="md-tabs__link">
+          
+  
+  
+  📚 Contributor Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../project_information/status/" class="md-tabs__link">
+          
+  
+  
+  📊 Project Information
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../api/index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🧩 APIs
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="libhal" class="md-nav__button md-logo" aria-label="libhal" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    libhal
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/libhal/libhal/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    libhal
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🏡 Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🚀 Getting Started
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    📖 User Guide
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            📖 User Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/setup_vscode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🧑🏿‍💻 Setting up VSCode
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/fundamentals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🧱 Fundamentals of libhal
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/interfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🔗 Interfaces in libhal
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🎯 Debugging Firmware
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/error_handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🪤 Error Handling in libhal
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/policy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ⚖️ Policies & FAQ
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    🏫 Education
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            🏫 Education
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded_systems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    What are Embedded Systems?
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bitmasking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bit Masking
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Microcontroller Architecture
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gpio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    General Purpose I/O
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dma/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    DMA
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../timers_and_counters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Timers & Counters
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    ADC
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADC
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#learning-about-adcs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Learning about ADCs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adc-interfaces-and-how-to-use-them" class="md-nav__link">
+    <span class="md-ellipsis">
+      ADC interfaces and how to use them
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ADC interfaces and how to use them">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-adc-upscaling-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      How ADC upscaling works
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-upscaled-adc-values-for-math" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using upscaled ADC values for math
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance-of-scaled-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance of scaled values
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#adc-utilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      ADC Utilities
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ADC Utilities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adc-scaler-apis" class="md-nav__link">
+    <span class="md-ellipsis">
+      ADC scaler APIs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adaptor-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Adaptor classes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#building-drivers-that-take-haladcn" class="md-nav__link">
+    <span class="md-ellipsis">
+      Building Drivers that take hal::adcN
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementing-the-adc-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implementing the ADC interface
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-this-design-choice" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why this design choice?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why this design choice?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-not-provide-a-single-interface-w-a-bit-width-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why not provide a single interface w/ a bit-width API?
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Why not provide a single interface w/ a bit-width API?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#problem-1-2-virtual-calls-needed-to-realize-the-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      Problem #1: 2 virtual calls needed to realize the value
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problem-2-caching-bit-width-in-drivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Problem #2: Caching bit-width in drivers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problem-3-computational-complexity" class="md-nav__link">
+    <span class="md-ellipsis">
+      Problem #3: Computational complexity
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#problem-4-why-not-return-both" class="md-nav__link">
+    <span class="md-ellipsis">
+      Problem #4: Why not return both?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conclusion-about-bit-width-apis" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion about bit-width APIs
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#benchmarks-against-other-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Benchmarks against other options
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pwm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PWM
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../spi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SPI
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../uart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    UART
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../i2c/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    I2C
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    DAC
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../canbus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    CAN BUS
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sensors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Basics of Sensors
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../actuators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Basics of Actuators
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rtos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    RTOS
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tbd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    TBD
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    📚 Contributor Guides
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            📚 Contributor Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributor_guide/philosophy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    📜 Design Philosophy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributor_guide/organization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🗃️ Organization
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributor_guide/style/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🎨 Style Guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributor_guide/interface_design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🔗 Interface Design Philosophy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributor_guide/library_guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🔹 Library Development Guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributor_guide/arm_cortex_m_bringup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🧠 ARM Cortex M Bring Up
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributor_guide/dma_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ⏩ DMA Tutorial
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributor_guide/upgrade_to_libhal_3_device_library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ⬆️ Upgrade Device Library to 3.x.y
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributor_guide/architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🏗️ Architectural Design Decisions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    📊 Project Information
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            📊 Project Information
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../project_information/status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🟢 Library Status 🔴
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../project_information/about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    About
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🧩 APIs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="adc-analog-to-digital-converter">ADC: Analog to Digital Converter</h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This document describes the ADC for libhal 5.0.0 which is not out yet.</p>
+</div>
+<p>Welcome to the libhal adc tutorial. ADCs are used to sample analog voltage
+signals and convert them into a number that can be used by controllers to sense
+the world .</p>
+<h2 id="learning-about-adcs">Learning about ADCs</h2>
+<p>To learn more about ADCs we have made a list of online resources to learn:</p>
+<ul>
+<li><a href="https://learn.sparkfun.com/tutorials/analog-to-digital-conversion/all">Sparkfun Tutorial</a>:
+  (RECOMMENDED) Quick and easy to understand.</li>
+<li><a href="https://www.youtube.com/watch?v=g4BvbAKNQ90">element14 ADC tutorial video</a>:
+  A great 10min long video that goes into the many different ADC
+  implementations and how they convert voltages into decimal numbers.</li>
+</ul>
+<h2 id="adc-interfaces-and-how-to-use-them">ADC interfaces and how to use them</h2>
+<p>libhal has 4 ADC interfaces. Each is suffixed with the bit resolution of the
+ADC.</p>
+<ul>
+<li><code>hal::adc8</code>: for ADCs with 8 bits or below</li>
+<li><code>hal::adc16</code>: for ADCs with 9 to 16 bits</li>
+<li><code>hal::adc24</code>: for ADCs with 17 to 24 bits</li>
+<li><code>hal::adc32</code>: for ADCs with 25 to 32 bits</li>
+</ul>
+<p>Different applications require different resolutions of analog measurement.</p>
+<ul>
+<li><code>hal::adc8</code> for when resolution is not very important and can be low</li>
+<li><code>hal::adc16</code> will be the most common ADC version and will suite most general
+  use cases</li>
+<li><code>hal::adc24</code> is for applications that need high precision</li>
+<li><code>hal::adc32</code> is for applications that need extremely high precision</li>
+</ul>
+<p>The ADC interfaces have a singular API which is <code>read()</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Returns value from 0 to 255</span>
+<span class="n">hal</span><span class="o">::</span><span class="n">u8</span><span class="w"> </span><span class="nf">hal::adc8::read</span><span class="p">();</span>
+<span class="c1">// Returns value from 0 to 65,535</span>
+<span class="n">hal</span><span class="o">::</span><span class="n">u16</span><span class="w"> </span><span class="nf">hal::adc16::read</span><span class="p">();</span>
+<span class="c1">// Returns value from 0 to 16,777,215</span>
+<span class="n">hal</span><span class="o">::</span><span class="n">u32</span><span class="w"> </span><span class="nf">hal::adc24::read</span><span class="p">();</span>
+<span class="c1">// Returns value from 0 to 4,294,967,295</span>
+<span class="n">hal</span><span class="o">::</span><span class="n">u32</span><span class="w"> </span><span class="nf">hal::adc32::read</span><span class="p">();</span>
+</code></pre></div>
+<p>The <code>read()</code> API returns a value between <code>0</code> and the maximum value
+representable for that bit-width. Drivers that are not exactly the bit-width of
+the adc they represent must upscale their ADC values to match the ADC they are
+implementing. For example a 9-bit ADC would need to perform an upscale to
+16-bits.</p>
+<h3 id="how-adc-upscaling-works">How ADC upscaling works</h3>
+<p>libhal provides an integer upscaling facility in:</p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">incoming_bit_width</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">upscaled_bit_width</span><span class="o">&gt;</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">container_int_t</span><span class="o">&lt;</span><span class="n">upscaled_bit_width</span><span class="o">&gt;</span><span class="w"> </span><span class="n">upscale</span><span class="p">(</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unsigned_integral</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">p_value</span><span class="p">);</span>
+</code></pre></div>
+<p>This may look pretty complicated but lets see it in use:</p>
+<div class="highlight"><pre><span></span><code><span class="n">hal</span><span class="o">::</span><span class="n">u16</span><span class="w"> </span><span class="nf">my_adc::read</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">u16</span><span class="w"> </span><span class="n">adc_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">/* ... acquire 9-bit sample ... */</span><span class="p">;</span>
+<span class="w">  </span><span class="c1">// scale 9-bit sample to 16-bits</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">upscale</span><span class="o">&lt;</span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="o">&gt;</span><span class="p">(</span><span class="n">adc_value</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The key to proportional upscaling is replicating the original bits into the
+larger bit depth through shifting and bitwise OR operations. Consider upscaling
+an 8-bit value to 16 bits:</p>
+<div class="highlight"><pre><span></span><code>8-bit value:          10110101 (decimal 181)
+Naive padding:        10110101 00000000 (decimal 46,336)
+Bit duplication:      10110101 10110101 (decimal 46,421)
+</code></pre></div>
+<p>Zero-padding (left shifting) multiplies the value by 256, which distorts the
+proportional relationship. More importantly, zero-padding can never reach the
+maximum 16-bit value (65,535) as the lower bits are always 0. Similarly,
+padding with 1s means you can never reach 0 in the larger bit depth.</p>
+<p>To demonstrate this distortion, let's look at the middle value of a <code>uint8_t</code>
+(127):</p>
+<div class="highlight"><pre><span></span><code>8-bit middle:         01111111 (decimal 127, 49.803% of 256)
+Naive padding:        01111111 00000000 (decimal 32,512)
+Bit duplication:      01111111 01111111 (decimal 32,767)
+</code></pre></div>
+<p>With naive zero-padding, 32,512 is only 49.61% of the 16-bit maximum (65,535),
+creating a proportional error of 0.193%. In contrast, bit duplication yields
+32,767, which is exactly 50% of 65,535, maintaining the correct proportional
+relationship from the original 8-bit value.</p>
+<p>Bit duplication ensures that all values maintain their relative positions when
+scaled up - when the input is 0, the output is 0, and when the input is max
+(255), the output is max (65,535). This makes it ideal for ADC upscaling where
+maintaining proportional relationships across the entire range is crucial.</p>
+<h3 id="using-upscaled-adc-values-for-math">Using upscaled ADC values for math</h3>
+<p>Typically, ADC values are used to scale other values. Lets take a very
+rudimentary example of a potentiometer with 350 degrees of movement.</p>
+<div class="highlight"><pre><span></span><code><span class="n">hal</span><span class="o">::</span><span class="n">u16</span><span class="w"> </span><span class="nf">adc_to_degrees</span><span class="p">(</span><span class="n">hal</span><span class="o">::</span><span class="n">adc16</span><span class="o">&amp;</span><span class="w"> </span><span class="n">p_adc</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">constexpr</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">u16</span><span class="w"> </span><span class="n">max_degrees</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">350</span><span class="p">;</span>
+<span class="w">  </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">u16_max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="n">hal</span><span class="o">::</span><span class="n">u16</span><span class="o">&gt;::</span><span class="n">max</span><span class="p">();</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">u16_sample</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p_adc</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+<span class="w">  </span><span class="c1">// Multiplication between two u16s requires u32 to contain it</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">u32</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">overscaled_value</span><span class="w"> </span><span class="o">=</span><span class="w">  </span><span class="n">max_degrees</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u16_sample</span><span class="p">;</span>
+<span class="w">  </span><span class="c1">// Divide resolve by the maximum value of a u16 to scale it back to degrees</span>
+<span class="w">  </span><span class="c1">// Because we are dividing by the max of u16, the resulting value will be u16</span>
+<span class="w">  </span><span class="c1">// in size.</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">degrees</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">hal</span><span class="o">::</span><span class="n">u16</span><span class="o">&gt;</span><span class="p">(</span><span class="n">overscaled_value</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">u16_max</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">degrees</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Scaling using a proportional integer value works like so:</p>
+<div class="highlight"><pre><span></span><code>           /  adc_value * 350  \
+degrees = | ------------------- |
+           \       65535       /
+</code></pre></div>
+<p>Lets put in a value that is in the middle of the ADC value. We should get a
+degrees value also in the middle of the 350 degrees which is 175.</p>
+<div class="highlight"><pre><span></span><code>           /    32767 * 350    \
+degrees = | ------------------- | =  175 (middle of the potentiometer)
+           \       65535       /
+</code></pre></div>
+<h3 id="performance-of-scaled-values">Performance of scaled values</h3>
+<p>By using scaled values, the application writer can decide how they want to
+perform mathematics on the adc samples based on their maximum value. For
+example, if the application requires a <code>adc24</code> and the result is multiplied by
+an <code>8-bit</code> number, the result can still be contained in a <code>u32</code> without needing
+to use a <code>u64</code> bit value. Note that u64 math on 32-bit systems must me emulated
+in software which results in a performance drop.</p>
+<h2 id="adc-utilities">ADC Utilities</h2>
+<h3 id="adc-scaler-apis">ADC scaler APIs</h3>
+<p>To make this scaling easier we provide two APIs</p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">u16</span><span class="w"> </span><span class="nf">hal::scale_value</span><span class="p">(</span><span class="n">hal</span><span class="o">::</span><span class="n">u16</span><span class="w"> </span><span class="n">p_max_value</span><span class="p">,</span>
+<span class="w">                                    </span><span class="n">hal</span><span class="o">::</span><span class="n">adc16</span><span class="o">&amp;</span><span class="w"> </span><span class="n">p_adc</span><span class="p">);</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">integral</span><span class="w"> </span><span class="n">int_t</span><span class="o">&gt;</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">u16</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">scale_value</span><span class="p">(</span><span class="n">hal</span><span class="o">::</span><span class="n">range</span><span class="o">&lt;</span><span class="n">int_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">p_value_range</span><span class="p">,</span>
+<span class="w">                                    </span><span class="n">hal</span><span class="o">::</span><span class="n">adc16</span><span class="o">&amp;</span><span class="w"> </span><span class="n">p_adc</span><span class="p">);</span>
+</code></pre></div>
+<p>Using these APIs we get:</p>
+<div class="highlight"><pre><span></span><code><span class="n">hal</span><span class="o">::</span><span class="n">u16</span><span class="w"> </span><span class="nf">adc_to_degrees</span><span class="p">(</span><span class="n">hal</span><span class="o">::</span><span class="n">adc16</span><span class="o">&amp;</span><span class="w"> </span><span class="n">p_adc</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">constexpr</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">u16</span><span class="w"> </span><span class="n">max_degrees</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">350</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">scale_value</span><span class="p">(</span><span class="n">max_degrees</span><span class="p">,</span><span class="w"> </span><span class="n">p_adc</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">hal</span><span class="o">::</span><span class="n">u16</span><span class="w"> </span><span class="nf">adc_to_degrees</span><span class="p">(</span><span class="n">hal</span><span class="o">::</span><span class="n">adc16</span><span class="o">&amp;</span><span class="w"> </span><span class="n">p_adc</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// In this case we have a minimum that is not</span>
+<span class="w">  </span><span class="k">constexpr</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">u16</span><span class="w"> </span><span class="n">min_degrees</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span>
+<span class="w">  </span><span class="k">constexpr</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">u16</span><span class="w"> </span><span class="n">max_degrees</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">350</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">scale_value</span><span class="p">({</span><span class="w"> </span><span class="p">.</span><span class="n">min</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">min_degrees</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max_degrees</span><span class="p">},</span><span class="w"> </span><span class="n">p_adc</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="adaptor-classes">Adaptor classes</h3>
+<p>Let say you have a 16-bit ADC and want to use it in place of a 8-bit adc. This
+can happen when a driver that requires an ADC requires a different ADC then what you currently have. Reducing the resolution is as easy as shifting the
+data to the right to reach the desired bit-width.</p>
+<div class="highlight"><pre><span></span><code><span class="k">template</span><span class="o">&lt;</span><span class="n">hal</span><span class="o">::</span><span class="n">adc_t</span><span class="w"> </span><span class="n">destination_adc</span><span class="p">,</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">adc_t</span><span class="w"> </span><span class="n">source_adc</span><span class="o">&gt;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">adc_adaptor</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="n">adc_adaptor</span><span class="p">(</span><span class="n">source_adc</span><span class="o">&amp;</span><span class="w"> </span><span class="n">p_source</span><span class="p">);</span>
+<span class="w">  </span><span class="n">adc_adaptor</span><span class="p">(</span><span class="n">source_adc</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">p_source</span><span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>Usage:</p>
+<div class="highlight"><pre><span></span><code><span class="n">hal</span><span class="o">::</span><span class="n">adc24</span><span class="o">&amp;</span><span class="w"> </span><span class="n">high_precision_adc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">/* ... */</span><span class="p">;</span>
+<span class="n">hal</span><span class="o">::</span><span class="n">adc_adaptor</span><span class="o">&lt;</span><span class="n">hal</span><span class="o">::</span><span class="n">adc16</span><span class="o">&gt;</span><span class="w"> </span><span class="n">adc_16_bit</span><span class="p">(</span><span class="n">high_precision_adc</span><span class="p">);</span>
+<span class="n">hal</span><span class="o">::</span><span class="n">u16</span><span class="w"> </span><span class="n">reading</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">adc_16_bit</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+</code></pre></div>
+<p>The adaptor can also scale up bit data but usage in that direction is dubious if an driver requires a specific resolution.</p>
+<div class="highlight"><pre><span></span><code><span class="n">hal</span><span class="o">::</span><span class="n">adc8</span><span class="o">&amp;</span><span class="w"> </span><span class="n">low_precision_adc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">/* ... */</span><span class="p">;</span>
+<span class="n">hal</span><span class="o">::</span><span class="n">adc_adaptor</span><span class="o">&lt;</span><span class="n">hal</span><span class="o">::</span><span class="n">adc16</span><span class="o">&gt;</span><span class="w"> </span><span class="n">adc_16_bit</span><span class="p">(</span><span class="n">low_precision_adc</span><span class="p">);</span>
+<span class="n">hal</span><span class="o">::</span><span class="n">u16</span><span class="w"> </span><span class="n">reading</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">adc_16_bit</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+</code></pre></div>
+<h2 id="building-drivers-that-take-haladcn">Building Drivers that take <code>hal::adcN</code></h2>
+<p><code>hal::adcN</code> can be shared but in general it is recommended to pass a single adc
+to a single driver to use. Driver implementors should assume that they are the
+only users of the <code>hal::adcN</code>. Driver implementors should assume that the passed in adc will outlive the lifetime of the driver.</p>
+<p>Drivers that require an ADC to function should look similar to the following:</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">my_driver</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="n">my_driver</span><span class="p">(</span><span class="n">hal</span><span class="o">::</span><span class="n">adc16</span><span class="o">&amp;</span><span class="w"> </span><span class="n">p_adc</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="n">m_adc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">p_adc</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Do what is needed for the driver</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">adc16</span><span class="o">*</span><span class="w"> </span><span class="n">m_adc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>For your application, decide what bit-resolution your driver requires. When
+  in doubt, choose <code>hal::adc16</code> as it is the most common ADC type.</li>
+<li>Accept your ADC type by reference and store the ADC's address within a
+  pointer. See style guide "S.15.2 Storing references" for more details.</li>
+</ul>
+<p>And thats about it. You can use the adc as much as you like in your APIs. The
+only concern is ensuring that you do not get integer overflows when performing
+math on the ADC values.</p>
+<h2 id="implementing-the-adc-interface">Implementing the ADC interface</h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This section is incomplete!</p>
+</div>
+<p>ADCs can appear in different locations such as:</p>
+<ul>
+<li>Embedded into the silicon of a microcontroller</li>
+<li>Discrete devices that a controller to speak to over protocols like i2c and
+  spi.</li>
+</ul>
+<p>ADCs typically come with multiple channels. Each ADC object should manage and
+control a singular ADC channel. Initializing an ADC object may require that it
+setup the whole.</p>
+<h2 id="why-this-design-choice">Why this design choice?</h2>
+<p>This section goes over the API design choice for the <code>hal::adcN</code> APIs. Starting
+with the original design:</p>
+<h3 id="why-not-provide-a-single-interface-w-a-bit-width-api">Why not provide a single interface w/ a bit-width API?</h3>
+<p>A very common approach for an ADC abstraction would be something like this:</p>
+<div class="highlight"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">adc</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">u8</span><span class="w"> </span><span class="nf">bit_width</span><span class="p">();</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">u32</span><span class="w"> </span><span class="nf">read</span><span class="p">();</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>Where an API is provided for both the bit-width and ADC value. To compute actual
+scaled value, the caller will need to call the <code>bit_width</code> API before it can
+use the information from <code>read()</code>. Calculating the maximum value for a bit width
+can be done with the following expression: <code>(1 &lt;&lt; bit_width) - 1</code>. This
+approach would allow interfaces to be used for everything ADC related.</p>
+<p>There are a couple of reasons why I do not like this approach:</p>
+<h4 id="problem-1-2-virtual-calls-needed-to-realize-the-value">Problem #1: 2 virtual calls needed to realize the value</h4>
+<p>If a function or method has never once called any APIs on an ADC, it must first
+call <code>bit_width</code> then call <code>read</code> to understand the value of <code>read</code>. Luckily
+the <code>bit_width</code> is a value that should be known at compile time and is
+intrinsic to the ADC's hardware, so returning the value is very simple and
+straight forward. But for each scope where the <code>bit_width</code> information is lost,
+the <code>bit_width</code> API must be called.</p>
+<p>The second virtual API call requires additional cycles, although not that many,
+but if we can avoid extra API calls and get all of the information in a single
+call, then I think that is the better technical design decision.</p>
+<h4 id="problem-2-caching-bit-width-in-drivers">Problem #2: Caching bit-width in drivers</h4>
+<p>For drivers, calling <code>bit_width</code> each time you need to scale a value based on
+<code>read</code> would be a waste of cycles. It would be faster to call <code>bit_width</code> once
+at driver construction and cache the full-scale value into a <code>hal::u32</code>. Then
+reuse that value through out the code.</p>
+<p>This would mean that drivers using an ADC interface will preferable cache
+an extra 32-bit word to save on a virtual call. Thus, this API design results
+in additional memory usage in order to improve on performance.</p>
+<h4 id="problem-3-computational-complexity">Problem #3: Computational complexity</h4>
+<p>Because the width isn't known until runtime, code using any such ADC will have
+to prepared for ADCs with large bit widths such as 24-bit ADCs. Code will need
+to perform a check against the bit-width and determine what resolution is
+needed for the code. It would look something like this:</p>
+<div class="highlight"><pre><span></span><code><span class="n">hal</span><span class="o">::</span><span class="n">u32</span><span class="w"> </span><span class="nf">scale_to_degrees</span><span class="p">(</span><span class="n">hal</span><span class="o">::</span><span class="n">adc_split</span><span class="o">&amp;</span><span class="w"> </span><span class="n">impl</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">constexpr</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">u16</span><span class="w"> </span><span class="n">max_degrees</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">360</span><span class="p">;</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">bit_width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">impl</span><span class="p">.</span><span class="n">bit_width</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">impl</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">bit_width</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">shift_amount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bit_width</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">16</span><span class="p">;</span>
+<span class="w">    </span><span class="n">response</span><span class="w"> </span><span class="o">&gt;&gt;=</span><span class="w"> </span><span class="n">shift_amount</span><span class="p">;</span>
+<span class="w">    </span><span class="n">bit_width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">16</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">max_scale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">bit_width</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">up_scaled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">max_degrees</span><span class="p">;</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">final_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">up_scaled</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">max_scale</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">final_value</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>In this case, our math can only work with 16-bit resolution values, so a check
+against the bit_width is required. If that branch is taken additional
+operations are needed to scale the value down to a bit-width that the code can
+work with. Or to eliminate the branch, the code could use <code>hal::u64</code>, but then
+the performance on 32-bit systems tanks.</p>
+<h4 id="problem-4-why-not-return-both">Problem #4: Why not return both?</h4>
+<p>You could return a struct with both of the information. But now each call has
+the additional cost of returning a bit-width each time it is called even if it
+won't be used.</p>
+<h4 id="conclusion-about-bit-width-apis">Conclusion about bit-width APIs</h4>
+<p>The choice to include a bit-width API takes information that is known at
+compile time and is intrinsic to the device and makes it only accessible via
+runtime. To accommodate this, code developers must:</p>
+<ol>
+<li>Make additional calls</li>
+<li>Cache information</li>
+<li>Computer the full-scale value</li>
+<li>Perform additional logic to ensure math safety</li>
+</ol>
+<p>These can all be eliminated by categorizing each adc bit-width bucket into the
+4 interfaces mentioned and merging the bit-width info into the returned value
+via upscaling. Lets consider <code>hal::adc16</code>:</p>
+<ol>
+<li>Only requires a single call</li>
+<li>No need to cache information, simply use the sample that was returned</li>
+<li>Full scale is known at compile time as the max value of a <code>u16</code> (65535)</li>
+<li>No additional logic is required because bit-width is intrinsic to the
+   interface</li>
+</ol>
+<p>Using upscaled values eliminates operations that would otherwise be reproduced
+throughout a code base and across drivers. Scaling within each of the <code>adcN</code>
+interface buckets ensures that only a single left shift and OR operation is
+required to upscale the data.</p>
+<h3 id="benchmarks-against-other-options">Benchmarks against other options</h3>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cinttypes&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;climits&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;concepts&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;limits&gt;</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;libhal-exceptions/control.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;libhal-util/serial.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;libhal-util/steady_clock.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;libhal/error.hpp&gt;</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;resource_list.hpp&gt;</span>
+
+<span class="c1">// This is only global so that the terminate handler can use the resources</span>
+<span class="c1">// provided.</span>
+<span class="n">resource_list</span><span class="w"> </span><span class="n">resources</span><span class="p">{};</span>
+
+<span class="p">[[</span><span class="n">noreturn</span><span class="p">]]</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">terminate_handler</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">valid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resources</span><span class="p">.</span><span class="n">status_led</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">resources</span><span class="p">.</span><span class="n">clock</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">not</span><span class="w"> </span><span class="n">valid</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// spin here until debugger is connected</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// Otherwise, blink the led in a pattern, and wait for the debugger.</span>
+<span class="w">  </span><span class="c1">// In GDB, use the `where` command to see if you have the `terminate_handler`</span>
+<span class="w">  </span><span class="c1">// in your stack trace.</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">led</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">resources</span><span class="p">.</span><span class="n">status_led</span><span class="p">.</span><span class="n">value</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">clock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">resources</span><span class="p">.</span><span class="n">clock</span><span class="p">.</span><span class="n">value</span><span class="p">();</span>
+
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="o">::</span><span class="nn">chrono_literals</span><span class="p">;</span>
+<span class="w">    </span><span class="n">led</span><span class="p">.</span><span class="n">level</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+<span class="w">    </span><span class="n">hal</span><span class="o">::</span><span class="n">delay</span><span class="p">(</span><span class="n">clock</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="n">ms</span><span class="p">);</span>
+<span class="w">    </span><span class="n">led</span><span class="p">.</span><span class="n">level</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+<span class="w">    </span><span class="n">hal</span><span class="o">::</span><span class="n">delay</span><span class="p">(</span><span class="n">clock</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="n">ms</span><span class="p">);</span>
+<span class="w">    </span><span class="n">led</span><span class="p">.</span><span class="n">level</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+<span class="w">    </span><span class="n">hal</span><span class="o">::</span><span class="n">delay</span><span class="p">(</span><span class="n">clock</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="n">ms</span><span class="p">);</span>
+<span class="w">    </span><span class="n">led</span><span class="p">.</span><span class="n">level</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+<span class="w">    </span><span class="n">hal</span><span class="o">::</span><span class="n">delay</span><span class="p">(</span><span class="n">clock</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="n">ms</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">application</span><span class="p">();</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="c1">// Setup the terminate handler before we call anything that can throw</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">set_terminate</span><span class="p">(</span><span class="n">terminate_handler</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Initialize the platform and set as many resources as available for this the</span>
+<span class="w">  </span><span class="c1">// supported platforms.</span>
+<span class="w">  </span><span class="n">initialize_platform</span><span class="p">(</span><span class="n">resources</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">application</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">bad_optional_access</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">resources</span><span class="p">.</span><span class="n">console</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">hal</span><span class="o">::</span><span class="n">print</span><span class="p">(</span><span class="o">*</span><span class="n">resources</span><span class="p">.</span><span class="n">console</span><span class="p">.</span><span class="n">value</span><span class="p">(),</span>
+<span class="w">                 </span><span class="s">&quot;A resource required by the application was not available!</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="w">                 </span><span class="s">&quot;Calling terminate!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span><span class="w">  </span><span class="c1">// Allow any other exceptions to terminate the application</span>
+
+<span class="w">  </span><span class="c1">// Terminate if the code reaches this point.</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">terminate</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">hal</span><span class="w"> </span><span class="p">{</span>
+
+<span class="k">using</span><span class="w"> </span><span class="n">integral_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint16_t</span><span class="p">;</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">integral_type_bit_width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">integral_type</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">CHAR_BIT</span><span class="p">;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">adc_scaled</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">integral_type</span><span class="w"> </span><span class="nf">read</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">adc_float</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="nf">read</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">adc_piecewise</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">struct</span><span class="w"> </span><span class="nc">read_t</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">integral_type</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">bit_width</span><span class="p">;</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">read_t</span><span class="w"> </span><span class="nf">read</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">adc_piecewise_max</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">struct</span><span class="w"> </span><span class="nc">read_t</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">integral_type</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">    </span><span class="n">integral_type</span><span class="w"> </span><span class="n">full_scale</span><span class="p">;</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">read_t</span><span class="w"> </span><span class="nf">read</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">adc_split</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="w"> </span><span class="nf">bit_width</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">integral_type</span><span class="w"> </span><span class="nf">read</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">test_bit_width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">adc_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">31</span><span class="p">;</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unsigned_integral</span><span class="w"> </span><span class="n">int_t</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">bit_width</span><span class="o">&gt;</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">int_t</span><span class="w"> </span><span class="n">upscale</span><span class="p">(</span><span class="n">int_t</span><span class="w"> </span><span class="n">p_value</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">resultant_bit_width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">int_t</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">CHAR_BIT</span><span class="p">;</span>
+<span class="w">  </span><span class="k">static_assert</span><span class="p">(</span><span class="n">bit_width</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">bit_width</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">resultant_bit_width</span><span class="p">,</span>
+<span class="w">                </span><span class="s">&quot;Bit width must be between 1 and 32&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="c1">// If already 32 bits, return as-is</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="p">(</span><span class="n">bit_width</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">resultant_bit_width</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">p_value</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="c1">// Create mask for the input bits</span>
+<span class="w">  </span><span class="k">constexpr</span><span class="w"> </span><span class="n">int_t</span><span class="w"> </span><span class="n">mask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1u</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">bit_width</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Calculate number of iterations needed (ceiling(32/bit_width) - 1)</span>
+<span class="w">  </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">iterations</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="p">(</span><span class="n">resultant_bit_width</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">bit_width</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">bit_width</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Place cleaned input value in MSB position</span>
+<span class="w">  </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">shift_distance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resultant_bit_width</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">bit_width</span><span class="p">;</span>
+<span class="w">  </span><span class="n">int_t</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">p_value</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">mask</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">shift_distance</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Replicate the pattern for the calculated number of iterations</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0U</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">iterations</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">result</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">bit_width</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">adc_scaled_impl</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">adc_scaled</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">integral_type</span><span class="w"> </span><span class="nf">read</span><span class="p">()</span><span class="w"> </span><span class="k">override</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">upscale</span><span class="o">&lt;</span><span class="n">integral_type</span><span class="p">,</span><span class="w"> </span><span class="n">test_bit_width</span><span class="o">&gt;</span><span class="p">(</span><span class="n">adc_data</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">adc_piecewise_impl</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">adc_piecewise</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">read_t</span><span class="w"> </span><span class="nf">read</span><span class="p">()</span><span class="w"> </span><span class="k">override</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">adc_data</span><span class="p">,</span><span class="w"> </span><span class="n">test_bit_width</span><span class="w"> </span><span class="p">};</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">adc_split_impl</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">adc_split</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="w"> </span><span class="nf">bit_width</span><span class="p">()</span><span class="w"> </span><span class="k">override</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">test_bit_width</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">integral_type</span><span class="w"> </span><span class="nf">read</span><span class="p">()</span><span class="w"> </span><span class="k">override</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">adc_data</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">adc_float_impl</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">adc_float</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="nf">read</span><span class="p">()</span><span class="w"> </span><span class="k">override</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">test_bit_width</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kt">float</span><span class="p">(</span><span class="n">adc_data</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">max</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">adc_piecewise_max_impl</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">adc_piecewise_max</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">read_t</span><span class="w"> </span><span class="nf">read</span><span class="p">()</span><span class="w"> </span><span class="k">override</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">test_bit_width</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">adc_data</span><span class="p">,</span><span class="w"> </span><span class="n">max</span><span class="w"> </span><span class="p">};</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">};</span>
+<span class="p">}</span><span class="w">  </span><span class="c1">// namespace hal</span>
+
+<span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">max_degrees</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">360</span><span class="p">;</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">u16_max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint16_t</span><span class="o">&gt;::</span><span class="n">max</span><span class="p">();</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">shift_amount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">integral_type_bit_width</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">16</span><span class="p">;</span>
+
+<span class="p">[[</span><span class="n">gnu</span><span class="o">::</span><span class="n">noinline</span><span class="p">]]</span>
+<span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">scale_to_degrees</span><span class="p">(</span><span class="n">hal</span><span class="o">::</span><span class="n">adc_scaled</span><span class="o">&amp;</span><span class="w"> </span><span class="n">impl</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">impl</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">response_u16</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint16_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">response</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">shift_amount</span><span class="p">);</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">up_scaled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">response_u16</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">max_degrees</span><span class="p">;</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">final_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">up_scaled</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">u16_max</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">final_value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">[[</span><span class="n">gnu</span><span class="o">::</span><span class="n">noinline</span><span class="p">]]</span>
+<span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">scale_to_degrees</span><span class="p">(</span><span class="n">hal</span><span class="o">::</span><span class="n">adc_piecewise</span><span class="o">&amp;</span><span class="w"> </span><span class="n">impl</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">[</span><span class="n">response</span><span class="p">,</span><span class="w"> </span><span class="n">bit_width</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">impl</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">max_scale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">bit_width</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">up_scaled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">max_degrees</span><span class="p">;</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">final_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">up_scaled</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">max_scale</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">final_value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">[[</span><span class="n">gnu</span><span class="o">::</span><span class="n">noinline</span><span class="p">]]</span>
+<span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">scale_to_degrees</span><span class="p">(</span><span class="n">hal</span><span class="o">::</span><span class="n">adc_split</span><span class="o">&amp;</span><span class="w"> </span><span class="n">impl</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">bit_width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">impl</span><span class="p">.</span><span class="n">bit_width</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">impl</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">max_scale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">bit_width</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">up_scaled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">max_degrees</span><span class="p">;</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">final_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">up_scaled</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">max_scale</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">final_value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">[[</span><span class="n">gnu</span><span class="o">::</span><span class="n">noinline</span><span class="p">]]</span>
+<span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">scale_to_degrees</span><span class="p">(</span><span class="n">hal</span><span class="o">::</span><span class="n">adc_piecewise_max</span><span class="o">&amp;</span><span class="w"> </span><span class="n">impl</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">[</span><span class="n">response</span><span class="p">,</span><span class="w"> </span><span class="n">max_scale</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">impl</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">up_scaled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">max_degrees</span><span class="p">;</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">final_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">up_scaled</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">max_scale</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">final_value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">[[</span><span class="n">gnu</span><span class="o">::</span><span class="n">noinline</span><span class="p">]]</span>
+<span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">scale_to_degrees</span><span class="p">(</span><span class="n">hal</span><span class="o">::</span><span class="n">adc_float</span><span class="o">&amp;</span><span class="w"> </span><span class="n">impl</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">impl</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">final_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">max_degrees</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">final_value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">[[</span><span class="n">gnu</span><span class="o">::</span><span class="n">noinline</span><span class="p">]]</span>
+<span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">scale_to_degrees2</span><span class="p">(</span><span class="n">hal</span><span class="o">::</span><span class="n">adc_split</span><span class="o">&amp;</span><span class="w"> </span><span class="n">impl</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">bit_width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">impl</span><span class="p">.</span><span class="n">bit_width</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">impl</span><span class="p">.</span><span class="n">read</span><span class="p">();</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">bit_width</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">shift_amount</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bit_width</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">16</span><span class="p">;</span>
+<span class="w">    </span><span class="n">response</span><span class="w"> </span><span class="o">&gt;&gt;=</span><span class="w"> </span><span class="n">shift_amount</span><span class="p">;</span>
+<span class="w">    </span><span class="n">bit_width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">16</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">max_scale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">bit_width</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">up_scaled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">max_degrees</span><span class="p">;</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">final_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">up_scaled</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">max_scale</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">final_value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">use</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">t</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">__asm__</span><span class="w"> </span><span class="n">__volatile__</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="o">::</span><span class="s">&quot;g&quot;</span><span class="p">(</span><span class="n">t</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">application</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="o">::</span><span class="nn">chrono_literals</span><span class="p">;</span>
+<span class="w">  </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">sample_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2&#39;000&#39;000</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Calling `value()` on the optional resources will perform a check and if the</span>
+<span class="w">  </span><span class="c1">// resource is not set, it will throw a std::bad_optional_access exception.</span>
+<span class="w">  </span><span class="c1">// If it is set, dereference it and store the address in the references below.</span>
+<span class="w">  </span><span class="c1">// When std::optional&lt;T&amp;&gt; is in the standard, we will change to use that.</span>
+<span class="w">  </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">led</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">resources</span><span class="p">.</span><span class="n">status_led</span><span class="p">.</span><span class="n">value</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">clock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">resources</span><span class="p">.</span><span class="n">clock</span><span class="p">.</span><span class="n">value</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">console</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">resources</span><span class="p">.</span><span class="n">console</span><span class="p">.</span><span class="n">value</span><span class="p">();</span>
+
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">print</span><span class="p">(</span><span class="n">console</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Starting ADC benchmark!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">adc_piecewise_impl</span><span class="w"> </span><span class="n">piecewise</span><span class="p">;</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">start_piecewise</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clock</span><span class="p">.</span><span class="n">uptime</span><span class="p">();</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">sample_count</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scale_to_degrees</span><span class="p">(</span><span class="n">piecewise</span><span class="p">);</span>
+<span class="w">    </span><span class="n">use</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="n">end_piecewise</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clock</span><span class="p">.</span><span class="n">uptime</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="n">delta_piecewise</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">end_piecewise</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_piecewise</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="n">start_split</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clock</span><span class="p">.</span><span class="n">uptime</span><span class="p">();</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">adc_split_impl</span><span class="w"> </span><span class="n">split</span><span class="p">;</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">sample_count</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scale_to_degrees</span><span class="p">(</span><span class="n">split</span><span class="p">);</span>
+<span class="w">    </span><span class="n">use</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="n">end_split</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clock</span><span class="p">.</span><span class="n">uptime</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="n">delta_split</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">end_split</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_split</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">start_scaled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clock</span><span class="p">.</span><span class="n">uptime</span><span class="p">();</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">adc_scaled_impl</span><span class="w"> </span><span class="n">scaled</span><span class="p">;</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">sample_count</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scale_to_degrees</span><span class="p">(</span><span class="n">scaled</span><span class="p">);</span>
+<span class="w">    </span><span class="n">use</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="n">end_scaled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clock</span><span class="p">.</span><span class="n">uptime</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="n">delta_scaled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">end_scaled</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_scaled</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">start_max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clock</span><span class="p">.</span><span class="n">uptime</span><span class="p">();</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">adc_piecewise_max_impl</span><span class="w"> </span><span class="n">max</span><span class="p">;</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">sample_count</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scale_to_degrees</span><span class="p">(</span><span class="n">max</span><span class="p">);</span>
+<span class="w">    </span><span class="n">use</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="n">end_max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clock</span><span class="p">.</span><span class="n">uptime</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="n">delta_max</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">end_max</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_max</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="n">start_float</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clock</span><span class="p">.</span><span class="n">uptime</span><span class="p">();</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">adc_float_impl</span><span class="w"> </span><span class="n">float_adc</span><span class="p">;</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">sample_count</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scale_to_degrees</span><span class="p">(</span><span class="n">float_adc</span><span class="p">);</span>
+<span class="w">    </span><span class="n">use</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="n">end_float</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clock</span><span class="p">.</span><span class="n">uptime</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="n">delta_float</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">end_float</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_float</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">print</span><span class="o">&lt;</span><span class="mi">64</span><span class="o">&gt;</span><span class="p">(</span><span class="n">console</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;   start_scaled = %&quot;</span><span class="w"> </span><span class="n">PRIu64</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">start_scaled</span><span class="p">);</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">print</span><span class="o">&lt;</span><span class="mi">64</span><span class="o">&gt;</span><span class="p">(</span><span class="n">console</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;     end_scaled = %&quot;</span><span class="w"> </span><span class="n">PRIu64</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">end_scaled</span><span class="p">);</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">print</span><span class="o">&lt;</span><span class="mi">64</span><span class="o">&gt;</span><span class="p">(</span><span class="n">console</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;start_piecewise = %&quot;</span><span class="w"> </span><span class="n">PRIu64</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">start_piecewise</span><span class="p">);</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">print</span><span class="o">&lt;</span><span class="mi">64</span><span class="o">&gt;</span><span class="p">(</span><span class="n">console</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;  end_piecewise = %&quot;</span><span class="w"> </span><span class="n">PRIu64</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">end_piecewise</span><span class="p">);</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">print</span><span class="o">&lt;</span><span class="mi">64</span><span class="o">&gt;</span><span class="p">(</span><span class="n">console</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;    start_split = %&quot;</span><span class="w"> </span><span class="n">PRIu64</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">start_split</span><span class="p">);</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">print</span><span class="o">&lt;</span><span class="mi">64</span><span class="o">&gt;</span><span class="p">(</span><span class="n">console</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;      end_split = %&quot;</span><span class="w"> </span><span class="n">PRIu64</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">end_split</span><span class="p">);</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">print</span><span class="o">&lt;</span><span class="mi">64</span><span class="o">&gt;</span><span class="p">(</span><span class="n">console</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;      start_max = %&quot;</span><span class="w"> </span><span class="n">PRIu64</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">start_max</span><span class="p">);</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">print</span><span class="o">&lt;</span><span class="mi">64</span><span class="o">&gt;</span><span class="p">(</span><span class="n">console</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;        end_max = %&quot;</span><span class="w"> </span><span class="n">PRIu64</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">end_max</span><span class="p">);</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">print</span><span class="o">&lt;</span><span class="mi">64</span><span class="o">&gt;</span><span class="p">(</span><span class="n">console</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;    start_float = %&quot;</span><span class="w"> </span><span class="n">PRIu64</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">start_float</span><span class="p">);</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">print</span><span class="o">&lt;</span><span class="mi">64</span><span class="o">&gt;</span><span class="p">(</span><span class="n">console</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;      end_float = %&quot;</span><span class="w"> </span><span class="n">PRIu64</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">end_float</span><span class="p">);</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">print</span><span class="p">(</span><span class="n">console</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">print</span><span class="o">&lt;</span><span class="mi">64</span><span class="o">&gt;</span><span class="p">(</span><span class="n">console</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;delta_piecewise = %&quot;</span><span class="w"> </span><span class="n">PRIu64</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">delta_piecewise</span><span class="p">);</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">print</span><span class="o">&lt;</span><span class="mi">64</span><span class="o">&gt;</span><span class="p">(</span><span class="n">console</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;   delta_scaled = %&quot;</span><span class="w"> </span><span class="n">PRIu64</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">delta_scaled</span><span class="p">);</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">print</span><span class="o">&lt;</span><span class="mi">64</span><span class="o">&gt;</span><span class="p">(</span><span class="n">console</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;    delta_split = %&quot;</span><span class="w"> </span><span class="n">PRIu64</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">delta_split</span><span class="p">);</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">print</span><span class="o">&lt;</span><span class="mi">64</span><span class="o">&gt;</span><span class="p">(</span><span class="n">console</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;      delta_max = %&quot;</span><span class="w"> </span><span class="n">PRIu64</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">delta_max</span><span class="p">);</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">print</span><span class="o">&lt;</span><span class="mi">64</span><span class="o">&gt;</span><span class="p">(</span><span class="n">console</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;    delta_float = %&quot;</span><span class="w"> </span><span class="n">PRIu64</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">delta_float</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">print</span><span class="p">(</span><span class="n">console</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Resetting in 10s!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">delay</span><span class="p">(</span><span class="n">clock</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="n">s</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">resources</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>All tests executed on an stm32f103c8 which featues a Cortex-M3 processor which
+does not include a floating point unit. Using GCC 12.3.1.</p>
+<p>Built using the following commands:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Defaults to min size build</span>
+conan<span class="w"> </span>build<span class="w"> </span>.<span class="w"> </span>-pr<span class="w"> </span>stm32f103c8<span class="w"> </span>-pr<span class="w"> </span>arm-gcc-12.3
+<span class="c1"># For release</span>
+conan<span class="w"> </span>build<span class="w"> </span>.<span class="w"> </span>-pr<span class="w"> </span>stm32f103c8<span class="w"> </span>-pr<span class="w"> </span>arm-gcc-12.3<span class="w"> </span>-s<span class="w"> </span><span class="nv">build_type</span><span class="o">=</span>Release
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>nm<span class="w"> </span>--demangle<span class="w"> </span>--size-sort<span class="w"> </span>build/stm32f103c8/MinSizeRel/app.elf<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;::read&quot;</span>
+0000000c<span class="w"> </span>W<span class="w"> </span>hal::adc_split_impl::read<span class="o">()</span>
+<span class="m">00000014</span><span class="w"> </span>W<span class="w"> </span>hal::adc_piecewise_max_impl::read<span class="o">()</span>
+<span class="m">00000018</span><span class="w"> </span>W<span class="w"> </span>hal::adc_scaled_impl::read<span class="o">()</span>
+0000001c<span class="w"> </span>W<span class="w"> </span>hal::adc_float_impl::read<span class="o">()</span>
+<span class="m">00000024</span><span class="w"> </span>W<span class="w"> </span>hal::adc_piecewise_impl::read<span class="o">()</span>
+
+nm<span class="w"> </span>--demangle<span class="w"> </span>--size-sort<span class="w"> </span>build/stm32f103c8/MinSizeRel/app.elf<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;::bit_width&quot;</span>
+<span class="m">00000004</span><span class="w"> </span>W<span class="w"> </span>hal::adc_split_impl::bit_width<span class="o">()</span>
+</code></pre></div>
+<p>Above we see that the scaled is in the middle in terms of code size. But
+we will go over why this isn't an issue in the next block.</p>
+<div class="highlight"><pre><span></span><code>nm<span class="w"> </span>--demangle<span class="w"> </span>--size-sort<span class="w"> </span>build/stm32f103c8/MinSizeRel/app.elf<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>scale_to_degrees
+<span class="m">00000018</span><span class="w"> </span>T<span class="w"> </span>scale_to_degrees<span class="o">(</span>hal::adc_scaled<span class="p">&amp;</span><span class="o">)</span>
+0000001a<span class="w"> </span>T<span class="w"> </span>scale_to_degrees<span class="o">(</span>hal::adc_float<span class="p">&amp;</span><span class="o">)</span>
+0000001c<span class="w"> </span>T<span class="w"> </span>scale_to_degrees<span class="o">(</span>hal::adc_piecewise_max<span class="p">&amp;</span><span class="o">)</span>
+<span class="m">00000024</span><span class="w"> </span>T<span class="w"> </span>scale_to_degrees<span class="o">(</span>hal::adc_piecewise<span class="p">&amp;</span><span class="o">)</span>
+<span class="m">00000026</span><span class="w"> </span>T<span class="w"> </span>scale_to_degrees<span class="o">(</span>hal::adc_split<span class="p">&amp;</span><span class="o">)</span>
+<span class="m">00000036</span><span class="w"> </span>T<span class="w"> </span>scale_to_degrees2<span class="o">(</span>hal::adc_split<span class="p">&amp;</span><span class="o">)</span>
+</code></pre></div>
+<p>In a minimum sized build, using <code>adc_scaled</code> results in the smallest code size for the same results. In this case, the <code>adc_scaled::read</code> API takes up
+more memory than the cost of its usage. We believe that it makes sense to optimize for the usages as those are more likely to be more numerous than ADC implementations.</p>
+<div class="highlight"><pre><span></span><code><span class="w"> </span>nm<span class="w"> </span>--demangle<span class="w"> </span>--size-sort<span class="w"> </span>build/stm32f103c8/Release/app.elf<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;::read&quot;</span>
+0000000c<span class="w"> </span>W<span class="w"> </span>hal::adc_split_impl::read<span class="o">()</span>
+<span class="m">00000014</span><span class="w"> </span>W<span class="w"> </span>hal::adc_piecewise_max_impl::read<span class="o">()</span>
+<span class="m">00000018</span><span class="w"> </span>W<span class="w"> </span>hal::adc_scaled_impl::read<span class="o">()</span>
+0000001c<span class="w"> </span>W<span class="w"> </span>hal::adc_float_impl::read<span class="o">()</span>
+<span class="m">00000024</span><span class="w"> </span>W<span class="w"> </span>hal::adc_piecewise_impl::read<span class="o">()</span>
+
+nm<span class="w"> </span>--demangle<span class="w"> </span>--size-sort<span class="w"> </span>build/stm32f103c8/Release/app.elf<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>scale_to_degrees
+<span class="m">00000024</span><span class="w"> </span>t<span class="w"> </span>scale_to_degrees<span class="o">(</span>hal::adc_piecewise<span class="p">&amp;</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>.constprop.0<span class="o">)</span>
+<span class="m">00000024</span><span class="w"> </span>t<span class="w"> </span>scale_to_degrees<span class="o">(</span>hal::adc_piecewise_max<span class="p">&amp;</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>.constprop.0<span class="o">)</span>
+<span class="m">00000024</span><span class="w"> </span>t<span class="w"> </span>scale_to_degrees<span class="o">(</span>hal::adc_split<span class="p">&amp;</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>.constprop.0<span class="o">)</span>
+<span class="m">00000028</span><span class="w"> </span>t<span class="w"> </span>scale_to_degrees<span class="o">(</span>hal::adc_float<span class="p">&amp;</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>.constprop.0<span class="o">)</span>
+0000002c<span class="w"> </span>t<span class="w"> </span>scale_to_degrees<span class="o">(</span>hal::adc_scaled<span class="p">&amp;</span><span class="o">)</span><span class="w"> </span><span class="o">(</span>.constprop.0<span class="o">)</span>
+
+<span class="m">00000040</span><span class="w"> </span>T<span class="w"> </span>scale_to_degrees<span class="o">(</span>hal::adc_scaled<span class="p">&amp;</span><span class="o">)</span>
+<span class="m">00000044</span><span class="w"> </span>T<span class="w"> </span>scale_to_degrees<span class="o">(</span>hal::adc_piecewise_max<span class="p">&amp;</span><span class="o">)</span>
+<span class="m">00000044</span><span class="w"> </span>T<span class="w"> </span>scale_to_degrees<span class="o">(</span>hal::adc_float<span class="p">&amp;</span><span class="o">)</span>
+0000004c<span class="w"> </span>T<span class="w"> </span>scale_to_degrees<span class="o">(</span>hal::adc_piecewise<span class="p">&amp;</span><span class="o">)</span>
+0000005c<span class="w"> </span>T<span class="w"> </span>scale_to_degrees<span class="o">(</span>hal::adc_split<span class="p">&amp;</span><span class="o">)</span>
+<span class="m">00000088</span><span class="w"> </span>T<span class="w"> </span>scale_to_degrees2<span class="o">(</span>hal::adc_split<span class="p">&amp;</span><span class="o">)</span>
+</code></pre></div>
+<p>In the above Release build, the results are similar. <code>(.constprop.0)</code> in GCC
+means that the symbol is a duplicate of another function but optimized to
+perform around the same. In the optimized code scaled fairs the worst by an
+additional 8 bytes compared to the lowest code size functions. But on the other
+hand, for the original symbol, the scaled ADC code is the smallest in terms of
+code size.</p>
+<div class="highlight"><pre><span></span><code># Release Build Cycles
+
+delta_piecewise = 12000075
+   delta_scaled = 12000084
+    delta_split = 12000084
+      delta_max = 12000081
+    delta_float = 12000443
+
+# Min Size Build Cycles
+delta_piecewise = 156000044
+   delta_scaled = 134000059
+    delta_split = 176000052
+      delta_max = 136000052
+    delta_float = 844000052
+</code></pre></div>
+<p>As you can see the cycles for almost all of these benchmarks are almost
+identical. So much so that there isn't really a clear winner. Some seem to
+perform worse off in specific builds. But overall they are about the same. And
+if all else is the same in performance, then code size should be the deciding
+factor.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../timers_and_counters/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Timers &amp; Counters">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Timers & Counters
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../pwm/" class="md-footer__link md-footer__link--next" aria-label="Next: PWM">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                PWM
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "content.tabs.link", "toc.integrate", "navigation.tracking", "navigation.footer"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.50899def.min.js"></script>
+      
+    
+  </body>
+</html>
