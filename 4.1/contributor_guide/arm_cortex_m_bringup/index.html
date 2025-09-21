@@ -1,0 +1,2528 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../library_guides/">
+      
+      
+        <link rel="next" href="../dma_tutorial/">
+      
+      
+      <link rel="icon" href="../../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.20">
+    
+    
+      
+        <title>🧠 ARM Cortex M Bring Up - libhal</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.e53b48f4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#arm-cortex-m-series-platform-bringup" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+          <aside class="md-banner md-banner--warning">
+            <div class="md-banner__inner md-grid md-typeset">
+              
+You're not viewing the latest version.
+<a href="../../..">
+  <strong>Click here to go to latest.</strong>
+</a>
+
+            </div>
+            <script>var el=document.querySelector("[data-md-component=outdated]"),base=new URL("../.."),outdated=__md_get("__outdated",sessionStorage,base);!0===outdated&&el&&(el.hidden=!1)</script>
+          </aside>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="libhal" class="md-header__button md-logo" aria-label="libhal" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            libhal
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              🧠 ARM Cortex M Bring Up
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/libhal/libhal/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    libhal
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  🏡 Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../getting_started/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🚀 Getting Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../user_guide/setup_vscode/" class="md-tabs__link">
+          
+  
+  
+  📖 User Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../education/embedded_systems/" class="md-tabs__link">
+          
+  
+  
+  🏫 Education
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../philosophy/" class="md-tabs__link">
+          
+  
+  
+  📚 Contributor Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../project_information/status/" class="md-tabs__link">
+          
+  
+  
+  📊 Project Information
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../api/index.html" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🧩 APIs
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="libhal" class="md-nav__button md-logo" aria-label="libhal" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    libhal
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/libhal/libhal/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    libhal
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🏡 Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🚀 Getting Started
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    📖 User Guide
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            📖 User Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/setup_vscode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🧑🏿‍💻 Setting up VSCode
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/fundamentals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🧱 Fundamentals of libhal
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/interfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🔗 Interfaces in libhal
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🎯 Debugging Firmware
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/error_handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🪤 Error Handling in libhal
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/policy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ⚖️ Policies & FAQ
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    🏫 Education
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            🏫 Education
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/embedded_systems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    What are Embedded Systems?
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/bitmasking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Bit Masking
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Microcontroller Architecture
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/gpio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    General Purpose I/O
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/dma/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    DMA
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/timers_and_counters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Timers & Counters
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/adc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ADC
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/pwm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    PWM
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/spi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    SPI
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/uart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    UART
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/i2c/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    I2C
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/dac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    DAC
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/canbus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    CAN BUS
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/sensors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Basics of Sensors
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/actuators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Basics of Actuators
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/rtos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    RTOS
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/tbd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    TBD
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    📚 Contributor Guides
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            📚 Contributor Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../philosophy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    📜 Design Philosophy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../organization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🗃️ Organization
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../style/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🎨 Style Guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interface_design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🔗 Interface Design Philosophy
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../library_guides/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🔹 Library Development Guide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    🧠 ARM Cortex M Bring Up
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    🧠 ARM Cortex M Bring Up
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚀 Getting Started
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conan-profiles" class="md-nav__link">
+    <span class="md-ellipsis">
+      🌐 Conan Profiles
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🌐 Conan Profiles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#components-of-a-typical-profile" class="md-nav__link">
+    <span class="md-ellipsis">
+      Components of a Typical Profile
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Components of a Typical Profile">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#explanation-of-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      Explanation of Settings
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#options-section" class="md-nav__link">
+    <span class="md-ellipsis">
+      Options Section
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#customizing-your-profile" class="md-nav__link">
+    <span class="md-ellipsis">
+      Customizing Your Profile
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-profile-templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Profile Templates
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#directory-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Directory structure
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#linker-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔗 Linker Scripts
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔗 Linker Scripts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#standard-linker-script-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      Standard Linker Script Template
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#customizing-linker-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Customizing Linker Scripts
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-multiple-flash-and-ram-configurations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handling Multiple Flash and RAM Configurations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integrating-linker-scripts-into-build-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integrating Linker Scripts into Build Systems
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implementing-linker-scripts-for-your-platform" class="md-nav__link">
+    <span class="md-ellipsis">
+      Implementing Linker Scripts for Your Platform
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementing Linker Scripts for Your Platform">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-download-and-review-the-user-manual" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Download and Review the User Manual
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-determine-the-naming-scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Determine the Naming Scheme
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-populate-the-linker-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Populate the Linker Script
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-repeat-for-all-variants" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Repeat for All Variants
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-update-add_linker_scripts_to_link_flags-in-conanfilepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Update add_linker_scripts_to_link_flags() in conanfile.py
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Testing
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continuous-integration-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔄 Continuous Integration &amp; Deployment
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 Continuous Integration &amp; Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#branch-pull-request-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Branch &amp; Pull Request Checks
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#platform-constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      📜 Platform Constants
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📜 Platform Constants">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#peripheral-constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      Peripheral Constants
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Peripheral Constants">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#defining-peripheral-constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      Defining Peripheral Constants
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mapping-to-power-registers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mapping to Power Registers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example Usage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#benefits" class="md-nav__link">
+    <span class="md-ellipsis">
+      Benefits
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#irq-constants" class="md-nav__link">
+    <span class="md-ellipsis">
+      IRQ Constants
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementing-the-core-apis" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧩 Implementing the core APIs
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dma_tutorial/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ⏩ DMA Tutorial
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../upgrade_to_libhal_3_device_library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ⬆️ Upgrade Device Library to 3.x.y
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🏗️ Architectural Design Decisions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    📊 Project Information
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            📊 Project Information
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../project_information/status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🟢 Library Status 🔴
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../project_information/about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    About
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    🧩 APIs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="arm-cortex-m-series-platform-bringup">🧠 ARM Cortex-M Series Platform Bringup</h1>
+<p>To fully bring up an ARM Cortex-M series microcontroller for libhal, several
+critical elements need to be implemented:</p>
+<ol>
+<li>Conan profiles</li>
+<li>Linker scripts</li>
+<li>Continuous Integration &amp; Deployment</li>
+<li>Platform Constants</li>
+<li>Core APIs</li>
+</ol>
+<p>To ensure peripheral drivers operate without conflicts, such as clashing power
+control implementations, the following APIs must be implemented:</p>
+<ol>
+<li>Power control</li>
+<li>Pin Multiplexing</li>
+<li>Clock tree</li>
+<li>Direct Memory Access (DMA)</li>
+</ol>
+<p>While not all devices support these features, and many drivers can function
+without them, implementing them ensures comprehensive peripheral support. For
+instance, on the LPC40xx series, GPIOs are enabled by default, and simple tasks
+like blinking an LED don't require knowledge of the system's clock speed or DMA.</p>
+<p>However, accommodating all features enables support for all potential
+peripheral drivers.</p>
+<p>Keep in mind that, as with all libhal tutorials, adaptability is key. Some
+chips may deviate from standard architectures; in such cases, a fundamental
+understanding and sound judgment are essential to ensure your system functions
+effectively.</p>
+<h2 id="getting-started">🚀 Getting Started</h2>
+<p>libhal provides a template repository for ARM Cortex-M series platforms. Begin
+by visiting
+<a href="https://github.com/libhal/libhal-__platform__"><code>libhal-__platform__</code></a>,
+clicking "Use this template," and then "Create new repository."</p>
+<p>Your project should be named <code>libhal-&lt;insert platform name&gt;</code>. This standard
+naming triggers the GitHub action
+<a href="https://github.com/libhal/libhal-__platform__/blob/main/.github/workflows/update_name.yml">update_name.yml</a>
+to create a pull request that updates names and files within the repo from
+<code>__platform__</code> to your chosen name. Merge this pull request to proceed to the
+next phase.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If there is demand for platform names without the <code>libhal-</code> prefix, we can
+modify <code>update_name.yml</code> to accommodate this. Currently, we support only
+prefixed package names.</p>
+</div>
+<h2 id="conan-profiles">🌐 Conan Profiles</h2>
+<p>Libhal leverages Conan's robust profile system to specify the architecture and
+operating system for which an application is built. If you are new to libhal,
+refer to the "Getting Started" guide for details on building applications using
+compiler and platform profiles.</p>
+<p>A microcontroller family consists of microcontrollers with nearly identical
+designs but variations in memory, storage, and peripherals. Since these
+variations share a common architecture, drivers can typically operate across
+the family.</p>
+<p>Creating a Conan profile begins with understanding the device family. This
+determines the number of profiles needed. For example, the RP2040, which is a
+single-device family, would have one profile simply named <code>rp2040</code>. However, a
+chip family with 15 variations would require a distinct profile for each
+variant.</p>
+<h3 id="components-of-a-typical-profile">Components of a Typical Profile</h3>
+<p>Below is an example of a Conan profile for the <code>rp2040</code> microcontroller:</p>
+<div class="highlight"><pre><span></span><code>[settings]
+build_type=MinSizeRel
+os=baremetal
+arch=cortex-m0plus
+libc=custom
+
+[options]
+*:platform=rp2040
+</code></pre></div>
+<h4 id="explanation-of-settings">Explanation of Settings</h4>
+<ul>
+<li><strong><code>[settings]</code></strong>: This section configures the build environment for your code.</li>
+<li><strong><code>build_type</code></strong>: Defaults to <code>MinSizeRel</code>, optimizing for the smallest
+  binary size, which is crucial for embedded applications.</li>
+<li><strong><code>os</code></strong>: Always set to <code>baremetal</code> for ARM Cortex-M processors, indicating a
+  direct hardware operation without a traditional operating system.</li>
+<li><strong><code>arch</code></strong>: Specifies the processor architecture. It is essential to consult
+  the user manual to identify the correct architecture as variations within the
+  same family may exist. For instance, the LPC4078 uses a Cortex-M4F (with
+  floating point unit), unlike the LPC4072, which uses a Cortex-M4 (without
+  floating point unit). Supported architectures include <code>cortex-m0</code>,
+  <code>cortex-m0plus</code>, <code>cortex-m1</code>, <code>cortex-m3</code>, <code>cortex-m4</code>, <code>cortex-m4f</code>,
+  <code>cortex-m7</code>, <code>cortex-m7f</code>, <code>cortex-m7d</code>, <code>cortex-m23</code>, <code>cortex-m33</code>,
+  <code>cortex-m33f</code>, <code>cortex-m33p</code>, <code>cortex-m35p</code>, <code>cortex-m55</code>, and <code>cortex-m85</code>.</li>
+<li><strong><code>libc</code></strong>: Should be set to <code>custom</code> to accommodate picolibc, which is
+  preferable over the default newlib-nano used by the GNU ARM toolchain.</li>
+</ul>
+<h4 id="options-section">Options Section</h4>
+<ul>
+<li><strong><code>[options]</code></strong>: This section defines library options for the build process.
+  It facilitates the selection of specific package options within
+  <code>conanfile.py</code>.</li>
+<li><strong><code>*:platform=rp2040</code></strong>: This setting universally applies the <code>rp2040</code>
+  platform option across all packages, using <code>*</code> as a wildcard to ensure it
+  affects all compiled packages.</li>
+</ul>
+<h4 id="customizing-your-profile">Customizing Your Profile</h4>
+<p>To tailor this profile for different platforms, replace <code>rp2040</code> with the
+relevant platform name and adjust <code>arch</code> to match the specific CPU architecture
+of your device. This customized approach ensures that the build settings are
+perfectly aligned with the hardware specifications of the microcontroller you
+are working with.</p>
+<h3 id="using-profile-templates">Using Profile Templates</h3>
+<p>Conan has the ability to use Jinja templates in its profiles allowing for the composition and expansion of profiles. So if you have a ton of devices in the same family with nearly identical bits of information, you can make a template for them. Check out the following examples:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">libhal-lpc40</label><label for="__tabbed_1_2">libhal-stm32f1</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Notice how the only thing that changes between these are the architecture
+and the platform.</p>
+<p><code>libhal-lpc40/conan/v2/lpc40</code>:</p>
+<div class="highlight"><pre><span></span><code>[settings]
+build_type=MinSizeRel
+os=baremetal
+arch={{ arch }}
+libc=custom
+
+[options]
+*:platform={{ platform }}
+</code></pre></div>
+<p><code>libhal-lpc40/conan/v2/lpc4078</code>:</p>
+<div class="highlight"><pre><span></span><code>{% set platform = &quot;lpc4078&quot; %}
+{% set arch = &quot;cortex-m4f&quot; %}
+{% include &quot;lpc40&quot; %}
+</code></pre></div>
+<p><code>libhal-lpc40/conan/v2/lpc4072</code>:</p>
+<div class="highlight"><pre><span></span><code>{% set platform = &quot;lpc4072&quot; %}
+{% set arch = &quot;cortex-m4&quot; %}
+{% include &quot;lpc40&quot; %}
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>The only difference between the chips with respect to the settings and options is just the platform name so the template only needs to be used for the platform variable.</p>
+<p><code>libhal-stm32f1/conan/v2/stm32f103</code>:
+<div class="highlight"><pre><span></span><code>[settings]
+build_type=MinSizeRel
+os=baremetal
+arch=cortex-m3
+libc=custom
+
+[options]
+*:platform={{ platform }}
+</code></pre></div></p>
+<p><code>libhal-stm32f1/conan/v2/stm32f103c8</code>:
+<div class="highlight"><pre><span></span><code>{% set platform = &quot;stm32f103c8&quot; %}
+{% include &quot;stm32f1&quot; %}
+</code></pre></div></p>
+<p><code>libhal-stm32f1/conan/v2/stm32f103vc</code>:
+<div class="highlight"><pre><span></span><code>{% set platform = &quot;stm32f103vc&quot; %}
+{% include &quot;stm32f1&quot; %}
+</code></pre></div></p>
+</div>
+</div>
+</div>
+<hr />
+<h3 id="directory-structure">Directory structure</h3>
+<p>In order to allow changes into the future, it is advised to put your profiles
+in a <code>v1</code> or <code>vN</code> directory. This way, if there is a significant change between
+the profiles into the future, code can still use the original profiles they
+used before.</p>
+<h2 id="linker-scripts">🔗 Linker Scripts</h2>
+<p>Linker scripts play a crucial role in defining the memory layout of embedded
+systems. They are used to organize different types of data within the binary,
+such as code, initialized data, uninitialized data, read-only data, and thread
+local storage. These scripts also outline the memory regions available for the
+application.</p>
+<p>The finer details about linker scripts and how they work can be found in the
+resources below:</p>
+<ul>
+<li><a href="https://allthingsembedded.com/post/2020-04-11-mastering-the-gnu-linker-script/">Mastering the GNU linker script by AllThingsEmbeddd</a>: Easy to learn 13 min read</li>
+<li><a href="https://blog.thea.codes/the-most-thoroughly-commented-linker-script/">"The most thoroughly commented linker script (probably)" by Thea "Stargirl" Flowers</a>:
+  A very thoroughly documented and easy read on linker scripts</li>
+<li><a href="https://ftp.gnu.org/old-gnu/Manuals/ld-2.9.1/html_chapter/ld_3.html">GNU Linker Scripts</a>: Full user specification, if you need or want those details</li>
+</ul>
+<p>This section will not go into detail about linker scripts but will provide you all of the steps to port your device to libhal platform library.</p>
+<h3 id="standard-linker-script-template">Standard Linker Script Template</h3>
+<p>The <code>libhal-armcortex</code> library provides standardized linker script templates,
+which can be easily adapted for specific platforms. An example template is
+available at:
+<a href="https://github.com/libhal/libhal-armcortex/blob/main/linker_scripts/libhal-armcortex/standard.ld"><code>libhal-armcortex/linker_scripts/libhal-armcortex/standard.ld</code></a>.</p>
+<p>To utilize these templates, include the following definitions in your linker
+scripts directory:</p>
+<div class="highlight"><pre><span></span><code>__flash = 0x00000000;
+__flash_size = 64K;
+__ram = 0x10000000;
+__ram_size = 16K;
+__stack_size = 1K;
+
+INCLUDE &quot;libhal-armcortex/standard.ld&quot;
+</code></pre></div>
+<p>The above configuration is an example from the
+<a href="https://github.com/libhal/libhal-lpc40/blob/main/linker_scripts/libhal-lpc40/lpc4072.ld"><code>lpc4072</code></a>
+script.</p>
+<h3 id="customizing-linker-scripts">Customizing Linker Scripts</h3>
+<p>You need to specify:</p>
+<ul>
+<li>The location and size of the flash memory within the device's address space.</li>
+<li>The location and size of the main RAM.</li>
+<li>The minimum stack size before the build should fail, typically set to <code>1K</code>
+  for libhal. Adjust this based on available RAM.</li>
+</ul>
+<p>Each variation within a chip family, such as those in the LPC40xx series,
+requires its own linker script due to differences in flash and RAM sizes:</p>
+<p>For example the chips in the LPC40xx series are:</p>
+<ul>
+<li><a href="https://github.com/libhal/libhal-lpc40/blob/main/linker_scripts/libhal-lpc40/lpc4072.ld">lpc4072</a></li>
+<li><a href="https://github.com/libhal/libhal-lpc40/blob/main/linker_scripts/libhal-lpc40/lpc4074.ld">lpc4074</a></li>
+<li><a href="https://github.com/libhal/libhal-lpc40/blob/main/linker_scripts/libhal-lpc40/lpc4076.ld">lpc4076</a></li>
+<li><a href="https://github.com/libhal/libhal-lpc40/blob/main/linker_scripts/libhal-lpc40/lpc4078.ld">lpc4078</a></li>
+<li><a href="https://github.com/libhal/libhal-lpc40/blob/main/linker_scripts/libhal-lpc40/lpc4088.ld">lpc4088</a></li>
+</ul>
+<p>Each has their own unique ram and flash amounts.</p>
+<p>Similarly, the STM32F10x series has distinct linker scripts for each variant based on flash and RAM requirements, such as:</p>
+<ul>
+<li><a href="https://github.com/libhal/libhal-stm32f1/blob/main/linker_scripts/libhal-stm32f1/stm32f10xx4.ld">stm32f10xx4.ld</a></li>
+<li><a href="https://github.com/libhal/libhal-stm32f1/blob/main/linker_scripts/libhal-stm32f1/stm32f10xx6.ld">stm32f10xx6.ld</a></li>
+<li><a href="https://github.com/libhal/libhal-stm32f1/blob/main/linker_scripts/libhal-stm32f1/stm32f10xx8.ld">stm32f10xx8.ld</a></li>
+<li><a href="https://github.com/libhal/libhal-stm32f1/blob/main/linker_scripts/libhal-stm32f1/stm32f10xxb.ld">stm32f10xxb.ld</a></li>
+<li><a href="https://github.com/libhal/libhal-stm32f1/blob/main/linker_scripts/libhal-stm32f1/stm32f10xxc.ld">stm32f10xxc.ld</a></li>
+<li><a href="https://github.com/libhal/libhal-stm32f1/blob/main/linker_scripts/libhal-stm32f1/stm32f10xxd.ld">stm32f10xxd.ld</a></li>
+<li><a href="https://github.com/libhal/libhal-stm32f1/blob/main/linker_scripts/libhal-stm32f1/stm32f10xxe.ld">stm32f10xxe.ld</a></li>
+<li><a href="https://github.com/libhal/libhal-stm32f1/blob/main/linker_scripts/libhal-stm32f1/stm32f10xxf.ld">stm32f10xxf.ld</a></li>
+<li><a href="https://github.com/libhal/libhal-stm32f1/blob/main/linker_scripts/libhal-stm32f1/stm32f10xxg.ld">stm32f10xxg.ld</a></li>
+</ul>
+<p>The STM32F103C8 belongs to the STM32F1 series of microcontrollers, which are
+part of the STM32 family of devices from STMicroelectronics. The naming scheme
+for this series can be broken down as follows:</p>
+<ul>
+<li><strong>STM32</strong>: Indicates the family of ARM Cortex-M microcontrollers.</li>
+<li><strong>F1</strong>: Indicates the series within the STM32 family, specifically the
+  STM32F1 series.</li>
+<li><strong>03</strong>: Indicates the sub-family, which in this case is the STM32F103
+  sub-family. The '1' before '03' generally represents the sub-category within
+  the series.</li>
+<li><strong>C</strong>: Indicates the package type and number of pins (e.g., 'C' typically
+  indicates an LQFP48 package with 48 pins).</li>
+<li><strong>8</strong>: Indicates the memory size, specifically the Flash memory size, in this
+  case, 64 KB of Flash memory.</li>
+</ul>
+<p>All devices in this family have just 20kB of RAM. Thus the only part of the
+profile name that matters in terms of determining the appropriate flash size is
+the last digit. That digits can be <code>4</code>, <code>6</code>, <code>8</code>, <code>b</code>, <code>c</code>, <code>d</code>, <code>e</code>, <code>f</code>, <code>g</code>,
+which is why we have that many linker scripts above. The exact reason why each
+number and letter is used is not known to the writer, but is also not
+important. All that we need to do is map those profile names to the correct
+<code>.ld</code> file.</p>
+<h3 id="handling-multiple-flash-and-ram-configurations">Handling Multiple Flash and RAM Configurations</h3>
+<p>Currently, <code>libhal-armcortex</code> supports MCUs with single flash and RAM
+configurations. For support for multi-flash and multi-RAM devices, consider
+contributing or following the development on this GitHub issue:
+<a href="https://github.com/libhal/libhal-armcortex/issues/16">Add multi flash &amp; multi ram linker scripts</a>.
+In order to communicate to the build system what your linker scripts are and
+where to find them, we must add to the conan package's <code>cpp_info.exelinkflags</code>
+array. This property describes to conan what link flags should be added if a
+package depends on this package. See the code below.</p>
+<h3 id="integrating-linker-scripts-into-build-systems">Integrating Linker Scripts into Build Systems</h3>
+<p>To properly integrate your linker scripts with the Conan build system, add the appropriate link flags to the <code>cpp_info.exelinkflags</code> array in your package. This setup ensures that the linker scripts are correctly recognized and used during the build process.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">package_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">cpp_info</span><span class="o">.</span><span class="n">set_property</span><span class="p">(</span><span class="s2">&quot;cmake_target_name&quot;</span><span class="p">,</span> <span class="s2">&quot;libhal::__platform__&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">cpp_info</span><span class="o">.</span><span class="n">libs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;libhal-__platform__&quot;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">os</span> <span class="o">==</span> <span class="s2">&quot;baremetal&quot;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_linker_script</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_linker_scripts_to_link_flags</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">add_linker_scripts_to_link_flags</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">platform</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">platform</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">cpp_info</span><span class="o">.</span><span class="n">exelinkflags</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;-L&quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">package_folder</span><span class="p">,</span> <span class="s2">&quot;linker_scripts&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;-T&quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;libhal-__platform__&quot;</span><span class="p">,</span> <span class="n">platform</span> <span class="o">+</span> <span class="s2">&quot;.ld&quot;</span><span class="p">),</span>
+    <span class="p">]</span>
+</code></pre></div>
+<h3 id="implementing-linker-scripts-for-your-platform">Implementing Linker Scripts for Your Platform</h3>
+<h4 id="1-download-and-review-the-user-manual">1. Download and Review the User Manual</h4>
+<p>Begin by downloading and reviewing the user manual for your microcontroller.
+The datasheet may provide some information, but the user manual will typically
+contain a comprehensive memory map. Search for the section labeled "memory map"
+to find detailed information about the sizes of the device's flash and RAM.</p>
+<h4 id="2-determine-the-naming-scheme">2. Determine the Naming Scheme</h4>
+<p>Device naming schemes vary. Some, like the <code>lpc4078</code>, have straightforward
+names, while others, like the <code>stm32f10x</code>, incorporate coded symbols. Establish
+a clear naming strategy for your linker scripts. Each profile should correspond
+to exactly one linker script, although a single linker script can apply to
+multiple profiles if the hardware characteristics are identical.</p>
+<h4 id="3-populate-the-linker-script">3. Populate the Linker Script</h4>
+<p>Fill out the linker script with the specific memory addresses and sizes for
+your device:</p>
+<div class="highlight"><pre><span></span><code>__flash = ???;
+__flash_size = ???;
+__ram = ???;
+__ram_size = ???;
+__stack_size = 1K;
+
+INCLUDE &quot;libhal-armcortex/standard.ld&quot;
+</code></pre></div>
+<h4 id="4-repeat-for-all-variants">4. Repeat for All Variants</h4>
+<p>Continue this process for each device variant within the chip family, ensuring
+that all have appropriate linker scripts reflecting their specific memory
+configurations.</p>
+<h4 id="5-update-add_linker_scripts_to_link_flags-in-conanfilepy">5. Update <code>add_linker_scripts_to_link_flags()</code> in <code>conanfile.py</code></h4>
+<p>Modify the <code>add_linker_scripts_to_link_flags()</code> function in your <code>conanfile.py</code>
+to correctly link the appropriate scripts based on the platform:</p>
+<p>For devices like the STM32 family, where multiple variants exist, implement a
+dynamic approach to link the correct script:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_linker_scripts_to_link_flags</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">linker_script_name</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">platform</span><span class="p">))</span>
+    <span class="c1"># Replace unneeded characters with &#39;x&#39; to denote a generic script</span>
+    <span class="n">linker_script_name</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span>
+    <span class="n">linker_script_name</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span>
+    <span class="n">linker_script_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">linker_script_name</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">cpp_info</span><span class="o">.</span><span class="n">exelinkflags</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;-L&quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">package_folder</span><span class="p">,</span> <span class="s2">&quot;linker_scripts&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;-T&quot;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;libhal-stm32f1&quot;</span><span class="p">,</span> <span class="n">linker_script_name</span> <span class="o">+</span> <span class="s2">&quot;.ld&quot;</span><span class="p">),</span>
+    <span class="p">]</span>
+</code></pre></div>
+<p>This adjustment allows you to use a single script for similar variants by
+replacing specific parts of the chip identifier with a 'don't care' symbol
+('x'). Think of it like bit masking but for letters.</p>
+<p>For some devices with XIP (eXecute In Place) external flash memory interfaces
+packages can opt to conan's package "option" feature, allowing the user to
+specify the size in the command line, their own profile, or set the option
+directly in the final application <code>conanfile.py</code>.</p>
+<h4 id="6-testing">6. Testing</h4>
+<p>Once all scripts are in place, it's time to test:</p>
+<p>To build the package, run:
+<div class="highlight"><pre><span></span><code>conan<span class="w"> </span>create<span class="w"> </span>.<span class="w"> </span>-pr<span class="w"> </span>YOUR_PROFILE<span class="w"> </span>-pr<span class="w"> </span>arm-gcc-12.3<span class="w"> </span>--version<span class="o">=</span>latest
+</code></pre></div></p>
+<p>To build your demos, use:
+<div class="highlight"><pre><span></span><code><span class="nv">VERBOSE</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>conan<span class="w"> </span>build<span class="w"> </span>demos<span class="w"> </span>-pr<span class="w"> </span>YOUR_PROFILE<span class="w"> </span>-pr<span class="w"> </span>arm-gcc-12.3
+</code></pre></div></p>
+<p>On Windows:
+<div class="highlight"><pre><span></span><code><span class="nv">$env</span>:VERBOSE<span class="o">=</span><span class="m">1</span><span class="w"> </span>conan<span class="w"> </span>build<span class="w"> </span>demos<span class="w"> </span>-pr<span class="w"> </span>YOUR_PROFILE<span class="w"> </span>-pr<span class="w"> </span>arm-gcc-12.3
+</code></pre></div></p>
+<p>Ensure verbose output is enabled to check the <code>-Tyour_linker_script.ld</code> command
+argument during the build process. Verify the binary fits the addresses
+specified in the linker script with:</p>
+<div class="highlight"><pre><span></span><code>arm-none-eabi-readelf<span class="w"> </span>-S<span class="w"> </span>demos/build/YOUR_PROFILE/MinSizeRel/blinker.elf
+</code></pre></div>
+<p>Confirm the <code>.init</code> section aligns with the flash address and <code>.data</code> with the
+RAM address. If these match, your implementation is successful.</p>
+<div class="admonition error">
+<p class="admonition-title">Troubleshooting</p>
+<p>If commands do not execute as expected, particularly on Linux or macOS,
+source your environment variables with:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span>demos/build/YOUR_PROFILE/MinSizeRel/generators/conanbuild.sh
+</code></pre></div>
+</div>
+<h2 id="continuous-integration-deployment">🔄 Continuous Integration &amp; Deployment</h2>
+<p>Continuous Integration (CI) ensures that code in the main branch of any libhal
+library—or code intended for the main branch—builds successfully and passes all
+tests. This process is crucial for maintaining code quality and functionality
+over time.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The CI system is currently optimized for use within the libhal
+organization. Efforts are underway to enhance its usability for other
+organizations without requiring a fork or clone of the <code>libhal/ci</code>
+repository.</p>
+</div>
+<h3 id="branch-pull-request-checks">Branch &amp; Pull Request Checks</h3>
+<p>The <code>libhal-__platform__</code> includes a pre-configured
+<a href="https://github.com/libhal/libhal-__platform__/blob/main/.github/workflows/ci.yml"><code>ci.yml</code></a>
+GitHub Action script, which provides an overview of our automated testing
+approach:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">on</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">workflow_dispatch</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">pull_request</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">branches</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main</span>
+<span class="w">  </span><span class="nt">schedule</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">cron</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0</span><span class="nv"> </span><span class="s">12</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">0&quot;</span>
+</code></pre></div>
+<p>Key Features:</p>
+<ul>
+<li><strong>Scheduled Tests:</strong> The CI system automatically tests the main branch daily
+  to ensure ongoing compatibility and to detect any issues caused by changes in
+  other packages or the infrastructure.</li>
+<li><strong>Pull Request Tests:</strong> All pull requests undergo CI tests to ensure that new
+  contributions do not introduce bugs or compatibility issues.</li>
+<li><strong>Manual Trigger:</strong> The <code>workflow_dispatch</code> event allows for manual CI runs
+  without needing to push updates or create pull requests.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">library_checks</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">libhal/ci/.github/workflows/library_check.yml@5.x.y</span>
+<span class="w">    </span><span class="nt">secrets</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inherit</span>
+
+<span class="w">  </span><span class="nt">deploy_cortex-m4f_check</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">libhal/ci/.github/workflows/deploy.yml@5.x.y</span>
+<span class="w">    </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">arch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cortex-m4f</span>
+<span class="w">      </span><span class="nt">os</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">baremetal</span>
+<span class="w">      </span><span class="nt">compiler</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcc</span>
+<span class="w">      </span><span class="nt">compiler_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12.3</span>
+<span class="w">      </span><span class="nt">compiler_package</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">arm-gnu-toolchain</span>
+<span class="w">    </span><span class="nt">secrets</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inherit</span>
+
+<span class="w">  </span><span class="nt">deploy_cortex-m4_check</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">libhal/ci/.github/workflows/deploy.yml@5.x.y</span>
+<span class="w">    </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">arch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cortex-m4</span>
+<span class="w">      </span><span class="nt">os</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">baremetal</span>
+<span class="w">      </span><span class="nt">compiler</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gcc</span>
+<span class="w">      </span><span class="nt">compiler_version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">12.3</span>
+<span class="w">      </span><span class="nt">compiler_package</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">arm-gnu-toolchain</span>
+<span class="w">    </span><span class="nt">secrets</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inherit</span>
+
+<span class="w">  </span><span class="nt">demo_check_profile1</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">libhal/ci/.github/workflows/demo_builder.yml@5.x.y</span>
+<span class="w">    </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">compiler_profile_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/libhal/arm-gnu-toolchain.git</span>
+<span class="w">      </span><span class="nt">compiler_profile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1/arm-gcc-12.3</span>
+<span class="w">      </span><span class="nt">platform_profile_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/libhal/libhal-__platform__.git</span>
+<span class="w">      </span><span class="nt">platform_profile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1/profile1</span>
+<span class="w">    </span><span class="nt">secrets</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inherit</span>
+
+<span class="w">  </span><span class="nt">demo_check_profile2</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">libhal/ci/.github/workflows/demo_builder.yml@5.x.y</span>
+<span class="w">    </span><span class="nt">with</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">compiler_profile_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/libhal/arm-gnu-toolchain.git</span>
+<span class="w">      </span><span class="nt">compiler_profile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1/arm-gcc-12.3</span>
+<span class="w">      </span><span class="nt">platform_profile_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/libhal/libhal-__platform__.git</span>
+<span class="w">      </span><span class="nt">platform_profile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">v1/profile2</span>
+<span class="w">    </span><span class="nt">secrets</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inherit</span>
+</code></pre></div>
+<p>Key Checks:</p>
+<ul>
+<li><strong>Library Checks:</strong> Ensures packaging in host mode, conducts host side tests,
+  verifies API documentation (Doxygen comments), and checks code formatting.</li>
+<li><strong>Deployment Checks:</strong> Uses <code>deploy.yml</code> to simulate the deployment process
+  for all <code>build_type</code>s such as <code>Debug</code>, <code>MinSizeRel</code>, and <code>Release</code>, without a
+  specific <code>version</code> input for a dry run.</li>
+<li><strong>Demo Application Checks:</strong> Ensures demo applications remain functional
+  after changes using <code>demo_builder.yml</code>. This script should specify the paths
+  to compiler and platform profiles, using these to download and build the
+  applications.</li>
+</ul>
+<p>Each <code>ci.yml</code> configuration should include these checks. If a package does not
+include demos, the demo check can be omitted, though it is generally
+recommended to include demos to demonstrate the library's capabilities.</p>
+<h2 id="platform-constants">📜 Platform Constants</h2>
+<p>Now we've reached the point where we can start modifying the C++ source code.
+The first area to start with is defining the <code>peripheral</code> and <code>irq</code> enumeration
+class constants. These outline the set of peripherals and interrupt requests
+that can be used on the platform.</p>
+<p>Here's a guide section for "Peripheral Constants" that you can use in your
+documentation. This section explains how to map peripheral identifiers to their
+respective power and clock control registers, tailored specifically for an API
+like the one you're designing for libhal.</p>
+<h3 id="peripheral-constants">Peripheral Constants</h3>
+<p>In the libhal ecosystem, peripheral constants play a crucial role in the power
+and clock management APIs. These constants uniquely identify each peripheral
+and correspond directly to control bits in the power and clock registers. This
+design ensures efficient and straightforward management of peripheral power
+states and clock frequencies.</p>
+<h4 id="defining-peripheral-constants">Defining Peripheral Constants</h4>
+<p>Peripheral constants are defined in an enumeration where each constant
+corresponds to a specific bit in a device's power or clock enable registers.
+This method allows direct manipulation of these registers using bit operations,
+which are both fast and memory-efficient.</p>
+<div class="highlight"><pre><span></span><code><span class="k">namespace</span><span class="w"> </span><span class="nn">hal</span><span class="o">::</span><span class="nn">your_platform</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">/// List of each peripheral and their power on id number for this platform</span>
+<span class="w">  </span><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">peripheral</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Examples</span>
+<span class="w">    </span><span class="n">gpio</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">    </span><span class="n">uart0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">    </span><span class="n">spi1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">    </span><span class="c1">// More peripherals follow...</span>
+<span class="w">    </span><span class="n">max</span><span class="p">,</span><span class="w"> </span><span class="c1">// Placeholder for the count of peripherals</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
+<h4 id="mapping-to-power-registers">Mapping to Power Registers</h4>
+<ol>
+<li>
+<p><strong>Locate Power Registers:</strong> First, consult the power management section of
+   your microcontroller's user manual. Identify the registers responsible for
+   powering peripherals. These are often labeled as power control registers or
+   clock enable registers.</p>
+</li>
+<li>
+<p><strong>Understand Register Layout:</strong> Registers typically control multiple
+   peripherals. Each bit in a register corresponds to the power state of one
+   peripheral. For instance, bit 0 might control the power for the GPIO
+   interface, bit 1 for the UART0, and so on.</p>
+</li>
+<li>
+<p><strong>Designing the Enumeration:</strong> Define each peripheral in the enum class such
+   that the value of the enum matches the bit position in the power register.
+   For a microcontroller with two 32-bit power registers:</p>
+</li>
+<li>Peripherals controlled by the first register will have IDs 0 to 31.</li>
+<li>
+<p>Peripherals controlled by the second register will have IDs 32 to 63.</p>
+</li>
+<li>
+<p><strong>Bitwise Operations:</strong> With each peripheral ID corresponding directly to a
+   bit position, you can toggle power by applying bitwise operations. For
+   example, to power on a peripheral, the operation would be:</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="n">power_register</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">peripheral</span><span class="o">::</span><span class="n">uart0</span><span class="p">));</span>
+</code></pre></div>
+<p>To power it off:</p>
+<div class="highlight"><pre><span></span><code><span class="n">power_register</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">~</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">peripheral</span><span class="o">::</span><span class="n">uart0</span><span class="p">));</span>
+</code></pre></div>
+<h4 id="example-usage">Example Usage</h4>
+<p>Consider a scenario where the ADC peripheral is mapped to bit 12 in the power
+control register. By defining the <code>adc</code> constant as 12 in the enum, you enable
+straightforward manipulation:</p>
+<ul>
+<li><strong>Power On:</strong> <code>power_register |= (1 &lt;&lt; static_cast&lt;int&gt;(peripheral::adc));</code></li>
+<li><strong>Check Power State:</strong> <code>bool isPowered = power_register &amp; (1 &lt;&lt; static_cast&lt;int&gt;(peripheral::adc));</code></li>
+<li><strong>Power Off:</strong> <code>power_register &amp;= ~(1 &lt;&lt; static_cast&lt;int&gt;(peripheral::adc));</code></li>
+</ul>
+<h4 id="benefits">Benefits</h4>
+<p>This mapping strategy ensures that your power and clock management API is both
+efficient and easy to use. It reduces the overhead of calculating bit masks and
+positions dynamically, leading to faster execution and cleaner code.</p>
+<p>This guide section aims to clarify the process of defining and using peripheral
+constants within the libhal framework, providing a structured approach to
+managing device resources effectively.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Your microcontroller may use multiple bits or have a more complicated
+scheme to power control. If that is the case, then it is up to you to
+determine what is the best scheme for powering on peripheral on the device
+that driver and potentially users can utilize.</p>
+</div>
+<h3 id="irq-constants">IRQ Constants</h3>
+<p>It may be useful to understand how ARM Cortex M exceptions work. To learn these
+details, we'd highly recommend reading
+<a href="https://interrupt.memfault.com/blog/arm-cortex-m-exceptions-and-nvic">A Practical guide to ARM Cortex-M Exception Handling by Chris Coleman of Memfault</a>.</p>
+<p>The maximum number of interrupts for Cortex-M series CPUs varies depending on
+the specific model within the Cortex-M family. Here is a breakdown of the
+maximum interrupt numbers for different Cortex-M series processors:</p>
+<ol>
+<li><strong>Cortex-M0/M0+</strong>: Supports up to 32 external interrupts.</li>
+<li><strong>Cortex-M3/M4/M7/M33/M35P</strong>: Supports up to 240 external interrupts.</li>
+<li><strong>Cortex-M23</strong>: Supports up to 32 external interrupts.</li>
+</ol>
+<p>The exact number of interrupts available in a specific microcontroller will
+also depend on the chip and the specific features they have included. Consult
+the technical reference manual or datasheet for the mcu to get the precise
+number of interrupts supported and what they map to.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// The enum class type must always be `std::int16_t`, representing the</span>
+<span class="c1">// maximum number of IRQs a Cortex-M processor can support. This type is also</span>
+<span class="c1">// used for the input parameter that specifies the IRQ number.</span>
+<span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">irq</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">int16_t</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">watchdog_timer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="c1">// The first IRQ must always be zero</span>
+<span class="w">  </span><span class="n">timer0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="n">timer1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">  </span><span class="n">uart0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span>
+<span class="w">  </span><span class="n">uart1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span>
+<span class="w">  </span><span class="n">pwm1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span>
+<span class="w">  </span><span class="n">i2c0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span>
+<span class="w">  </span><span class="n">i2c1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span>
+<span class="w">  </span><span class="n">i2c2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span>
+<span class="w">  </span><span class="n">reserved0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w"> </span><span class="c1">// Fill gaps with reserved IRQs</span>
+<span class="w">  </span><span class="n">spi0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span>
+<span class="w">  </span><span class="n">spi1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">15</span><span class="p">,</span>
+<span class="w">  </span><span class="n">pll0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span>
+<span class="w">  </span><span class="n">rtc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">17</span><span class="p">,</span>
+<span class="w">  </span><span class="c1">// ... Add the rest...</span>
+<span class="w">  </span><span class="n">max</span><span class="p">,</span><span class="w"> </span><span class="c1">// The final entry must ALWAYS be &quot;max&quot;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>When referencing your user manual, look for the term <strong>NVIC</strong>, which stands for
+<strong>Nested Vector Interrupt Controller</strong>. This is a typical title in ARM MCU
+data sheets for where the interrupts IRQs are defined. The NVIC section in the
+manual typically includes IRQ numbers for each peripheral. Integrate these
+numbers into the enum class, assigning them as corresponding values.
+Additionally, you may encounter <strong>ISER</strong>, or <strong>Interrupt Set-Enable Register</strong>,
+which is the ARM designation for the register controlling interrupt enabling.</p>
+<h2 id="implementing-the-core-apis">🧩 Implementing the core APIs</h2>
+<p>To be written.</p>
+<!--
+Here are documents that go over how to implement the following core APIs
+
+- [Implementing Power Control]()
+- [Implementing Direct Memory Access]()
+- [Implementing a Clock Tree & Clock Configuration]()
+- [Implementing Pin Multiplexing]()
+-->
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../library_guides/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 🔹 Library Development Guide">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                🔹 Library Development Guide
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../dma_tutorial/" class="md-footer__link md-footer__link--next" aria-label="Next: ⏩ DMA Tutorial">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                ⏩ DMA Tutorial
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "content.tabs.link", "toc.integrate", "navigation.tracking", "navigation.footer"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>
