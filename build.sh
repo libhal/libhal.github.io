@@ -19,6 +19,5 @@ sphinx-build -b html -Dbreathe_projects.libhal=../doxygen_output/xml . output
 
 cd ..
 
-rm -rf mkdocs/api 
+rm -rf mkdocs/api
 cp -r sphinx/output mkdocs/api
-
