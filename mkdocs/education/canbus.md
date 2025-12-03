@@ -477,6 +477,9 @@ convert one filter to another.
 
 ### Range to identifier filter
 
+!!! warning
+    This does not exist currently!
+
 libhal provides `hal::range_to_identifier_can_adaptor` which can take a
 `hal::can_range_filter` and generate multiple `hal::can_identifier_filters`.
 This can be beneficial when the set of IDs is contiguous OR close enough
