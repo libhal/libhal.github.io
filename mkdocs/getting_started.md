@@ -77,7 +77,7 @@ Skip these steps if you already have both of these installed
     choco install git
     choco install python --version=3.12.2
     python -m pip install --user pipx
-    pipx ensurepath
+    python -m pipx ensurepath
     ```
 
     There is no more installation required at this point.
