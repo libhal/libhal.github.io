@@ -80,6 +80,9 @@ Skip these steps if you already have both of these installed
     python -m pipx ensurepath
     ```
 
+    Install Visual Studio for the rest of the necessary components. 
+    The download can be found on [Microsoft's website.](https://visualstudio.microsoft.com/)
+
     There is no more installation required at this point.
 
     Close and reopen powershell as a normal user now.
