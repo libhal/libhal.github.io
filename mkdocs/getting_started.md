@@ -80,7 +80,7 @@ Skip these steps if you already have both of these installed
     python -m pipx ensurepath
     ```
 
-    Install Visual Studio for the rest of the necessary components. 
+    Install Visual Studio for the rest of the necessary components.
     The download can be found on [Microsoft's website.](https://visualstudio.microsoft.com/)
 
     There is no more installation required at this point.
@@ -131,18 +131,34 @@ git clone https://github.com/libhal/libhal-arm-mcu.git
 cd libhal-arm-mcu
 ```
 
-To build using conan you just need to run the following:
+To build a libhal demo, you must first create the latest version of the library
+package like so:
 
 === "STM32F103"
 
     ```bash
-    conan build demos -pr hal/mcu/stm32f103c8 -pr hal/tc/arm-gcc-12.3
+    conan create . -pr:a hal/tc/gcc -pr hal/mcu/stm32f103c8
     ```
 
 === "LPC4078"
 
     ```bash
-    conan build demos -pr hal/mcu/lpc4078 -pr hal/tc/arm-gcc-12.3
+    conan create . -pr:a hal/tc/gcc -pr hal/mcu/lpc4078
+    ```
+
+With the latest package installed within your conan cache, you can now build
+the demo applications:
+
+=== "STM32F103"
+
+    ```bash
+    conan build demos -pr:a hal/tc/gcc -pr hal/mcu/stm32f103c8
+    ```
+
+=== "LPC4078"
+
+    ```bash
+    conan build demos -pr:a hal/tc/gcc -pr hal/mcu/lpc4078
     ```
 
 You can find binaries of your application within the
