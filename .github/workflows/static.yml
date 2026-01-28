@@ -24,7 +24,7 @@ on:
 permissions:
   contents: write
 env:
-  CURRENT_VERSION: "4.2"
+  CURRENT_VERSION: "4.3"
   PRODUCTION: true
 
 jobs:
