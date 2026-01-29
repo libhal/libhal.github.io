@@ -80,11 +80,17 @@ Skip these steps if you already have both of these installed
     python -m pipx ensurepath
     ```
 
-    Install Visual Studio for the rest of the necessary components.
-    The download can be found on [Microsoft's website.](https://visualstudio.microsoft.com/)
+    In order to build packages and applications targeting Windows you must
+    install **Visual Studio**. You can install it using `winget` in an admin
+    powershell:
+
+    ```powershell
+    winget install Microsoft.VisualStudio.2022.BuildTools --override "--add Microsoft.VisualStudio.Workload.VCTools --includeRecommended -p --installWhileDownloading"
+    ```
+
+    Or you can the install found on [visualstudio.microsoft.com](https://visualstudio.microsoft.com/).
 
     There is no more installation required at this point.
-
     Close and reopen powershell as a normal user now.
 
 ---
