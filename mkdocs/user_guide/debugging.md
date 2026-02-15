@@ -9,7 +9,7 @@ PyOCD is a Python-based debugging tool specifically designed for ARM Cortex-M mi
 ### 1. Install PyOCD
 
 ```bash
-python3 -m pip install pyocd
+pipx install pyocd
 ```
 
 ### 2. Connect Your Hardware
@@ -43,13 +43,28 @@ First, start the PyOCD server for your specific device:
 
 ```bash
 # For LPC40xx boards:
-pyocd gdbserver --target=lpc4088 --persist
+pyocd gdbserver --semihost -Osemihost_console_type=True --target=lpc4088 --persist
 
 # For STM32F103xx boards:
-pyocd gdbserver --target=stm32f103rc --persist
+pyocd gdbserver --semihost -Osemihost_console_type=True --target=stm32f103rc --persist
 ```
 
 Not sure about your target? Run `pyocd list --targets` to see all options.
+
+!!! important
+    The `--semihost -Osemihost_console_type=True` arguments are required for
+    builds that use semihosting. Otherwise you will get an error like this when
+    the application attempts to use a semihost API like `puts`, or `printf`:
+
+    ```text
+    Program received signal SIGTRAP, Trace/breakpoint trap.
+    sys_semihost (p_reason=p_reason@entry=21, p_arg=p_arg@entry=0x20000599 <sys_semihost_get_cmdline::cmdline>)
+        at /Users/kammce/.conan2/p/b/libha4b6f251bd59f1/b/src/system_controller.cpp:96
+    96            asm volatile("bkpt 0xAB" : "=r"(r0) : "r"(r0), "r"(r1) : "memory");
+    ```
+
+    Enabling this does not disrupt applications built without semihost support
+    so it is always acceptable enable this in your `pyocd` just in case.
 
 ### 2. Connect GDB
 
