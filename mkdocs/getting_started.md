@@ -209,7 +209,7 @@ In order to complete this tutorial you'll one of these devices:
     then
 
     ```bash
-    stm32loader -e -w -v -B -p /dev/tty.usbserial-10 demos/build/stm32f103c8/MinSizeRel/uart.elf.bin
+    stm32loader -e -w -v -B -p /dev/tty.usbserial-10 demos/build/stm32f103c8-gcc-14/MinSizeRel/uart.elf.bin
     ```
 
     Replace `/dev/tty.usbserial-10` with the correct port
@@ -239,7 +239,7 @@ In order to complete this tutorial you'll one of these devices:
         On other systems you may have to just use `python` as the command.
 
     ```bash
-    nxpprog --control --binary demos/build/lpc4078/MinSizeRel/uart.elf.bin --device /dev/tty.usbserial-140
+    nxpprog --control --binary demos/build/lpc4078-gcc-14/MinSizeRel/uart.elf.bin --device /dev/tty.usbserial-140
     ```
 
     - Replace `/dev/tty.usbserial-140` with the correct port
