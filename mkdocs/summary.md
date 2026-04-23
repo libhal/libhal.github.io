@@ -30,6 +30,7 @@
   - [🗃️ Organization](contributor_guide/organization.md)
   - [🎨 Style Guide](contributor_guide/style.md)
   - [🔗 Interface Design Philosophy](contributor_guide/interface_design.md)
+  - [‼️ Error Handling Design Philosophy](contributor_guide/error_handling.md)
   - [🔹 Library Development Guide](contributor_guide/library_guides.md)
   - [🧠 ARM Cortex M Bring Up](contributor_guide/arm_cortex_m_bringup.md)
   - [⏩ DMA Tutorial](contributor_guide/dma_tutorial.md)
