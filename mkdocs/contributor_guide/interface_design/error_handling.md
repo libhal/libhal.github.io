@@ -1,5 +1,8 @@
 # ‼️ Error Handling Design Philosophy
 
+!!! warning
+    These docs are with respect to libhal v4 and do not represent v5.
+
 ## Core Principle
 
 The primary objective for APIs is to make invalid inputs

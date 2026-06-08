@@ -1,5 +1,8 @@
 # 🔗 Interface Design Philosophy
 
+!!! warning
+    These docs are with respect to libhal v4 and do not represent v5.
+
 Interfaces are the foundation and building blocks of libhal. They are the "A"
 and "L" in HAL: hardware abstraction layer. They present a generalized ideal of
 a particular aspect of hardware or computing. For example and output pin

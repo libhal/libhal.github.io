@@ -1,51 +1,60 @@
 # 📜 Design Philosophy
 
-These are the core design tenets that `libhal` and libraries extending it must
+These are the core design tenets that `libhal` and its associated libraries must
 seek to achieve with every design choice, line written, and architecture change
 made.
 
 ## D.1 Multi Targeted
 
-`libhal` and the libraries that extend it, should work anywhere. So long as the
-appropriate compiler or cross compiler is used, the driver should do as it is
-intended. The exception is `target` libraries which are designated to execute
-for a particular target. Even so, those `target` libraries MUST be unit testable
-on any host machine.
+`libhal` and the libraries that extend it should work anywhere. So long as the
+appropriate compiler or cross-compiler is used, the driver should behave as
+intended. The exception is `platform` libraries, which are designated to
+execute for a particular platform. Even so, platform libraries must be unit
+testable on any host machine.
 
-## D.2 Light Weight
+## D.2 General
 
-`libhal` should keep its interfaces and utility code light weight, meaning
-such things do not allocate, and if they do only once, do not perform
-long/length copies, unless a copy was the desired operation,
+`libhal` interfaces should be general, meaning they do not include APIs or
+configuration settings that are uncommon across most targets or specific to a
+particular platform.
 
-## D.3 General
-
-`libhal` interfaces should be general, meaning that they do not include APIs, or
-configuration settings that are uncommon in most targets or specific to a
-particular target.
-
-## D.4 Minimalist
-
-`libhal` aims to be as simple as possible and no simpler. Interfaces, utility
-functions, and libraries should be straight forward for most programmers
-to understand with added complexity only when it is necessary and no other
-options exist.
-
-## D.5 Safe & Reliable
+## D.3 Safe & Reliable
 
 `libhal` and its style guide aim to use patterns, techniques, and documentation
-to help reduce safety issues and improve reliability.
+to reduce safety issues and improve reliability. libhal is designed with a
+long-term roadmap toward functional safety certification (IEC 61508 / ISO
+26262). Every design decision should consider whether it supports or obstructs
+that goal.
 
-## D.6 Tested & Testable
+## D.4 Tested & Testable
 
-`libhal` code should be as testable and unit tested.
+`libhal` code should be unit tested and designed to be testable. We have future
+plans to add hardware-in-the-loop testing as part of our testing infrastructure.
 
-## D.7 Compiled Quickly
+## D.5 Fast Builds
 
-`libhal` code should build fast and eliminate/replace any unnecessary
-dependencies that cause compile times to be long.
+`libhal` and its ecosystem provide prebuilt binaries for supported toolchain
+configurations. Libraries should avoid dependencies that significantly increase
+build times, and any new dependency must justify its compile-time cost.
 
-## D.8 Portable
+## D.6 Portable
 
-`libhal` code should not require or depend on any OS or target specific code or
-behaviors. `libhal` is designed to work anywhere and should not rely on OS.
+`libhal` code must not depend on any OS or target-specific behavior. It is
+designed to work on baremetal 32-bit MCUs, Linux, macOS, and Windows from the
+same source. No platform-specific code may appear outside of platform libraries.
+
+## D.7 Explicit Over Implicit
+
+libhal prefers explicit over implicit at every layer. Allocators are passed
+as parameters rather than taken from a global. Async context is a named
+parameter, not injected via thread-local storage. Dependencies are wired
+visibly. If something can be made a visible, traceable part of an API without a
+meaningful cost, it should be.
+
+## D.8 Memory Safety Through Ownership
+
+Driver dependencies that outlive a function call must be held as `hal::ptr<T>`
+which is a non-nullable, reference-counted smart pointer that tracks allocator
+lifetime alongside the object. Raw references are valid only for dependencies
+consumed within the current call and not retained. This model ensures that
+no driver can outlive the resources it depends on.
