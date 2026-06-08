@@ -1,0 +1,43 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "nodiscard",
+    "noexcept",
+    "nullptr",
+    "constexpr",
+    "cppm",
+    "libhal",
+    "decltype",
+    "typename",
+    "uintptr",
+    "intptr",
+    "ptrdiff",
+    "ifdef",
+    "ifndef",
+    "endif",
+    "pragma",
+    "nothrow",
+    "RAII",
+    "malloc",
+    "realloc",
+    "alignof",
+    "chrono",
+    "println",
+    "cassert",
+    "NOLINTNEXTLINE",
+    "bugprone",
+    "inplace",
+    "fprintf",
+    "fputs",
+    "offsetof",
+    "uart"
+  ],
+  "ignorePaths": [
+    "build/",
+    "*.json"
+  ],
+  "enableFiletypes": [
+    "markdown"
+  ]
+}

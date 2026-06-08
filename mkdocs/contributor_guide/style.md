@@ -76,7 +76,7 @@ understood than the expanded form:
 cross-reference code against the reference manual.
 
 ```cpp
-// ✅ Matches the datasheet — acceptable
+// ✅ Matches the datasheet - acceptable
 reg->CR1 |= enable_bit;
 reg->PCLKDIV = divider;
 ```
@@ -113,7 +113,7 @@ do not require manual attention.
 ### S.3.3 Number radix for bit manipulation
 
 When working with register values or bit masks, use only **binary** or **hex**.
-Never use decimal or octal — they obscure the bit-level structure that matters
+Never use decimal or octal. They obscure the bit-level structure that matters
 when reading hardware code.
 
 ```cpp
@@ -139,7 +139,7 @@ constexpr u32 base_address = 0x4000'0000;
 ### S.3.4 Documentation
 
 Every public API must be documented with Doxygen-style comments. This is
-enforced by the `doxygen-check` pre-commit hook — undocumented public APIs
+enforced by the `doxygen-check` pre-commit hook, undocumented public APIs
 will fail CI.
 
 ```cpp
@@ -171,9 +171,9 @@ See [S.10 Headers](#s10-headers) if you need to work with them.
 
 Two file types are used in a module-based library:
 
-- **`.cppm`** — module interface files. These declare the public API of a module
+- **`.cppm`** - module interface files. These declare the public API of a module
   or partition. Every exported symbol lives in a `.cppm` file.
-- **`.cpp`** — module implementation files. These provide definitions that
+- **`.cpp`** - module implementation files. These provide definitions that
   belong to a module but are not part of its public interface. Use these to hide
   implementation details, such as the `impl` struct in the pimpl pattern.
 
@@ -224,7 +224,7 @@ namespace hal::inline v5 {
 **Module partition implementation** (`gpio.cpp`):
 
 ```cpp
-module hal:gpio;  // no 'export' keyword — this is an implementation unit
+module hal:gpio;  // no 'export' keyword - this is an implementation unit
 
 // Definitions, internal helpers, impl structs go here.
 // Nothing in this file is visible to consumers of the module.
@@ -232,7 +232,7 @@ module hal:gpio;  // no 'export' keyword — this is an implementation unit
 
 ### S.4.3 Exporting declarations
 
-Export individual declarations — classes, functions, enums, and type aliases —
+Export individual declarations - classes, functions, enums, and type aliases -
 using the `export` keyword on each one. Do not use `export namespace { ... }` as
 it exports every symbol in the block, including internal helpers that should not
 be part of the public API.
@@ -357,7 +357,7 @@ hal::bit_modify(reg->control)
   .clear<lower_power_mode>()
   .set<enable>();
 
-// ❌ Anonymous and runtime — no compiler optimization, no readability
+// ❌ Anonymous and runtime - no compiler optimization, no readability
 reg->control = (reg->control & ~0x3F40) | ((divider << 6) & 0x3F40);
 ```
 
@@ -395,7 +395,7 @@ constexpr auto default_pin_config = hal::bit_value(0U)
   .to<std::uint32_t>();
 ```
 
-**Tail chaining** — calling the next method directly on the return value of the
+**Tail chaining** - calling the next method directly on the return value of the
 previous keeps the entire lifetime of the object visible to the compiler.
 This allows GCC and Clang to collapse the chain into a single constant,
 producing optimal code with no runtime cost.
@@ -509,10 +509,10 @@ current call and not retained. The rule is strictly about what gets stored
 in a member variable.
 
 ```cpp
-// ✅ Reference is fine here — p_settings is consumed and not stored
+// ✅ Reference is fine here - p_settings is consumed and not stored
 void configure(hal::i2c& p_bus, settings const& p_settings);
 
-// ✅ hal::ptr required here — p_i2c is stored as m_i2c
+// ✅ hal::ptr required here - p_i2c is stored as m_i2c
 my_driver(private_key, hal::ptr<hal::i2c> p_i2c)
   : m_i2c(p_i2c)
 {}
@@ -575,7 +575,39 @@ led.level(false);
     type-safe named boolean that is self-documenting at call sites without
     requiring a full enum. This section will be updated when it lands.
 
-## S.7 Portability Restrictions
+### S.6.5 `[[nodiscard]]`
+
+Apply `[[nodiscard]]` to any function whose return value being discarded is
+almost certainly a bug. The primary case is factory functions: discarding the
+return value of `create()` constructs and immediately destroys the driver
+without it ever being used.
+
+```cpp
+// ✅ Compiler error if the caller drops the return value
+[[nodiscard]] static hal::deferred_ptr<my_driver> create(
+  async::context& p_context,
+  hal::ptr<hal::i2c> p_i2c,
+  settings const& p_settings);
+```
+
+When the reason a discard is wrong is not obvious from the function name alone,
+add a string message to `[[nodiscard]]` so the compiler diagnostic is
+self-explanatory.
+
+```cpp
+[[nodiscard("Discarding the handle releases the lock immediately.")]]
+lock_guard acquire_lock();
+```
+
+Do not apply `[[nodiscard]]` to functions that are called primarily for their
+side effects or where ignoring the return value is a legitimate pattern.
+
+```cpp
+// ❌ Doesn't make sense - called for its side effect
+[[nodiscard]] void reset();
+```
+
+## S.7 Restrictions
 
 ### S.7.1 Avoid macros
 
@@ -628,7 +660,7 @@ the allocator, giving application developers full control over where memory
 comes from.
 
 ```cpp
-// ❌ Raw heap allocation — bypasses caller's memory strategy
+// ❌ Raw heap allocation - bypasses caller's memory strategy
 class my_driver {
   my_driver() {
     m_buffer = new std::byte[256];
@@ -636,7 +668,7 @@ class my_driver {
   std::byte* m_buffer;
 };
 
-// ✅ PMR allocation — caller controls where memory comes from
+// ✅ PMR allocation - caller controls where memory comes from
 class my_driver {
   my_driver(std::pmr::memory_resource* p_resource, std::size_t p_size)
     : m_buffer(p_resource, p_size)
@@ -695,6 +727,87 @@ async::future<void> worker(async::context& p_context) {
     application developers building on top of libhal. These implementations
     are intended for end users and their applications. They must not be used
     within libhal libraries themselves.
+
+### S.7.6 No logging from drivers
+
+Drivers must not write to stdout or stderr. This means no calls to:
+
+- `std::printf` / `std::fprintf`
+- `std::puts` / `std::fputs`
+- `std::print` / `std::println` (C++26)
+
+The role of logging belongs to the application, not its drivers. A driver that
+logs on every read or write is as surprising as a file I/O library that spams
+the console on every operation.
+
+```cpp
+// ❌ Driver owns no logging responsibility
+async::future<hal::celsius> read_temperature(async::context& p_ctx) {
+  auto raw = co_await read_raw(p_ctx);
+  std::printf("raw=%d\n", raw);   // never do this
+  co_return to_celsius(raw);
+}
+
+// ✅ Return the value and let the application decide what to do with it
+async::future<hal::celsius> read_temperature(async::context& p_ctx) {
+  auto raw = co_await read_raw(p_ctx);
+  co_return to_celsius(raw);
+}
+```
+
+!!! note
+    S.7.2 already prohibits `<iostream>` for binary size reasons. This rule
+    covers the remaining C-style output functions that do not carry the same
+    penalty but still violate driver responsibility boundaries.
+
+### S.7.7 No halting or termination
+
+Drivers must not stop execution. The following are forbidden in driver code:
+
+- `std::abort()`
+- `std::exit()` and `std::quick_exit()`
+- `std::terminate()`
+- Infinite loops that never yield control
+
+An application must always retain the ability to decide what happens when
+something goes wrong. Drivers surface errors through exceptions and return
+control to the caller. The application then decides whether to retry, log, shut
+down, or recover.
+
+```cpp
+// ❌ Driver takes control away from the application
+if (!initialized) {
+  std::abort();
+}
+
+// ❌ Spin loop with no exit - hangs the system permanently
+while (!(reg->status & ready_bit)) {}
+
+// ✅ Throw and let the application handle it
+if (!initialized) {
+  throw hal::not_initialized{};
+}
+
+// ✅ Yield to the scheduler while waiting
+while (hal::bit_extract<ready>(reg->status) == 0) {
+  co_await async::yield(p_ctx);
+}
+```
+
+### S.7.8 Avoid `noexcept`
+
+Do not annotate functions with `noexcept`. Since C++17, `noexcept` is part of
+a function's type. Removing it in a later version is a breaking ABI change.
+libhal keeps the option open for which APIs throw as the library evolves.
+Committing to `noexcept` prematurely closes that door.
+
+```cpp
+// ❌ ABI commitment - cannot be un-noexcept without breaking callers
+[[nodiscard]] hal::result<std::uint16_t> read_sample() noexcept;
+
+// ✅ No annotation - unannotated functions are implicitly potentially-throwing
+[[nodiscard]] hal::result<std::uint16_t> read_sample();
+```
 
 ## S.8 Namespace Hygiene
 
@@ -828,7 +941,7 @@ If source integration is used, those allocation sites must be replaced and
 tracked as modifications per [S.9.2](#s92-source-integration-rules).
 
 ```cpp
-// ❌ Allocation during operation — incompatible with real-time memory budgets
+// ❌ Allocation during operation - incompatible with real-time memory budgets
 void codec_process(frame_t* p_frame) {
   auto* buf = new uint8_t[256];   // forbidden
   ...
@@ -847,10 +960,10 @@ Windows APIs (`CreateFile`, `VirtualAlloc`), or Linux-specific syscalls are
 forbidden. See [D.6 Portable](../philosophy.md#d6-portable).
 
 ```cpp
-// ❌ POSIX — does not compile on baremetal
+// ❌ POSIX - does not compile on baremetal
 int fd = ::open("/dev/ttyUSB0", O_RDWR);
 
-// ❌ Windows API — does not compile outside Windows
+// ❌ Windows API - does not compile outside Windows
 HANDLE h = CreateFileA("COM3", GENERIC_READ | GENERIC_WRITE, ...);
 ```
 
@@ -859,11 +972,11 @@ intrinsics, x86 SIMD, RISC-V CSR access, or any inline assembly must not appear
 outside a platform library.
 
 ```cpp
-// ❌ ARM-only — breaks on RISC-V and host targets
+// ❌ ARM-only - breaks on RISC-V and host targets
 __DSB();
 uint32_t val = __get_PRIMASK();
 
-// ❌ x86 SIMD — breaks on 32-bit MCUs
+// ❌ x86 SIMD - breaks on 32-bit MCUs
 __m128i result = _mm_add_epi32(a, b);
 ```
 
@@ -940,7 +1053,7 @@ Also remember to remove unused headers.
 ### S.10.4 Include order
 
 Group includes in the order below, separated by blank lines. Within each group,
-`clang-format` sorts alphabetically — do not do it manually.
+`clang-format` sorts alphabetically, do not do it manually.
 
 1. C standard library headers, using `<>` (`<cstdint>`, `<cstring>`)
 2. C third-party headers, using `<>` (`<minimp3.h>`)
@@ -974,3 +1087,123 @@ Group includes in the order below, separated by blank lines. Within each group,
     In test files, `boost.ut` must always be the last include. It overloads
     `operator<<` for `ostream` and must see prior type declarations to generate
     correct output for test failures.
+
+## S.11 Memory-Mapped I/O
+
+Peripheral registers on microcontrollers are accessed by reading and writing
+to fixed physical addresses. This section covers how to declare, address, and
+access those registers correctly and safely.
+
+### S.11.1 Declare register maps as `volatile` structs
+
+Model a peripheral's register block as a plain struct where every hardware
+register is a `volatile` unsigned integer member. The struct must be
+standard-layout so that `sizeof` and `offsetof` are reliable.
+
+```cpp
+struct register_map {
+  volatile std::uint32_t control;    // offset 0x00
+  volatile std::uint32_t status;     // offset 0x04
+  volatile std::uint32_t data;       // offset 0x08
+  std::uint32_t          reserved0;  // offset 0x0C - unused, not volatile
+  volatile std::uint32_t baud_rate;  // offset 0x10
+};
+```
+
+Every readable or writable hardware register must be `volatile`. Reserved or
+unused registers that are never accessed do not need to be `volatile`, but
+must still be present to maintain correct offsets.
+
+Use `std::uint32_t`, `std::uint16_t`, or `std::uint8_t` to match the register
+width specified in the datasheet. Never use `int` or `unsigned int` directly
+as their width is implementation-defined.
+
+### S.11.2 Why `volatile` is mandatory
+
+Without `volatile`, the compiler may cache a register's value in a CPU register
+and skip subsequent reads, or eliminate writes it considers redundant. Hardware
+registers change independently of the CPU, via peripherals, DMA engines, or
+interrupts, so every access must reach the hardware.
+
+```cpp
+// ❌ Without volatile, the compiler may hoist the read out of the loop
+struct register_map {
+  std::uint32_t status;   // missing volatile
+};
+
+// The compiler sees no writes to status and may transform this into:
+//   if (reg->status & ready_bit) { while(true) {} }
+while (!(reg->status & ready_bit)) {}
+
+// ✅ volatile forces every iteration to re-read from the hardware address
+struct register_map {
+  volatile std::uint32_t status;
+};
+```
+
+### S.11.3 Obtain the register pointer via `reinterpret_cast`
+
+Declare the peripheral base address as a `constexpr std::uintptr_t` and cast
+it to a pointer once. Store and pass the typed pointer, never the raw integer.
+
+```cpp
+// ✅ Address constant is named and traced to the datasheet
+constexpr std::uintptr_t uart0_base = 0x4000'C000;
+
+register_map* reg = reinterpret_cast<register_map*>(uart0_base);
+
+hal::bit_modify(reg->control).set<enable>();
+```
+
+```cpp
+// ❌ Casting at every use site - type is implicit, address is not named
+*reinterpret_cast<std::uint32_t*>(0x4000'C004) |= 0x1;
+```
+
+`reinterpret_cast` is the only sanctioned cast for this operation. Do not use
+C-style casts.
+
+### S.11.4 Scope register maps to the translation unit
+
+Register map structs and their associated bit mask definitions belong in an
+anonymous namespace inside the module implementation `.cpp` file. Anonymous
+namespace linkage makes them invisible outside the translation unit, so no
+naming ceremony is required. Use plain descriptive names.
+
+```cpp
+// In gpio.cpp (module implementation - not visible to consumers)
+module hal:gpio;
+
+namespace {
+
+struct register_map {
+  volatile std::uint32_t direction;
+  volatile std::uint32_t mask;
+  volatile std::uint32_t pin;
+  volatile std::uint32_t set;
+  volatile std::uint32_t clear;
+};
+
+struct direction_register {
+  static constexpr auto output = hal::bit_mask::from(0);
+};
+
+} // namespace
+```
+
+### S.11.5 Assert layout with `static_assert`
+
+Use `static_assert` on `sizeof` and `offsetof` to verify that the struct layout
+matches the datasheet. Accidental padding shifts every subsequent register by
+the padding amount, producing silent hardware bugs.
+
+```cpp
+static_assert(sizeof(register_map) == 0x14,
+              "register_map size does not match datasheet");
+static_assert(offsetof(register_map, baud_rate) == 0x10,
+              "baud_rate offset does not match datasheet");
+```
+
+Add one `static_assert` per register that has a known offset in the datasheet.
+This is the only mechanical check that catches struct layout errors at compile
+time.
