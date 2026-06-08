@@ -1,4 +1,4 @@
-# 🔹 Board Library Guide
+# 🔹 Board Library Design Guide
 
 !!! info
     No Documentation yet.

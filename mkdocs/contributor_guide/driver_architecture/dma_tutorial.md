@@ -1,5 +1,8 @@
 # ⏩ DMA: Direct Memory Access Development Guide
 
+!!! warning
+    These docs are with respect to libhal v4 and do not represent v5.
+
 DMA is a key feature in many microcontrollers. DMA allows data to be transferred
 from one location to another without the need for the CPU to perform the copy.
 This can be used to transfer large amounts of data from one place in memory to
