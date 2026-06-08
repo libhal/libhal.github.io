@@ -29,13 +29,23 @@
   - [📜 Design Philosophy](contributor_guide/philosophy.md)
   - [🗃️ Organization](contributor_guide/organization.md)
   - [🎨 Style Guide](contributor_guide/style.md)
-  - [🔗 Interface Design Philosophy](contributor_guide/interface_design.md)
-  - [‼️ Error Handling Design Philosophy](contributor_guide/error_handling.md)
-  - [🔹 Library Development Guide](contributor_guide/library_guides.md)
-  - [🧠 ARM Cortex M Bring Up](contributor_guide/arm_cortex_m_bringup.md)
-  - [⏩ DMA Tutorial](contributor_guide/dma_tutorial.md)
-  - [⬆️ Upgrade Device Library to 3.x.y](contributor_guide/upgrade_to_libhal_3_device_library.md)
+  - [🔧 Build & Toolchain](contributor_guide/toolchain.md)
+  - 🔗 Interface Design
+    - [Interface Design Philosophy](contributor_guide/interface_design/interface_design.md)
+    - [‼️ Error Handling Philosophy](contributor_guide/interface_design/error_handling.md)
+  - 🏗️ Driver Architecture
+    - [Managers, Resources & Adapters](contributor_guide/driver_architecture/driver_types.md)
+    - [Construction Pattern](contributor_guide/driver_architecture/construction_pattern.md)
+    - [💾 Memory Model: hal::ptr & Allocators](contributor_guide/driver_architecture/memory_model.md)
+    - [Pimpl Pattern](contributor_guide/driver_architecture/pimpl.md)
+    - [⚡ Async Policy & Coroutines](contributor_guide/driver_architecture/async_policy.md)
+    - [⏩ DMA Tutorial](contributor_guide/driver_architecture/dma_tutorial.md)
+  - 📦 Library Packaging
+    - [C++ Library Guide](contributor_guide/packaging/cpp_library.md)
+    - [Board Library Guide](contributor_guide/packaging/board_library.md)
   - [🏗️ Architectural Design Decisions](contributor_guide/architecture.md)
+  - ARM
+    - [🧠 ARM Cortex-M Bring Up](contributor_guide/arm/arm_cortex_m_bringup.md)
 - 📊 Project Information
   - [🟢 Library Status 🔴](project_information/status.md)
   - [About](project_information/about.md)
