@@ -49,4 +49,4 @@
 - 📊 Project Information
   - [🟢 Library Status 🔴](project_information/status.md)
   - [About](project_information/about.md)
-- [🧩 APIs](api/index.html)
+- [🧩 APIs](https://libhal.github.io/api/)
