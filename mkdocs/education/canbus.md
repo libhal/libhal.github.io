@@ -1,8 +1,5 @@
 # CAN BUS: Controller Area Network Bus
 
-!!! warning
-    This document describes the CAN for libhal 5.0.0 which is not available yet.
-
 Welcome to the libhal controller area network (CAN) tutorial. CAN BUS is used
 as a reliable broadcast communication.
 
@@ -187,7 +184,7 @@ is located. Any value returned from `receive_cursor()` will always work like so:
 can.receive_buffer()[can.receive_cursor()];
 ```
 
-See [⛓️‍💥how interface circular buffers in libhal work](.).
+See how interface circular buffers in libhal work.
 
 Using the circular buffer APIs directly can be tedious and error prone, so we
 provide some utility classes in `libhal-util/can.hpp`.

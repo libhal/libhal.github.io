@@ -957,7 +957,7 @@ class codec {
 
 **Calls platform-specific APIs.** POSIX file I/O (`open`, `read`, `write`),
 Windows APIs (`CreateFile`, `VirtualAlloc`), or Linux-specific syscalls are
-forbidden. See [D.6 Portable](../philosophy.md#d6-portable).
+forbidden. See [D.6 Portable](./philosophy.md#d6-portable).
 
 ```cpp
 // ❌ POSIX - does not compile on baremetal
