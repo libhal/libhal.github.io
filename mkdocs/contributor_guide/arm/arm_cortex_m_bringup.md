@@ -216,10 +216,10 @@ This section will not go into detail about linker scripts but will provide you a
 
 ### Standard Linker Script Template
 
-The `libhal-armcortex` library provides standardized linker script templates,
+The `libhal-arm-mcu` library provides standardized linker script templates,
 which can be easily adapted for specific platforms. An example template is
 available at:
-[`libhal-armcortex/linker_scripts/libhal-armcortex/standard.ld`](https://github.com/libhal/libhal-armcortex/blob/main/linker_scripts/libhal-armcortex/standard.ld).
+[`libhal-arm-mcu/linker_scripts/libhal-arm-mcu/standard.ld`](https://github.com/libhal/libhal-arm-mcu/blob/main/linker_scripts/libhal-arm-mcu/standard.ld).
 
 To utilize these templates, include the following definitions in your linker
 scripts directory:
@@ -231,7 +231,7 @@ __ram = 0x10000000;
 __ram_size = 16K;
 __stack_size = 1K;
 
-INCLUDE "libhal-armcortex/standard.ld"
+INCLUDE "libhal-arm-mcu/standard.ld"
 ```
 
 The above configuration is an example from the
@@ -297,10 +297,10 @@ important. All that we need to do is map those profile names to the correct
 
 ### Handling Multiple Flash and RAM Configurations
 
-Currently, `libhal-armcortex` supports MCUs with single flash and RAM
+Currently, `libhal-arm-mcu` supports MCUs with single flash and RAM
 configurations. For support for multi-flash and multi-RAM devices, consider
 contributing or following the development on this GitHub issue:
-[Add multi flash & multi ram linker scripts](https://github.com/libhal/libhal-armcortex/issues/16).
+[Add multi flash & multi ram linker scripts](https://github.com/libhal/libhal-arm-mcu/issues/16).
 In order to communicate to the build system what your linker scripts are and
 where to find them, we must add to the conan package's `cpp_info.exelinkflags`
 array. This property describes to conan what link flags should be added if a
@@ -355,7 +355,7 @@ __ram = ???;
 __ram_size = ???;
 __stack_size = 1K;
 
-INCLUDE "libhal-armcortex/standard.ld"
+INCLUDE "libhal-arm-mcu/standard.ld"
 ```
 
 #### 4. Repeat for All Variants
