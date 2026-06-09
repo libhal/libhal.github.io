@@ -4,7 +4,7 @@ Every hardware driver in libhal is built from three distinct building blocks.
 Understanding which type to reach for, and why, is the first step in writing a
 correct driver.
 
-![Driver Types](driver_types.svg)
+![Driver Types](../../assets/driver_types.svg)
 
 | Type     | Owns hardware | Has vtable | Created by          |
 | -------- | ------------- | ---------- | ------------------- |
