@@ -3,7 +3,7 @@
 - 📖 User Guide
   - [🧑🏿‍💻 Setting up VSCode](user_guide/setup_vscode.md)
   - [🧱 Fundamentals of libhal](user_guide/fundamentals.md)
-  - [🔗 Interfaces in libhal](user_guide/interfaces.md)
+  - [🔗 Interfaces of libhal](user_guide/interfaces.md)
   - [🎯 Debugging Firmware](user_guide/debugging.md)
   - [🪤 Error Handling in libhal](user_guide/error_handling.md)
   - [⚖️ Policies & FAQ](user_guide/policy.md)

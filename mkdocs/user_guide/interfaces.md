@@ -18,8 +18,7 @@ work with any microcontroller that provides an implementation of that interface.
 ### Digital I/O
 
 === "Input Pin"
-    See API:
-    [`hal::input_pin`](https://libhal.github.io/4.1/api/libhal/input_pin.html)
+    `hal::input_pin`
 
     Reads the state of a digital pin (HIGH or LOW). Used for:
 
@@ -28,8 +27,7 @@ work with any microcontroller that provides an implementation of that interface.
     - Reading logic levels
 
 === "Output Pin"
-    See API:
-    [`hal::output_pin`](https://libhal.github.io/4.1/api/libhal/output_pin.html)
+    `hal::output_pin`
 
     Controls digital outputs (HIGH or LOW). Used for:
 
@@ -37,11 +35,10 @@ work with any microcontroller that provides an implementation of that interface.
     - Sending digital signals
     - Setting logic levels
 
-=== "Interrupt Pin"
-    See API:
-    [`hal::interrupt_pin`](https://libhal.github.io/4.1/api/libhal/interrupt_pin.html)
+=== "Awaitable Pin"
+    `hal::awaitable_pin`
 
-    Calls a function when a pin's state changes. Used for:
+    Waits for a pin's state to transition. Used for:
 
     - Detecting button presses
     - Responding to external signals
@@ -49,37 +46,35 @@ work with any microcontroller that provides an implementation of that interface.
 
 ### Analog Interfaces
 
-=== "ADC (Analog-to-Digital Converter)"
-    See API:
-    [`hal::adc`](https://libhal.github.io/4.1/api/libhal/adc.html)
+=== "ADC 16-bit"
+    `hal::adc16`
 
-    Converts analog signals to digital values. Used for:
+    Converts analog signals to 16-bit digital values. Used for:
 
     - Reading sensor values
     - Measuring voltages
     - Processing analog inputs
 
-=== "DAC (Digital-to-Analog Converter)"
-    See API:
-    [`hal::dac`](https://libhal.github.io/4.1/api/libhal/dac.html)
+=== "ADC 24-bit"
+    `hal::adc24`
 
-    Converts digital values to analog signals. Used for:
+    Converts analog signals to 24-bit digital values. Used for:
+
+    - High-precision sensor readings
+    - Precise voltage measurement
+    - Processing high-resolution analog inputs
+
+=== "DAC 16-bit"
+    `hal::dac16`
+
+    Converts 16-bit digital values to analog signals. Used for:
 
     - Generating analog voltages
     - Controlling analog devices
+    - Audio output
 
-=== "Stream DAC"
-    See API:
-    [`hal::dac`](https://libhal.github.io/4.1/api/libhal/dac.html)
-
-    Converts digital values to analog signals. Used for:
-
-    - Generating analog voltages based on a PCM waveform data
-    - Generating audio output
-
-=== "PWM (Pulse Width Modulation)"
-    See API:
-    [`hal::pwm`](https://libhal.github.io/4.1/api/libhal/pwm.html)
+=== "PWM Channel"
+    `hal::pwm16_channel`
 
     Generates square waves with controllable duty cycle. Used for:
 
@@ -87,21 +82,18 @@ work with any microcontroller that provides an implementation of that interface.
     - LED brightness control
     - Signal generation
 
+=== "PWM Group Manager"
+    `hal::pwm_group_manager`
+
+    Manages frequency for multiple PWM channels. Used for:
+
+    - Controlling frequency of PWM groups
+    - Synchronizing multiple channels
+
 ### Time Management
 
-=== "Timer"
-    See API:
-    [`hal::timer`](https://libhal.github.io/4.1/api/libhal/timer.html)
-
-    Schedules future events. Used for:
-
-    - Delayed operations
-    - Periodic tasks
-    - Timeout management
-
 === "Steady Clock"
-    See API:
-    [`hal::steady_clock`](https://libhal.github.io/4.1/api/libhal/steady_clock.html)
+    `hal::steady_clock`
 
     Provides consistent time measurements. Used for:
 
@@ -111,19 +103,17 @@ work with any microcontroller that provides an implementation of that interface.
 
 ### Communication Protocols
 
-=== "SPI"
-    See API:
-    [`hal::spi`](https://libhal.github.io/4.1/api/libhal/spi.html)
+=== "SPI Channel"
+    `hal::spi_channel`
 
-    Fast, synchronous communication protocol. Used for:
+    Fast, synchronous communication protocol with manual chip select. Used for:
 
     - Communicating with displays
     - Reading memory chips
     - High-speed sensor data
 
 === "I2C"
-    See API:
-    [`hal::i2c`](https://libhal.github.io/4.1/api/libhal/i2c.html)
+    `hal::i2c`
 
     Two-wire communication protocol. Used for:
 
@@ -132,19 +122,27 @@ work with any microcontroller that provides an implementation of that interface.
     - Low-speed communication
 
 === "Serial"
-    See API:
-    [`hal::serial`](https://libhal.github.io/4.1/api/libhal/serial.html)
+    `hal::serial`
 
-    Basic serial communication. Used for:
+    Asynchronous serial communication with buffering. Used for:
 
-    - Bi-direction asynchronous communication with a single device
+    - Bi-directional communication with a single device
     - Communication with computers
+    - UART, RS232, RS485 protocols
+
+=== "Awaitable Serial"
+    `hal::awaitable_serial`
+
+    Serial communication with RX event notifications. Used for:
+
+    - Awaiting receive events
+    - Idle detection on RX line
+    - Coroutine-based serial handling
 
 === "CAN"
-    See API:
-    [`hal::can`](https://libhal.github.io/4.1/api/libhal/can.html)
+    `hal::can` with `hal::can_message`
 
-    Robust communication bus. Used for:
+    Robust communication bus protocol. Used for:
 
     - Automotive systems
     - Industrial networks
@@ -153,30 +151,59 @@ work with any microcontroller that provides an implementation of that interface.
 ### Motion Control
 
 === "Motor"
-    See API:
-    [`hal::motor`](https://libhal.github.io/4.1/api/libhal/motor.html)
+    `hal::motor`
 
-    Controls open-loop motors. Used for:
+    Controls open-loop rotational actuators. Used for:
 
     - Basic motor control
     - Fan control
     - Simple actuators
 
-=== "Servo"
-    See API:
-    [`hal::servo`](https://libhal.github.io/4.1/api/libhal/servo.html)
+=== "Basic Servo"
+    `hal::basic_servo`
 
-    Controls position-based motors. Used for:
+    Controls servo position without feedback. Used for:
 
-    - Precise positioning
-    - Robotic arms
-    - Camera mounts
+    - Simple positional control
+    - Basic servo applications
+
+=== "Feedback Servo"
+    `hal::feedback_servo`
+
+    Controls servo with position and motion feedback. Used for:
+
+    - Precise positioning with feedback
+    - Detecting motion status
+    - Position-aware servo control
+
+=== "Velocity Servo"
+    `hal::velocity_servo`
+
+    Controls servo with variable velocity. Used for:
+
+    - Speed-controlled positioning
+    - Velocity-based servo applications
+
+=== "Torque Servo"
+    `hal::torque_servo`
+
+    Controls servo with torque feedback. Used for:
+
+    - Force-sensitive applications
+    - Load-aware servo control
+
+=== "Veltor Servo"
+    `hal::veltor_servo`
+
+    Controls servo with velocity and torque feedback. Used for:
+
+    - Advanced servo control
+    - Force and speed-aware applications
 
 ### Sensors
 
 === "Temperature Sensor"
-    See API:
-    [`hal::temperature_sensor`](https://libhal.github.io/4.1/api/libhal/temperature_sensor.html)
+    `hal::temperature_sensor`
 
     Measures temperature. Used for:
 
@@ -185,8 +212,7 @@ work with any microcontroller that provides an implementation of that interface.
     - Process control
 
 === "Accelerometer"
-    See API:
-    [`hal::accelerometer`](https://libhal.github.io/4.1/api/libhal/accelerometer.html)
+    `hal::accelerometer`
 
     Measures acceleration in X, Y, Z axes. Used for:
 
@@ -195,28 +221,25 @@ work with any microcontroller that provides an implementation of that interface.
     - Vibration monitoring
 
 === "Gyroscope"
-    See API:
-    [`hal::gyroscope`](https://libhal.github.io/4.1/api/libhal/gyroscope.html)
+    `hal::gyroscope`
 
-    Measures rotation rates. Used for:
+    Measures angular velocity in X, Y, Z axes. Used for:
 
     - Navigation
     - Stabilization
     - Motion tracking
 
 === "Magnetometer"
-    See API:
-    [`hal::magnetometer`](https://libhal.github.io/4.1/api/libhal/magnetometer.html)
+    `hal::magnetometer`
 
-    Measures magnetic fields. Used for:
+    Measures magnetic field strength in X, Y, Z axes. Used for:
 
     - Compass heading
     - Position detection
     - Metal detection
 
 === "Distance Sensor"
-    See API:
-    [`hal::distance_sensor`](https://libhal.github.io/4.1/api/libhal/distance_sensor.html)
+    `hal::distance_sensor`
 
     Measures linear distance. Used for:
 
@@ -225,32 +248,43 @@ work with any microcontroller that provides an implementation of that interface.
     - Proximity sensing
 
 === "Rotation Sensor"
-    See API:
-    [`hal::rotation_sensor`](https://libhal.github.io/4.1/api/libhal/rotation_sensor.html)
+    `hal::rotation_sensor`
 
-    Measures angular position. Used for:
+    Measures angular position (revolutions). Used for:
 
     - Motor position feedback
     - Device orientation tracking
     - Angle measurement
 
-### ⏳ Coming Soon
-
 === "Current Sensor"
-    **API not available yet**
+    `hal::current_sensor`
 
-    Measure electrical current flow in circuits. Used for:
+    Measures electrical current flow in circuits. Used for:
 
     - Calculating battery state of charge
     - Measuring system power consumption
-    - Measure motor torque/force
+    - Motor force/torque estimation
 
 === "Voltage Sensor"
-    **API not available yet**
+    `hal::volt_sensor`
 
-    Will measure voltage differences in circuits.
+    Measures voltage differences in circuits. Used for:
+
+    - Battery voltage monitoring
+    - Supply voltage measurement
+    - Power supply diagnostics
+
+=== "Angular Velocity Sensor"
+    `hal::angular_velocity_sensor`
+
+    Measures angular velocity (degrees per second). Used for:
+
+    - Rotational speed measurement
+    - Rotation rate sensing
+
+### ⏳ Coming Soon
 
 === "GPS"
-    **API not available yet**
+    **Interface not yet available**
 
     Will provide location, time, and velocity data from GPS signals.
