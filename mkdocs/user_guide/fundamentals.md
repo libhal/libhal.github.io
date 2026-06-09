@@ -75,47 +75,58 @@ use_input_pin(my_pin);
 
 ### Driver Types
 
-libhal has three main types of drivers:
+libhal v5 organizes all drivers into three distinct architectural types:
 
-1. **Peripheral Drivers**
-    - Built into the microcontroller
-    - Examples: pins, I2C, SPI, UART, ADC
-    - Form the foundation for communicating with external devices
-    - Fixed in number (you can't add more than what's built into the chip)
-
-2. **Device Drivers**
-    - Control external hardware
-    - Examples: sensors, motor controllers, displays
-    - Require peripheral drivers to communicate
-    - Example usage:
+1. **Managers**
+    - Own and configure actual hardware
+    - Examples: I2C controller, GPIO port, sensor on a bus, motor controller
+    - Created via a static `create()` factory that returns `hal::ptr<ManagerType>`
+    - Never accessed directly—they hand out resources to the application
+    - Implementation details are hidden; only the interface is visible
 
     ```cpp
-    // Using an I2C peripheral to communicate with an MPU6050 sensor
-    hal::stm32f103::i2c i2c_bus(1);
-    hal::sensor::mpu6050 imu(i2c_bus);
-    auto data = imu.read_accelerometer();
+    // Creating a manager for an I2C bus
+    auto i2c_manager = hal::lpc40::i2c::create(
+      allocator, 
+      hal::port<2>, 
+      {.clock_rate = 400_kHz}
+    );
     ```
 
-3. **Soft Drivers**
-    - Pure software implementations that emulate interfaces
-    - Examples:
-        - Creating I2C using GPIO pins
-        - Input/output pin inverters
-        - Thread-safe wrapper drivers
+2. **Resources**
+    - Handed out by managers to application code
+    - Implement hal interfaces (e.g., `hal::i2c`, `hal::output_pin`)
+    - The only way application code interacts with hardware the manager owns
+    - Concrete types are implementation details—returned as type-erased interface pointers
+    - Example: acquiring an I2C resource from the manager
 
-### Device Managers
+    ```cpp
+    // Acquire a resource from the manager
+    hal::ptr<hal::i2c> bus = i2c_manager->acquire_i2c();
+    
+    // Pass the resource to another driver that needs I2C
+    auto imu = co_await hal::sensors::mpu6050::create(
+      context, 
+      allocator, 
+      bus
+    );
+    ```
 
-Some complex devices need special handling. Device managers are classes that can provide multiple types of functionality:
+3. **Adapters**
+    - Transform one or more hal interfaces into a different interface
+    - Own no hardware directly—only work with the interfaces they hold
+    - Examples: bit-banged I2C from GPIO pins, SPI device with chip select wrapping
+    - Created via `create()` like managers, but implement interfaces directly
 
-```cpp
-// Example: RMD smart servo that provides multiple capabilities
-hal::rmd::drc smart_servo(/* ... */);
-
-// Get different interface implementations from the same device
-auto position_control = smart_servo.servo();
-auto temperature_sensor = smart_servo.temperature_sensor();
-auto voltage_sensor = smart_servo.voltage_sensor();
-```
+    ```cpp
+    // Bit-bang I2C from two GPIO pins
+    auto soft_i2c = hal::soft_i2c::create(
+      allocator,
+      sda_pin,
+      scl_pin,
+      {.clock_rate = 100_kHz}
+    );
+    ```
 
 ## 📚 Library Categories
 

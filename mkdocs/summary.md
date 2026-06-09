@@ -29,7 +29,6 @@
   - [📜 Design Philosophy](contributor_guide/philosophy.md)
   - [🗃️ Organization](contributor_guide/organization.md)
   - [🎨 Style Guide](contributor_guide/style.md)
-  - [🔧 Build & Toolchain](contributor_guide/toolchain.md)
   - 🔗 Interface Design
     - [Interface Design Philosophy](contributor_guide/interface_design/interface_design.md)
     - [‼️ Error Handling Philosophy](contributor_guide/interface_design/error_handling.md)
