@@ -90,7 +90,7 @@ environments such as the host device for host side tests, a specific target
 device, and a target device that is in the family of that specific target
 device.
 
-For example, lets consider liblpc40xx. If you are building to target the lpc4078
+For example, lets consider libhal-arm-mcu. If you are building to target the lpc4078
 chip then that prebuilt ought to be built with usage of FPU registers enabled.
 But if you use that same prebuilt with the lpc4074, you'll find that the program
 crashes because the 74 variant does not have an FPU. You can attempt make a
