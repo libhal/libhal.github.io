@@ -254,22 +254,3 @@ work with any microcontroller that provides an implementation of that interface.
     **API not available yet**
 
     Will provide location, time, and velocity data from GPS signals.
-
-## Understanding Virtual Functions in C++
-
-A quick note about virtual functions (which libhal uses extensively):
-
-1. **They don't require heap memory**: Virtual functions work fine with
-   stack-allocated objects.
-2. **Performance impact is minimal**: The overhead is usually just one pointer
-   lookup.
-3. **Memory overhead is small**: Each class with virtual functions needs only
-   one vtable (shared between all instances).
-
-Example of using virtual functions efficiently:
-
-```cpp
-// This works fine - no heap allocation needed
-hal::lpc4078::i2c i2c2(2);  // Stack allocated
-initialize_display(i2c2);   // Uses virtual functions, but still efficient
-```

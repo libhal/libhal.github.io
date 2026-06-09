@@ -655,7 +655,7 @@ all libhal libraries. These bypass the caller's memory strategy, are
 incompatible with systems that have no heap, and make it impossible to use
 custom allocators for specific memory regions such as DMA-capable RAM.
 
-All allocation must go through `std::pmr::memory_resource`. The caller provides
+All allocation must go through `std::pmr::polymorphic_allocator<>`. The caller provides
 the allocator, giving application developers full control over where memory
 comes from.
 
@@ -670,7 +670,7 @@ class my_driver {
 
 // ✅ PMR allocation - caller controls where memory comes from
 class my_driver {
-  my_driver(std::pmr::memory_resource* p_resource, std::size_t p_size)
+  my_driver(std::pmr::polymorphic_allocator<> p_resource, std::size_t p_size)
     : m_buffer(p_resource, p_size)
   {}
   hal::allocated_buffer<std::byte> m_buffer;
@@ -935,10 +935,10 @@ correctly on all libhal targets: baremetal 32-bit MCUs, Linux, macOS, and
 Windows. A library fails this requirement if it:
 
 **Allocates after construction.** Allocation must happen at construction time
-through `std::pmr::memory_resource`. Libraries that call `malloc`, `new`, or
-`free` during normal operation (reads, writes, callbacks) are not permitted.
-If source integration is used, those allocation sites must be replaced and
-tracked as modifications per [S.9.2](#s92-source-integration-rules).
+through `std::pmr::polymorphic_allocator<>`. Libraries that call `malloc`,
+`new`, or `free` during normal operation (reads, writes, callbacks) are not
+permitted. If source integration is used, those allocation sites must be
+replaced and tracked as modifications per [S.9.2](#s92-source-integration-rules).
 
 ```cpp
 // ❌ Allocation during operation - incompatible with real-time memory budgets
@@ -949,7 +949,7 @@ void codec_process(frame_t* p_frame) {
 
 // ✅ PMR allocation at construction time
 class codec {
-  codec(std::pmr::memory_resource* p_resource)
+  codec(std::pmr::polymorphic_allocator<> p_resource)
     : m_buffer(p_resource, 256) {}
   hal::allocated_buffer<std::uint8_t> m_buffer;
 };
