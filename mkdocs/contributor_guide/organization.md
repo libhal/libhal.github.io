@@ -3,9 +3,9 @@
 This section will explain the different parts/repos of libhal organization and
 ecosystem and how they are organized.
 
-## Target Libraries
+## Platform Libraries
 
-Target libraries provide platform-specific implementations of the libhal
+Platform libraries provide platform-specific implementations of the libhal
 interfaces. Each target library directly depends on `libhal` and encapsulates
 everything needed for a given hardware platform — processor startup, peripheral
 drivers, and any board-level support — in a single package.

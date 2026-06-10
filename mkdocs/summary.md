@@ -33,12 +33,11 @@
     - [Interface Design Philosophy](contributor_guide/interface_design/interface_design.md)
     - [‼️ Error Handling Philosophy](contributor_guide/interface_design/error_handling.md)
   - 🏗️ Driver Architecture
-    - [Managers, Resources & Adapters](contributor_guide/driver_architecture/driver_types.md)
-    - [Construction Pattern](contributor_guide/driver_architecture/construction_pattern.md)
+    - [⚪️ Managers, Resources & Adapters](contributor_guide/driver_architecture/driver_types.md)
+    - [🔐 Pimpl Pattern](contributor_guide/driver_architecture/pimpl.md)
     - [💾 Memory Model: hal::ptr & Allocators](contributor_guide/driver_architecture/memory_model.md)
-    - [Pimpl Pattern](contributor_guide/driver_architecture/pimpl.md)
+    - [🏗️ Construction Pattern](contributor_guide/driver_architecture/construction_pattern.md)
     - [⚡ Async Policy & Coroutines](contributor_guide/driver_architecture/async_policy.md)
-    - [⏩ DMA Tutorial](contributor_guide/driver_architecture/dma_tutorial.md)
   - 📦 Library Packaging
     - [C++ Library Guide](contributor_guide/packaging/cpp_library.md)
     - [Board Library Guide](contributor_guide/packaging/board_library.md)
