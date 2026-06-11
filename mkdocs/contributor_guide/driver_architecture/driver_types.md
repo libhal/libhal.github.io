@@ -118,17 +118,25 @@ public:
 } // namespace hal::sensors
 ```
 
+### Terminal external device example
+
+Some external device managers simply do not implement an interface and thus
+just provide a set of public APIs that the application can call as needed.
+
 ---
 
 ## Resources
 
 A resource is the object a manager hands out. It implements one of the hal interfaces and is the only way application code interacts with the hardware the manager owns.
 
-> [!NOTE]
-> While resources provide the standardized, generic interface used by other drivers to ensure interoperability, application code may also interact with managers directly if needed. However, we strongly prefer using resource interfaces to keep components decoupled. Furthermore, while a manager could theoretically depend on another manager, this is highly discouraged; always prefer finding a general `hal` interface to solve dependency issues rather than depending on the specific API of a manager object.
-
-!!! CAUTION
-    TODO(kammce): also, I need to explain that adapters can be hybrid and use pimpl and also inherit. This is due to the fact that a lot of adapters simply adapt a set of things down to one and the manager machinery isn't useful in that case.
+!!! NOTE
+    While resources provide the standardized, generic interface used by other
+    drivers to ensure interoperability, application code may also interact with
+    managers directly if needed. However, we strongly prefer using resource
+    interfaces to keep components decoupled. Furthermore, while a manager could
+    theoretically depend on another manager, this is highly discouraged; always
+    prefer finding a general `hal` interface to solve dependency issues rather
+    than depending on the specific API of a manager object.
 
 ### Type erasure is the default
 
@@ -142,6 +150,7 @@ auto manager = hal::lpc40::i2c::create(alloc, hal::port<2>, {
   .clock_rate = 400_kHz
 });
 
+// The exact i2c implementation is hidden
 hal::ptr<hal::i2c> bus = manager->acquire_i2c(alloc);
 
 // bus flows into anything that accepts hal::i2c
