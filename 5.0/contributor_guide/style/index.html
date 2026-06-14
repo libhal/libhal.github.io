@@ -1,0 +1,3911 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../organization/">
+      
+      
+        <link rel="next" href="../interface_design/interface_design/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/favicon.png">
+      <meta name="generator" content="mkdocs-ProperDocs 1.6.7, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>🎨 Style Guide - libhal</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#style-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+          <aside class="md-banner md-banner--warning">
+            <div class="md-banner__inner md-grid md-typeset">
+              
+You're not viewing the latest version.
+<a href="../../..">
+  <strong>Click here to go to latest.</strong>
+</a>
+
+            </div>
+            <script>var el=document.querySelector("[data-md-component=outdated]"),base=new URL("../.."),outdated=__md_get("__outdated",sessionStorage,base);!0===outdated&&el&&(el.hidden=!1)</script>
+          </aside>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="libhal" class="md-header__button md-logo" aria-label="libhal" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            libhal
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              🎨 Style Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/libhal/libhal/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    libhal
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  🏡 Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../getting_started/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🚀 Getting Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../user_guide/setup_vscode/" class="md-tabs__link">
+          
+  
+  
+  📖 User Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../education/embedded_systems/" class="md-tabs__link">
+          
+  
+  
+  🏫 Education
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../philosophy/" class="md-tabs__link">
+          
+  
+  
+  📚 Contributor Guides
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../project_information/status/" class="md-tabs__link">
+          
+  
+  
+  📊 Project Information
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://libhal.github.io/api/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  🧩 APIs
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="libhal" class="md-nav__button md-logo" aria-label="libhal" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    libhal
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/libhal/libhal/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    libhal
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏡 Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting_started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🚀 Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📖 User Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    📖 User Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/setup_vscode/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🧑🏿‍💻 Setting up VSCode
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/fundamentals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🧱 Fundamentals of libhal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/interfaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🔗 Interfaces of libhal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎯 Debugging Firmware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/error_handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🪤 Error Handling in libhal
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../user_guide/policy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ⚖️ Policies & FAQ
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏫 Education
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    🏫 Education
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/embedded_systems/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    What are Embedded Systems?
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/bitmasking/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bit Masking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Microcontroller Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/gpio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    General Purpose I/O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/dma/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DMA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/timers_and_counters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Timers & Counters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/adc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/pwm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PWM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/spi/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SPI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/uart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    UART
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/i2c/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    I2C
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/dac/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DAC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/canbus/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CAN BUS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/sensors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Basics of Sensors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/actuators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Basics of Actuators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/rtos/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RTOS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../education/tbd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TBD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📚 Contributor Guides
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    📚 Contributor Guides
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../philosophy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📜 Design Philosophy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../organization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🗃️ Organization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎨 Style Guide
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🎨 Style Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#s1-code-standards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.1 Code Standards
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#s2-naming-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.2 Naming Conventions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="S.2 Naming Conventions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#s21-general-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.2.1 General rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s22-abbreviations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.2.2 Abbreviations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#s3-formatting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.3 Formatting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="S.3 Formatting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#s31-line-length" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.3.1 Line length
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s32-file-endings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.3.2 File endings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s33-number-radix-for-bit-manipulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.3.3 Number radix for bit manipulation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s34-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.3.4 Documentation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#s4-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.4 Modules
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="S.4 Modules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#s41-file-extensions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.4.1 File extensions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s42-module-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.4.2 Module structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s43-exporting-declarations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.4.3 Exporting declarations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s44-global-module-fragment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.4.4 Global module fragment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s45-do-not-use-import-std" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.4.5 Do not use import std
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s46-versioned-inline-namespaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.4.6 Versioned inline namespaces
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s47-registering-modules-in-cmake" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.4.7 Registering modules in CMake
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#s5-bit-manipulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.5 Bit Manipulation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="S.5 Bit Manipulation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#s51-named-compile-time-bit-masks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.5.1 Named compile-time bit masks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s52-halbit_modify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.5.2 hal::bit_modify
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s53-halbit_value" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.5.3 hal::bit_value
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s54-halbit_extract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.5.4 hal::bit_extract
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s55-exception-native-shift-and-or-for-concatenation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.5.5 Exception: native shift and OR for concatenation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#s6-classes-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.6 Classes &amp; Types
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="S.6 Classes &amp; Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#s61-declaration-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.6.1 Declaration order
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s62-storing-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.6.2 Storing dependencies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s63-avoid-bool-as-a-member" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.6.3 Avoid bool as a member
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s64-avoid-bool-as-a-parameter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.6.4 Avoid bool as a parameter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s65-nodiscard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.6.5 [[nodiscard]]
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#s7-restrictions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.7 Restrictions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="S.7 Restrictions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#s71-avoid-macros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.7.1 Avoid macros
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s72-never-include-iostream" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.7.2 Never include &lt;iostream&gt;
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s73-use-pmr-for-allocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.7.3 Use PMR for allocation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s74-avoid-stdatomic-in-device-libraries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.7.4 Avoid std::atomic in device libraries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s75-avoid-thread" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.7.5 Avoid &lt;thread&gt;
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s76-no-logging-from-drivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.7.6 No logging from drivers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s77-no-halting-or-termination" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.7.7 No halting or termination
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s78-avoid-noexcept" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.7.8 Avoid noexcept
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#s8-namespace-hygiene" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.8 Namespace Hygiene
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="S.8 Namespace Hygiene">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#s81-stay-within-a-designated-namespace" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.8.1 Stay within a designated namespace
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s82-keep-the-hal-namespace-clean" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.8.2 Keep the hal namespace clean
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#s9-third-party-libraries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.9 Third-Party Libraries
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="S.9 Third-Party Libraries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#s91-prefer-package-manager-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.9.1 Prefer package manager integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s92-source-integration-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.9.2 Source integration rules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s93-compatibility-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.9.3 Compatibility requirements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s94-exceptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.9.4 Exceptions
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#s10-headers-legacy-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.10 Headers (Legacy / Compatibility)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="S.10 Headers (Legacy / Compatibility)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#s101-self-contained-and-extension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.10.1 Self-contained and extension
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s102-include-guards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.10.2 Include guards
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s103-include-what-you-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.10.3 Include what you use
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s104-include-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.10.4 Include order
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#s11-memory-mapped-io" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.11 Memory-Mapped I/O
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="S.11 Memory-Mapped I/O">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#s111-declare-register-maps-as-volatile-structs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.11.1 Declare register maps as volatile structs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s112-why-volatile-is-mandatory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.11.2 Why volatile is mandatory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s113-obtain-the-register-pointer-via-reinterpret_cast" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.11.3 Obtain the register pointer via reinterpret_cast
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s114-scope-register-maps-to-the-translation-unit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.11.4 Scope register maps to the translation unit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#s115-assert-layout-with-static_assert" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        S.11.5 Assert layout with static_assert
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_4" id="__nav_5_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🔗 Interface Design
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    🔗 Interface Design
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interface_design/interface_design/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interface Design Philosophy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interface_design/error_handling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ‼️ Error Handling Philosophy
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_5" id="__nav_5_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏗️ Driver Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    🏗️ Driver Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver_architecture/driver_types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ⚪️ Managers, Resources & Adapters
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver_architecture/pimpl/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🔐 Pimpl Pattern
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver_architecture/memory_model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    💾 Memory Model: hal::ptr & Allocators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver_architecture/construction_pattern/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏗️ Construction Pattern
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../driver_architecture/async_policy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ⚡ Async Policy & Coroutines
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_6" id="__nav_5_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📦 Library Packaging
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    📦 Library Packaging
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packaging/cpp_library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    C++ Library Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../packaging/board_library/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Board Library Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🏗️ Architectural Design Decisions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_8" id="__nav_5_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ARM
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ARM
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../arm/arm_cortex_m_bringup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🧠 ARM Cortex-M Bring Up
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    📊 Project Information
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    📊 Project Information
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../project_information/status/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🟢 Library Status 🔴
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../project_information/about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://libhal.github.io/api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🧩 APIs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="style-guide">🎨 Style Guide</h1>
+<h2 id="s1-code-standards">S.1 Code Standards</h2>
+<p>All libhal code follows the <a href="https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines">C++ Core Guidelines</a>.
+These are the authoritative baseline. Where libhal's style guide and the Core
+Guidelines conflict, libhal's style guide takes precedence.</p>
+<p>Code formatting is enforced by libhal's
+<a href="https://github.com/libhal/libhal/blob/main/.clang-format"><code>.clang-format</code></a>
+file, which uses the Mozilla C++ style as a base with adjustments. Do not
+manually reformat code, run <code>pre-commit run -a</code> and let it handle this.</p>
+<p>Static analysis is enforced by libhal's
+<a href="https://raw.githubusercontent.com/libhal/libhal/refs/heads/main/.clang-tidy"><code>.clang-tidy</code></a>
+file. CI will reject code that introduces new clang-tidy violations. Address
+violations directly rather than suppressing them with <code>// NOLINT</code> unless a
+genuine false positive is documented inline with the following format:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// NOLINT(&lt;violation-check-name&gt;): &lt;reason&gt;</span>
+</code></pre></div>
+<p>Here is an example:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// NOLINT(readability-identifier-naming): name of a 3rd party symbol we must define for the application to work properly.</span>
+</code></pre></div>
+<h2 id="s2-naming-conventions">S.2 Naming Conventions</h2>
+<p>Naming follows the standard library convention. Naming rules are enforced by
+<code>.clang-tidy</code> and spelling is enforced by <code>cspell</code> via <code>pre-commit run -a</code>.</p>
+<h3 id="s21-general-rules">S.2.1 General rules</h3>
+<table>
+<thead>
+<tr>
+<th>Construct</th>
+<th>Convention</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Namespaces</td>
+<td><code>snake_case</code></td>
+<td><code>hal::lpc40</code></td>
+</tr>
+<tr>
+<td>Types and classes</td>
+<td><code>snake_case</code></td>
+<td><code>output_pin</code>, <code>i2c_bus</code></td>
+</tr>
+<tr>
+<td>Template parameters</td>
+<td><code>CamelCase</code></td>
+<td><code>Container</code>, <code>WordType</code></td>
+</tr>
+<tr>
+<td>Functions and methods</td>
+<td><code>snake_case</code></td>
+<td><code>driver_read()</code>, <code>set_level()</code></td>
+</tr>
+<tr>
+<td>Variables</td>
+<td><code>snake_case</code></td>
+<td><code>baud_rate</code>, <code>timeout</code></td>
+</tr>
+<tr>
+<td>Constants and <code>constexpr</code></td>
+<td><code>snake_case</code></td>
+<td><code>max_frequency</code>, <code>default_timeout</code></td>
+</tr>
+<tr>
+<td>Macros</td>
+<td><code>CAP_CASE</code></td>
+<td><code>HAL_CHECK</code></td>
+</tr>
+<tr>
+<td>Function parameters</td>
+<td><code>p_</code> prefix + <code>snake_case</code></td>
+<td><code>p_timeout</code>, <code>p_address</code></td>
+</tr>
+<tr>
+<td>Private/protected members</td>
+<td><code>m_</code> prefix + <code>snake_case</code></td>
+<td><code>m_baud_rate</code>, <code>m_i2c</code></td>
+</tr>
+</tbody>
+</table>
+<p>Avoid macros entirely where possible. See S.7.</p>
+<h3 id="s22-abbreviations">S.2.2 Abbreviations</h3>
+<p>Prefer full words over abbreviations. A reader should not need domain knowledge
+to understand a variable name.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ Unclear abbreviations</span>
+<span class="n">u32</span><span class="w"> </span><span class="n">cnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">u32</span><span class="w"> </span><span class="n">cdl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">freq</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="n">u32</span><span class="w"> </span><span class="n">cdh</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">freq</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">cdl</span><span class="p">;</span>
+
+<span class="c1">// ✅ Full words</span>
+<span class="n">u32</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">u32</span><span class="w"> </span><span class="n">clock_divider_low</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">frequency</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="n">u32</span><span class="w"> </span><span class="n">clock_divider_high</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">frequency</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">clock_divider_low</span><span class="p">;</span>
+</code></pre></div>
+<p><strong>Allowed abbreviations</strong> are those whose abbreviated form is more universally
+understood than the expanded form:</p>
+<ul>
+<li>Hardware protocol names: <code>i2c</code>, <code>spi</code>, <code>uart</code>, <code>can</code>, <code>usb</code>, <code>dma</code></li>
+<li>Signal and peripheral names: <code>adc</code>, <code>dac</code>, <code>pwm</code>, <code>gpio</code></li>
+<li>Common units and types: <code>irq</code>, <code>isr</code>, <code>mcu</code>
+<strong>Register names</strong> are exempt from this rule. If a register is named <code>CR1</code> or
+<code>PCLKDIV</code> in the datasheet, use that name directly. This makes it easier to
+cross-reference code against the reference manual.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="c1">// ✅ Matches the datasheet - acceptable</span>
+<span class="n">reg</span><span class="o">-&gt;</span><span class="n">CR1</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">enable_bit</span><span class="p">;</span>
+<span class="n">reg</span><span class="o">-&gt;</span><span class="n">PCLKDIV</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">divider</span><span class="p">;</span>
+</code></pre></div>
+<p>If <code>cspell</code> flags an identifier that is a legitimate technical abbreviation or
+a datasheet-derived name, add it to the project's <code>cspell.json</code> dictionary
+rather than suppressing the check.</p>
+<h2 id="s3-formatting">S.3 Formatting</h2>
+<p>Most formatting is enforced automatically by <code>clang-format</code> and <code>pre-commit</code>.
+The rules below either require developer judgment or explain the rationale
+behind what the tools enforce.</p>
+<h3 id="s31-line-length">S.3.1 Line length</h3>
+<p>Keep lines within <strong>80 characters</strong>. <code>clang-format</code> handles this automatically.
+For the rare case where wrapping would hurt readability more than the long line,
+suppress with <code>clang-format off/on</code> and a comment explaining why:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// clang-format off</span>
+<span class="c1">// URL must remain intact for reference manual cross-linking</span>
+<span class="c1">// https://some-very-long-datasheet-url.com/reference/register-map/section-12</span>
+<span class="c1">// clang-format on</span>
+</code></pre></div>
+<h3 id="s32-file-endings">S.3.2 File endings</h3>
+<p>All files must end with a newline character and use LF line endings. Trailing
+whitespace is not permitted. These are enforced automatically by pre-commit and
+do not require manual attention.</p>
+<h3 id="s33-number-radix-for-bit-manipulation">S.3.3 Number radix for bit manipulation</h3>
+<p>When working with register values or bit masks, use only <strong>binary</strong> or <strong>hex</strong>.
+Never use decimal or octal. They obscure the bit-level structure that matters
+when reading hardware code.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ Decimal and octal hide the bit pattern</span>
+<span class="n">u32</span><span class="w"> </span><span class="n">mask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">15</span><span class="p">;</span>
+<span class="n">u32</span><span class="w"> </span><span class="n">flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mo">0377</span><span class="p">;</span>
+
+<span class="c1">// ✅ Binary shows the bit pattern directly</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">mask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">bit_mask</span><span class="o">::</span><span class="n">from</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+
+<span class="c1">// ✅ Hex is acceptable when the value comes from a datasheet</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">u32</span><span class="w"> </span><span class="n">pll_config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0040&#39;001F</span><span class="p">;</span>
+</code></pre></div>
+<p>Use digit separators (<code>'</code>) to group bits into readable chunks for long binary
+or hex literals:</p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="n">u32</span><span class="w"> </span><span class="n">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mb">0b1000&#39;0011&#39;0000&#39;0000</span><span class="p">;</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">u32</span><span class="w"> </span><span class="n">base_address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x4000&#39;0000</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="s34-documentation">S.3.4 Documentation</h3>
+<p>Every public API must be documented with Doxygen-style comments. This is
+enforced by the <code>doxygen-check</code> pre-commit hook, undocumented public APIs
+will fail CI.</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * @brief Set the output voltage level of the pin.</span>
+<span class="cm"> *</span>
+<span class="cm"> * @param p_high If true, drives the pin to the logic high voltage.</span>
+<span class="cm"> *               If false, drives the pin to the logic low voltage.</span>
+<span class="cm"> */</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">level</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">p_high</span><span class="p">);</span>
+</code></pre></div>
+<p>Document the <em>why</em> and <em>what</em>, not the <em>how</em>. Avoid restating the function
+signature in prose. If a parameter has constraints or units, state them
+explicitly.</p>
+<p>Internal implementation details and private members do not require Doxygen
+comments, but non-obvious logic should have inline <code>//</code> comments explaining
+intent.</p>
+<h2 id="s4-modules">S.4 Modules</h2>
+<p>libhal v5 and all libraries in the ecosystem use C++20 modules as the primary
+compilation model. All new library code must be written as module files. Headers
+still exist for compatibility with toolchains that do not yet support modules.
+See <a href="#s10-headers">S.10 Headers</a> if you need to work with them.</p>
+<h3 id="s41-file-extensions">S.4.1 File extensions</h3>
+<p>Two file types are used in a module-based library:</p>
+<ul>
+<li><strong><code>.cppm</code></strong> - module interface files. These declare the public API of a module
+  or partition. Every exported symbol lives in a <code>.cppm</code> file.</li>
+<li><strong><code>.cpp</code></strong> - module implementation files. These provide definitions that
+  belong to a module but are not part of its public interface. Use these to hide
+  implementation details, such as the <code>impl</code> struct in the pimpl pattern.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>modules/
+  hal.cppm        ← primary module interface (re-exports all partitions)
+  gpio.cppm       ← partition interface (public)
+  gpio.cpp        ← partition implementation (hidden)
+  units.cppm      ← partition interface (public)
+</code></pre></div>
+<h3 id="s42-module-structure">S.4.2 Module structure</h3>
+<p>Each library is organized as a single named module split into partitions. Each
+partition covers one domain. The primary interface file re-exports all
+partitions so consumers only need one import statement.</p>
+<p><strong>Primary module interface</strong> (<code>hal.cppm</code>):</p>
+<div class="highlight"><pre><span></span><code><span class="k">export</span><span class="w"> </span><span class="k">module</span><span class="w"> </span><span class="n">hal</span><span class="p">;</span>
+
+<span class="c1">// Export partitions</span>
+<span class="k">export</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="o">:</span><span class="n">units</span><span class="p">;</span>
+<span class="k">export</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="o">:</span><span class="n">gpio</span><span class="p">;</span>
+<span class="k">export</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="o">:</span><span class="n">i2c</span><span class="p">;</span>
+
+<span class="c1">// Export transitive dependencies</span>
+<span class="k">export</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="n">strong_ptr</span><span class="p">;</span>
+<span class="k">export</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="n">async_context</span><span class="p">;</span>
+</code></pre></div>
+<p><strong>Module partition interface</strong> (<code>gpio.cppm</code>):</p>
+<div class="highlight"><pre><span></span><code><span class="k">export</span><span class="w"> </span><span class="k">module</span><span class="w"> </span><span class="n">hal</span><span class="o">:</span><span class="n">gpio</span><span class="p">;</span>
+
+<span class="k">export</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="n">async_context</span><span class="p">;</span>
+<span class="k">export</span><span class="w"> </span><span class="k">import</span><span class="w"> </span><span class="o">:</span><span class="n">units</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">hal</span><span class="o">::</span><span class="kr">inline</span><span class="w"> </span><span class="nn">v5</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">export</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">input_pin</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span>
+<span class="w">  </span><span class="k">export</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">output_pin</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">input_pin</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span>
+<span class="w">  </span><span class="k">export</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">edge_trigger</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">u8</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Module partition implementation</strong> (<code>gpio.cpp</code>):</p>
+<div class="highlight"><pre><span></span><code><span class="k">module</span><span class="w"> </span><span class="n">hal</span><span class="o">:</span><span class="n">gpio</span><span class="p">;</span><span class="w">  </span><span class="c1">// no &#39;export&#39; keyword - this is an implementation unit</span>
+
+<span class="c1">// Definitions, internal helpers, impl structs go here.</span>
+<span class="c1">// Nothing in this file is visible to consumers of the module.</span>
+</code></pre></div>
+<h3 id="s43-exporting-declarations">S.4.3 Exporting declarations</h3>
+<p>Export individual declarations - classes, functions, enums, and type aliases -
+using the <code>export</code> keyword on each one. Do not use <code>export namespace { ... }</code> as
+it exports every symbol in the block, including internal helpers that should not
+be part of the public API.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ Exports everything in the namespace, including internals</span>
+<span class="k">export</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">hal</span><span class="o">::</span><span class="kr">inline</span><span class="w"> </span><span class="nn">v5</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">class</span><span class="w"> </span><span class="nc">input_pin</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span>
+<span class="w">  </span><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">edge_trigger</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">u8</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span>
+<span class="w">  </span><span class="k">class</span><span class="w"> </span><span class="nc">internal_helper</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span><span class="w">  </span><span class="c1">// unintentionally exposed</span>
+<span class="p">}</span>
+
+<span class="c1">// ✅ Exports only what is intentionally public</span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">hal</span><span class="o">::</span><span class="kr">inline</span><span class="w"> </span><span class="nn">v5</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">export</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">input_pin</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span>
+<span class="w">  </span><span class="k">export</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">edge_trigger</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">u8</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span>
+<span class="w">  </span><span class="k">class</span><span class="w"> </span><span class="nc">internal_helper</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span><span class="w">  </span><span class="c1">// stays internal</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="s44-global-module-fragment">S.4.4 Global module fragment</h3>
+<p>Standard library headers and third-party C and C++ headers do not have module
+interfaces. Include them in the <strong>global module fragment</strong>, which appears before
+the <code>export module</code> declaration and is separated by a bare <code>module;</code> line.</p>
+<div class="highlight"><pre><span></span><code><span class="k">module</span><span class="p">;</span><span class="w">  </span><span class="c1">// ← begins the global module fragment</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;span&gt;</span>
+
+<span class="k">export</span><span class="w"> </span><span class="k">module</span><span class="w"> </span><span class="n">hal</span><span class="o">:</span><span class="n">units</span><span class="p">;</span><span class="w">  </span><span class="c1">// ← global fragment ends here, module begins</span>
+</code></pre></div>
+<p>Do not <code>#include</code> headers below the <code>export module</code> line. That is only valid
+inside the global module fragment.</p>
+<h3 id="s45-do-not-use-import-std">S.4.5 Do not use <code>import std</code></h3>
+<p><code>import std</code> is not yet supported reliably across all compilers and toolchain
+versions that libhal targets. Use individual standard library headers in the
+global module fragment instead.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ Not yet supported reliably</span>
+<span class="k">import</span><span class="w"> </span><span class="n">std</span><span class="p">;</span>
+
+<span class="c1">// ✅ Include individual headers in the global module fragment</span>
+<span class="k">module</span><span class="p">;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;span&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;array&gt;</span>
+<span class="k">export</span><span class="w"> </span><span class="k">module</span><span class="w"> </span><span class="n">hal</span><span class="o">:</span><span class="n">example</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="s46-versioned-inline-namespaces">S.4.6 Versioned inline namespaces</h3>
+<p>All libhal ecosystem libraries use an inline versioned namespace for ABI
+stability. The <code>inline</code> keyword makes the version suffix transparent to
+consumers. See <a href="#s2-naming-conventions">S.2 Naming Conventions</a> for the full
+namespace naming rules.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// hal uses hal::inline v5</span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">hal</span><span class="o">::</span><span class="kr">inline</span><span class="w"> </span><span class="nn">v5</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">export</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">output_pin</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span>
+<span class="p">}</span>
+
+<span class="c1">// async_context uses async::inline v0</span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">async</span><span class="o">::</span><span class="kr">inline</span><span class="w"> </span><span class="nn">v0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">export</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">mutex</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Consumers always write <code>hal::output_pin</code> and <code>async::mutex</code>. The version suffix
+is never written externally and contributors should never need to reference it
+directly.</p>
+<h3 id="s47-registering-modules-in-cmake">S.4.7 Registering modules in CMake</h3>
+<p>Every <code>.cppm</code> file must be listed in the <code>MODULES</code> argument of
+<code>libhal_add_library</code>. Implementation <code>.cpp</code> files that belong to a module are
+listed under <code>SOURCES</code>. The build system will not pick up either automatically.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">libhal_add_library</span><span class="p">(</span><span class="s">hal</span>
+<span class="w">  </span><span class="s">MODULES</span>
+<span class="w">    </span><span class="s">modules/hal.cppm</span>
+<span class="w">    </span><span class="s">modules/gpio.cppm</span>
+<span class="w">    </span><span class="s">modules/units.cppm</span>
+<span class="w">  </span><span class="s">SOURCES</span>
+<span class="w">    </span><span class="s">modules/gpio.cpp</span>
+<span class="p">)</span>
+</code></pre></div>
+<h2 id="s5-bit-manipulation">S.5 Bit Manipulation</h2>
+<p>Manual bit manipulation is error prone and hard to review. libhal provides
+<code>hal::bit_modify</code>, <code>hal::bit_value</code>, and <code>hal::bit_extract</code> from <code>libhal-util</code>
+to handle bit operations in a readable and verifiable way.</p>
+<h3 id="s51-named-compile-time-bit-masks">S.5.1 Named compile-time bit masks</h3>
+<p>Always give bit masks names. Anonymous magic numbers in bit operations are
+difficult to cross-reference against a datasheet and easy to get wrong.</p>
+<p>Always prefer the template form of bit mask APIs over the runtime form. A
+<code>constexpr</code> bit mask passed as a template argument gives the compiler full
+knowledge of the operation at compile time, enabling significantly better
+code generation.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ✅ Named, constexpr, template form</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">state</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">bit_mask</span><span class="o">::</span><span class="n">from</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">enable</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">bit_mask</span><span class="o">::</span><span class="n">from</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">prescale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">bit_mask</span><span class="o">::</span><span class="n">from</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p">);</span>
+
+<span class="n">hal</span><span class="o">::</span><span class="n">bit_modify</span><span class="p">(</span><span class="n">reg</span><span class="o">-&gt;</span><span class="n">control</span><span class="p">)</span>
+<span class="w">  </span><span class="p">.</span><span class="n">insert</span><span class="o">&lt;</span><span class="n">prescale</span><span class="o">&gt;</span><span class="p">(</span><span class="n">divider</span><span class="p">)</span>
+<span class="w">  </span><span class="p">.</span><span class="n">clear</span><span class="o">&lt;</span><span class="n">lower_power_mode</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="w">  </span><span class="p">.</span><span class="n">set</span><span class="o">&lt;</span><span class="n">enable</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="c1">// ❌ Anonymous and runtime - no compiler optimization, no readability</span>
+<span class="n">reg</span><span class="o">-&gt;</span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">reg</span><span class="o">-&gt;</span><span class="n">control</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="o">~</span><span class="mh">0x3F40</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">((</span><span class="n">divider</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">6</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x3F40</span><span class="p">);</span>
+</code></pre></div>
+<h3 id="s52-halbit_modify">S.5.2 <code>hal::bit_modify</code></h3>
+<p>Use <code>hal::bit_modify</code> to read-modify-write a volatile hardware register.
+It copies the register value to a temporary, applies all operations to the
+temporary, then writes it back on destruction. This avoids multiple volatile
+reads and writes.</p>
+<div class="highlight"><pre><span></span><code><span class="n">reg_t</span><span class="o">*</span><span class="w"> </span><span class="n">reg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_peripheral_register</span><span class="p">();</span>
+
+<span class="n">hal</span><span class="o">::</span><span class="n">bit_modify</span><span class="p">(</span><span class="n">reg</span><span class="o">-&gt;</span><span class="n">control</span><span class="p">)</span>
+<span class="w">  </span><span class="p">.</span><span class="n">insert</span><span class="o">&lt;</span><span class="n">pre_scalar</span><span class="o">&gt;</span><span class="p">(</span><span class="n">freq</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">desired_frequency</span><span class="p">)</span>
+<span class="w">  </span><span class="p">.</span><span class="n">clear</span><span class="o">&lt;</span><span class="n">lower_power_mode</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="w">  </span><span class="p">.</span><span class="n">set</span><span class="o">&lt;</span><span class="n">enable</span><span class="o">&gt;</span><span class="p">();</span>
+</code></pre></div>
+<p>Chain all operations on the same register in a single <code>bit_modify</code> call.
+This keeps the read-modify-write atomic with respect to the surrounding code
+and produces tighter assembly.</p>
+<h3 id="s53-halbit_value">S.5.3 <code>hal::bit_value</code></h3>
+<p>Use <code>hal::bit_value</code> to construct a register value entirely at compile time.
+This is useful for default configurations and constants that are known before
+runtime.</p>
+<div class="highlight"><pre><span></span><code><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">default_pin_config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">bit_value</span><span class="p">(</span><span class="mi">0U</span><span class="p">)</span>
+<span class="w">  </span><span class="p">.</span><span class="n">insert</span><span class="o">&lt;</span><span class="n">mode</span><span class="o">&gt;</span><span class="p">(</span><span class="mh">0x04</span><span class="p">)</span>
+<span class="w">  </span><span class="p">.</span><span class="n">clear</span><span class="o">&lt;</span><span class="n">high_slew_rate</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="w">  </span><span class="p">.</span><span class="n">set</span><span class="o">&lt;</span><span class="n">high_speed_mode</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="w">  </span><span class="p">.</span><span class="n">to</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">();</span>
+</code></pre></div>
+<p><strong>Tail chaining</strong> - calling the next method directly on the return value of the
+previous keeps the entire lifetime of the object visible to the compiler.
+This allows GCC and Clang to collapse the chain into a single constant,
+producing optimal code with no runtime cost.</p>
+<h3 id="s54-halbit_extract">S.5.4 <code>hal::bit_extract</code></h3>
+<p>Use <code>hal::bit_extract</code> to read a field out of a register value.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Polling on a status bit</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">hal</span><span class="o">::</span><span class="n">bit_extract</span><span class="o">&lt;</span><span class="n">state</span><span class="o">&gt;</span><span class="p">(</span><span class="n">reg</span><span class="o">-&gt;</span><span class="n">status</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">states</span><span class="o">::</span><span class="n">busy</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">continue</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Extracting a multi-bit ADC result</span>
+<span class="kt">float</span><span class="w"> </span><span class="n">my_adc</span><span class="o">::</span><span class="n">driver_read</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">capture_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">bit_mask</span><span class="o">::</span><span class="n">from</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">bit_extract</span><span class="o">&lt;</span><span class="n">capture_value</span><span class="o">&gt;</span><span class="p">(</span><span class="n">reg</span><span class="o">-&gt;</span><span class="n">status</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="s55-exception-native-shift-and-or-for-concatenation">S.5.5 Exception: native shift and OR for concatenation</h3>
+<p>When assembling a value from multiple bytes rather than operating on a single
+register field, native shift and OR can be clearer than <code>bit_value</code>. This
+commonly arises when combining bytes read from a sensor over I2C or SPI.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ✅ Readable concatenation with native syntax</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">write_then_read</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_i2c</span><span class="p">,</span><span class="w"> </span><span class="mh">0x11</span><span class="p">,</span><span class="w"> </span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="n">timeout</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+</code></pre></div>
+<p>Choose whichever form is clearer for the specific operation. The goal is
+reviewability, not mechanical rule-following.</p>
+<h2 id="s6-classes-types">S.6 Classes &amp; Types</h2>
+<h3 id="s61-declaration-order">S.6.1 Declaration order</h3>
+<p>Class sections must appear in this order: public, then protected, then private.
+Omit any section that would be empty.</p>
+<p>Within each section, follow this order:</p>
+<ol>
+<li>Types and type aliases (<code>using</code>, <code>enum class</code>, nested structs and classes)</li>
+<li>Static constants</li>
+<li>Factory functions</li>
+<li>Constructors and assignment operators</li>
+<li>Destructor</li>
+<li>All other member functions</li>
+<li>All other data members</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">my_driver</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="c1">// 1. Types</span>
+<span class="w">  </span><span class="k">struct</span><span class="w"> </span><span class="nc">settings</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">hal</span><span class="o">::</span><span class="n">hertz</span><span class="w"> </span><span class="n">frequency</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100&#39;000</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">mp_units</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">hertz</span><span class="p">;</span>
+<span class="w">  </span><span class="p">};</span>
+
+<span class="w">  </span><span class="c1">// 3. Factory</span>
+<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">deferred_ptr</span><span class="o">&lt;</span><span class="n">my_driver</span><span class="o">&gt;</span><span class="w"> </span><span class="n">create</span><span class="p">(</span><span class="n">async</span><span class="o">::</span><span class="n">context</span><span class="o">&amp;</span><span class="w"> </span><span class="n">p_context</span><span class="p">,</span>
+<span class="w">                                              </span><span class="n">hal</span><span class="o">::</span><span class="n">ptr</span><span class="o">&lt;</span><span class="n">hal</span><span class="o">::</span><span class="n">i2c</span><span class="o">&gt;</span><span class="w"> </span><span class="n">p_i2c</span><span class="p">,</span>
+<span class="w">                                              </span><span class="n">settings</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">p_settings</span><span class="p">);</span>
+<span class="w">  </span><span class="c1">// 4. Constructors</span>
+<span class="w">  </span><span class="n">my_driver</span><span class="p">(</span><span class="n">private_key</span><span class="p">,</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">ptr</span><span class="o">&lt;</span><span class="n">hal</span><span class="o">::</span><span class="n">i2c</span><span class="o">&gt;</span><span class="w"> </span><span class="n">p_i2c</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// 5. Destructor</span>
+<span class="w">  </span><span class="o">~</span><span class="n">my_driver</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 6. Member functions</span>
+<span class="w">  </span><span class="n">async</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="n">hal</span><span class="o">::</span><span class="n">celsius</span><span class="o">&gt;</span><span class="w"> </span><span class="n">read_temperature</span><span class="p">(</span><span class="n">async</span><span class="o">::</span><span class="n">context</span><span class="o">&amp;</span><span class="w"> </span><span class="n">p_context</span><span class="p">);</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">  </span><span class="c1">// 7. Data members</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">ptr</span><span class="o">&lt;</span><span class="n">hal</span><span class="o">::</span><span class="n">i2c</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_i2c</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>Do not define large method bodies inline within the class definition. Only
+trivial or performance-critical methods that are very short may be defined
+inline. Template classes are an exception as they must be defined within a
+module interface file.</p>
+<h3 id="s62-storing-dependencies">S.6.2 Storing dependencies</h3>
+<p>Any dependency captured as a class member must be stored as <code>hal::ptr&lt;T&gt;</code>.
+<code>hal::ptr&lt;T&gt;</code> is a non-nullable reference-counted smart pointer that keeps
+the dependency alive for at least as long as the object holding it.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ Raw pointer gives no ownership or lifetime guarantee</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">my_driver</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">i2c</span><span class="o">*</span><span class="w"> </span><span class="n">m_i2c</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// ❌ Reference member deletes copy and move constructors</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">my_driver</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">i2c</span><span class="o">&amp;</span><span class="w"> </span><span class="n">m_i2c</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// ✅ hal::ptr expresses ownership and prevents use-after-free</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">my_driver</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">ptr</span><span class="o">&lt;</span><span class="n">hal</span><span class="o">::</span><span class="n">i2c</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_i2c</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>Raw references remain correct for parameters that are consumed within the
+current call and not retained. The rule is strictly about what gets stored
+in a member variable.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ✅ Reference is fine here - p_settings is consumed and not stored</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">configure</span><span class="p">(</span><span class="n">hal</span><span class="o">::</span><span class="n">i2c</span><span class="o">&amp;</span><span class="w"> </span><span class="n">p_bus</span><span class="p">,</span><span class="w"> </span><span class="n">settings</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">p_settings</span><span class="p">);</span>
+
+<span class="c1">// ✅ hal::ptr required here - p_i2c is stored as m_i2c</span>
+<span class="n">my_driver</span><span class="p">(</span><span class="n">private_key</span><span class="p">,</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">ptr</span><span class="o">&lt;</span><span class="n">hal</span><span class="o">::</span><span class="n">i2c</span><span class="o">&gt;</span><span class="w"> </span><span class="n">p_i2c</span><span class="p">)</span>
+<span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="n">m_i2c</span><span class="p">(</span><span class="n">p_i2c</span><span class="p">)</span>
+<span class="p">{}</span>
+</code></pre></div>
+<h3 id="s63-avoid-bool-as-a-member">S.6.3 Avoid <code>bool</code> as a member</h3>
+<p><code>bool</code> has poor information density as it occupies a full byte per entry. A
+single <code>bool</code> member is acceptable. When multiple boolean flags are needed,
+use <code>std::bitset</code> with named <code>constexpr</code> index positions to pack them into
+the minimum footprint.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ Three separate bytes for three flags</span>
+<span class="kt">bool</span><span class="w"> </span><span class="n">m_enabled</span><span class="p">;</span>
+<span class="kt">bool</span><span class="w"> </span><span class="n">m_inverted</span><span class="p">;</span>
+<span class="kt">bool</span><span class="w"> </span><span class="n">m_open_drain</span><span class="p">;</span>
+
+<span class="c1">// ✅ Three bits packed into one word</span>
+<span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">enabled_bit</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">inverted_bit</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">open_drain_bit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">bitset</span><span class="o">&lt;</span><span class="mi">3</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_flags</span><span class="p">;</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>std::bitset</code> uses a backing block of <code>unsigned long</code> internally. On
+32-bit architectures this means a <code>bitset</code> of any size from 1 to 32 bits
+still occupies 4 bytes. Pack enough flags together to make that footprint
+worthwhile.</p>
+</div>
+<h3 id="s64-avoid-bool-as-a-parameter">S.6.4 Avoid <code>bool</code> as a parameter</h3>
+<p>Boolean parameters at a call site are unreadable without looking up the
+function signature. See
+<a href="https://medium.com/@amlcurran/clean-code-the-curse-of-a-boolean-parameter-c237a830b7a3">"Clean code: The curse of a boolean parameter"</a>
+for a detailed treatment.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ What does &#39;false&#39; mean here?</span>
+<span class="n">pin</span><span class="p">.</span><span class="n">configure</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span>
+
+<span class="c1">// ✅ Each state is self-describing at the call site</span>
+<span class="n">pin</span><span class="p">.</span><span class="n">configure</span><span class="p">(</span><span class="n">pin_direction</span><span class="o">::</span><span class="n">output</span><span class="p">,</span>
+<span class="w">              </span><span class="n">pin_drive</span><span class="o">::</span><span class="n">push_pull</span><span class="p">,</span>
+<span class="w">              </span><span class="n">pin_resistor</span><span class="o">::</span><span class="n">none</span><span class="p">);</span>
+</code></pre></div>
+<p>A <code>bool</code> parameter is acceptable when it is the only parameter and reads
+naturally as a logical switch at the call site.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ✅ Reads clearly without context</span>
+<span class="n">led</span><span class="p">.</span><span class="n">level</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+<span class="n">led</span><span class="p">.</span><span class="n">level</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A <code>hal::bool</code> type is planned for a future release. It will provide a
+type-safe named boolean that is self-documenting at call sites without
+requiring a full enum. This section will be updated when it lands.</p>
+</div>
+<h3 id="s65-nodiscard">S.6.5 <code>[[nodiscard]]</code></h3>
+<p>Apply <code>[[nodiscard]]</code> to any function whose return value being discarded is
+almost certainly a bug. The primary case is factory functions: discarding the
+return value of <code>create()</code> constructs and immediately destroys the driver
+without it ever being used.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ✅ Compiler error if the caller drops the return value</span>
+<span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">deferred_ptr</span><span class="o">&lt;</span><span class="n">my_driver</span><span class="o">&gt;</span><span class="w"> </span><span class="n">create</span><span class="p">(</span>
+<span class="w">  </span><span class="n">async</span><span class="o">::</span><span class="n">context</span><span class="o">&amp;</span><span class="w"> </span><span class="n">p_context</span><span class="p">,</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">ptr</span><span class="o">&lt;</span><span class="n">hal</span><span class="o">::</span><span class="n">i2c</span><span class="o">&gt;</span><span class="w"> </span><span class="n">p_i2c</span><span class="p">,</span>
+<span class="w">  </span><span class="n">settings</span><span class="w"> </span><span class="k">const</span><span class="o">&amp;</span><span class="w"> </span><span class="n">p_settings</span><span class="p">);</span>
+</code></pre></div>
+<p>When the reason a discard is wrong is not obvious from the function name alone,
+add a string message to <code>[[nodiscard]]</code> so the compiler diagnostic is
+self-explanatory.</p>
+<div class="highlight"><pre><span></span><code><span class="p">[[</span><span class="n">nodiscard</span><span class="p">(</span><span class="s">&quot;Discarding the handle releases the lock immediately.&quot;</span><span class="p">)]]</span>
+<span class="n">lock_guard</span><span class="w"> </span><span class="n">acquire_lock</span><span class="p">();</span>
+</code></pre></div>
+<p>Do not apply <code>[[nodiscard]]</code> to functions that are called primarily for their
+side effects or where ignoring the return value is a legitimate pattern.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ Doesn&#39;t make sense - called for its side effect</span>
+<span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">reset</span><span class="p">();</span>
+</code></pre></div>
+<h2 id="s7-restrictions">S.7 Restrictions</h2>
+<h3 id="s71-avoid-macros">S.7.1 Avoid macros</h3>
+<p>Only use macros when something cannot be expressed any other way. In practice
+this is extremely rare. Nearly every macro can be replaced with <code>constexpr</code>
+variables, <code>constexpr</code> functions, or templates.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ Macro with no justification</span>
+<span class="cp">#define MAX_CHANNELS 8</span>
+<span class="cp">#define CLAMP(x, lo, hi) ((x) &lt; (lo) ? (lo) : (x) &gt; (hi) ? (hi) : (x))</span>
+
+<span class="c1">// ✅ constexpr equivalents</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">max_channels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">clamp</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">lo</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">hi</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">clamp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">lo</span><span class="p">,</span><span class="w"> </span><span class="n">hi</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Only use preprocessor <code>#if</code> when <code>if constexpr</code> cannot achieve the same result.</p>
+<h3 id="s72-never-include-iostream">S.7.2 Never include <code>&lt;iostream&gt;</code></h3>
+<p>Including any <code>&lt;iostream&gt;</code> header incurs an automatic 150 kB binary size
+penalty. This happens even if the code never calls <code>std::cout</code> or any related
+function, as the global stream objects are constructed unconditionally at
+startup.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ Never in library or driver code</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sstream&gt;</span>
+</code></pre></div>
+<p><code>&lt;iostream&gt;</code> may be used in libraries that exclusively target host-side unit
+testing and are never compiled for embedded targets.</p>
+<h3 id="s73-use-pmr-for-allocation">S.7.3 Use PMR for allocation</h3>
+<p>Raw heap allocation via <code>new</code>, <code>delete</code>, <code>malloc</code>, or <code>free</code> is forbidden in
+all libhal libraries. These bypass the caller's memory strategy, are
+incompatible with systems that have no heap, and make it impossible to use
+custom allocators for specific memory regions such as DMA-capable RAM.</p>
+<p>All allocation must go through <code>std::pmr::polymorphic_allocator&lt;&gt;</code>. The caller provides
+the allocator, giving application developers full control over where memory
+comes from.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ Raw heap allocation - bypasses caller&#39;s memory strategy</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">my_driver</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">my_driver</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">m_buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">byte</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">byte</span><span class="o">*</span><span class="w"> </span><span class="n">m_buffer</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// ✅ PMR allocation - caller controls where memory comes from</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">my_driver</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">my_driver</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">pmr</span><span class="o">::</span><span class="n">polymorphic_allocator</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">p_resource</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">p_size</span><span class="p">)</span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">m_buffer</span><span class="p">(</span><span class="n">p_resource</span><span class="p">,</span><span class="w"> </span><span class="n">p_size</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{}</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">allocated_buffer</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">byte</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_buffer</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>When a fixed-size region of memory is needed, prefer <code>hal::allocated_buffer&lt;T&gt;</code>
+over <code>std::pmr::vector&lt;T&gt;</code>. <code>allocated_buffer</code> only works with default
+constructible types, keeping it appropriate for buffers of integral types or
+pre-allocated object slots. <code>std::pmr::vector</code> permits resizing after
+construction, which violates the rule that allocation happens at startup and
+not during normal operation.</p>
+<p>Allocation should happen at object construction time, not during normal
+operation. A driver that allocates during a read or write call is
+incompatible with real-time systems and deterministic memory budgets.</p>
+<h3 id="s74-avoid-stdatomic-in-device-libraries">S.7.4 Avoid <code>std::atomic</code> in device libraries</h3>
+<p><code>std::atomic</code> has portability issues across architectures and is not guaranteed
+to be available or lock-free on all targets that device libraries must support.
+Device libraries must compile and run correctly on any architecture.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ Not portable across all device library targets</span>
+<span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_busy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+
+<span class="c1">// ✅ Design around the async model instead</span>
+<span class="n">async</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">m_access</span><span class="p">;</span>
+</code></pre></div>
+<p>Platform libraries and processor libraries may use <code>std::atomic</code> when the
+target architecture and toolchain are known to support it.</p>
+<h3 id="s75-avoid-thread">S.7.5 Avoid <code>&lt;thread&gt;</code></h3>
+<p>Embedded toolchains do not provide <code>&lt;thread&gt;</code>. Including it will fail to
+compile when cross-compiling for any baremetal target. Use the async context
+model for concurrency instead.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ Will not compile on baremetal targets</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+<span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="nf">worker</span><span class="p">([]{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">});</span>
+
+<span class="c1">// ✅ Use async context for concurrent work</span>
+<span class="n">async</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="kt">void</span><span class="o">&gt;</span><span class="w"> </span><span class="n">worker</span><span class="p">(</span><span class="n">async</span><span class="o">::</span><span class="n">context</span><span class="o">&amp;</span><span class="w"> </span><span class="n">p_context</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">co_await</span><span class="w"> </span><span class="n">do_work</span><span class="p">(</span><span class="n">p_context</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>libhal does plan to provide <code>&lt;thread&gt;</code>-compatible implementations for
+application developers building on top of libhal. These implementations
+are intended for end users and their applications. They must not be used
+within libhal libraries themselves.</p>
+</div>
+<h3 id="s76-no-logging-from-drivers">S.7.6 No logging from drivers</h3>
+<p>Drivers must not write to stdout or stderr. This means no calls to:</p>
+<ul>
+<li><code>std::printf</code> / <code>std::fprintf</code></li>
+<li><code>std::puts</code> / <code>std::fputs</code></li>
+<li><code>std::print</code> / <code>std::println</code> (C++26)</li>
+</ul>
+<p>The role of logging belongs to the application, not its drivers. A driver that
+logs on every read or write is as surprising as a file I/O library that spams
+the console on every operation.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ Driver owns no logging responsibility</span>
+<span class="n">async</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="n">hal</span><span class="o">::</span><span class="n">celsius</span><span class="o">&gt;</span><span class="w"> </span><span class="n">read_temperature</span><span class="p">(</span><span class="n">async</span><span class="o">::</span><span class="n">context</span><span class="o">&amp;</span><span class="w"> </span><span class="n">p_ctx</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">raw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">co_await</span><span class="w"> </span><span class="n">read_raw</span><span class="p">(</span><span class="n">p_ctx</span><span class="p">);</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;raw=%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">raw</span><span class="p">);</span><span class="w">   </span><span class="c1">// never do this</span>
+<span class="w">  </span><span class="k">co_return</span><span class="w"> </span><span class="n">to_celsius</span><span class="p">(</span><span class="n">raw</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// ✅ Return the value and let the application decide what to do with it</span>
+<span class="n">async</span><span class="o">::</span><span class="n">future</span><span class="o">&lt;</span><span class="n">hal</span><span class="o">::</span><span class="n">celsius</span><span class="o">&gt;</span><span class="w"> </span><span class="n">read_temperature</span><span class="p">(</span><span class="n">async</span><span class="o">::</span><span class="n">context</span><span class="o">&amp;</span><span class="w"> </span><span class="n">p_ctx</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">raw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">co_await</span><span class="w"> </span><span class="n">read_raw</span><span class="p">(</span><span class="n">p_ctx</span><span class="p">);</span>
+<span class="w">  </span><span class="k">co_return</span><span class="w"> </span><span class="n">to_celsius</span><span class="p">(</span><span class="n">raw</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>S.7.2 already prohibits <code>&lt;iostream&gt;</code> for binary size reasons. This rule
+covers the remaining C-style output functions that do not carry the same
+penalty but still violate driver responsibility boundaries.</p>
+</div>
+<h3 id="s77-no-halting-or-termination">S.7.7 No halting or termination</h3>
+<p>Drivers must not stop execution. The following are forbidden in driver code:</p>
+<ul>
+<li><code>std::abort()</code></li>
+<li><code>std::exit()</code> and <code>std::quick_exit()</code></li>
+<li><code>std::terminate()</code></li>
+<li>Infinite loops that never yield control</li>
+</ul>
+<p>An application must always retain the ability to decide what happens when
+something goes wrong. Drivers surface errors through exceptions and return
+control to the caller. The application then decides whether to retry, log, shut
+down, or recover.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ Driver takes control away from the application</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">initialized</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">abort</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="c1">// ❌ Spin loop with no exit - hangs the system permanently</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">reg</span><span class="o">-&gt;</span><span class="n">status</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">ready_bit</span><span class="p">))</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="c1">// ✅ Throw and let the application handle it</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">initialized</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">throw</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">not_initialized</span><span class="p">{};</span>
+<span class="p">}</span>
+
+<span class="c1">// ✅ Yield to the scheduler while waiting</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">hal</span><span class="o">::</span><span class="n">bit_extract</span><span class="o">&lt;</span><span class="n">ready</span><span class="o">&gt;</span><span class="p">(</span><span class="n">reg</span><span class="o">-&gt;</span><span class="n">status</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">co_await</span><span class="w"> </span><span class="n">async</span><span class="o">::</span><span class="n">yield</span><span class="p">(</span><span class="n">p_ctx</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="s78-avoid-noexcept">S.7.8 Avoid <code>noexcept</code></h3>
+<p>Do not annotate functions with <code>noexcept</code>. Since C++17, <code>noexcept</code> is part of
+a function's type. Removing it in a later version is a breaking ABI change.
+libhal keeps the option open for which APIs throw as the library evolves.
+Committing to <code>noexcept</code> prematurely closes that door.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ ABI commitment - cannot be un-noexcept without breaking callers</span>
+<span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">result</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint16_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">read_sample</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="p">;</span>
+
+<span class="c1">// ✅ No annotation - unannotated functions are implicitly potentially-throwing</span>
+<span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">result</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint16_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">read_sample</span><span class="p">();</span>
+</code></pre></div>
+<h2 id="s8-namespace-hygiene">S.8 Namespace Hygiene</h2>
+<h3 id="s81-stay-within-a-designated-namespace">S.8.1 Stay within a designated namespace</h3>
+<p>All libhal code must live within the <code>hal</code> namespace or a library-specific
+namespace. Never place symbols in the global namespace or in <code>std</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ Global namespace pollution</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">output_pin</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">configure_pin</span><span class="p">(</span><span class="n">output_pin</span><span class="o">&amp;</span><span class="w"> </span><span class="n">p_pin</span><span class="p">);</span>
+
+<span class="c1">// ✅ Scoped to the library namespace</span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">hal</span><span class="o">::</span><span class="nn">lpc40</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">class</span><span class="w"> </span><span class="nc">output_pin</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">configure_pin</span><span class="p">(</span><span class="n">output_pin</span><span class="o">&amp;</span><span class="w"> </span><span class="n">p_pin</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Headers included via the global module fragment may introduce global
+namespace symbols. Do not re-expose them and do not rely on their names
+being available outside the translation unit that includes them.</p>
+<h3 id="s82-keep-the-hal-namespace-clean">S.8.2 Keep the <code>hal</code> namespace clean</h3>
+<p>The <code>hal</code> namespace is shared across the entire ecosystem. Keep it clean by
+nesting implementation details, register maps, and bit mask definitions inside
+the class that uses them rather than placing them directly in <code>hal</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ Register and mask types pollute the shared namespace</span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">hal</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">struct</span><span class="w"> </span><span class="nc">uart_register_map</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span>
+<span class="w">  </span><span class="k">struct</span><span class="w"> </span><span class="nc">uart_control1</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span>
+<span class="w">  </span><span class="k">class</span><span class="w"> </span><span class="nc">uart</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">};</span>
+<span class="p">}</span>
+
+<span class="c1">// ✅ Implementation details are nested inside the class</span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">hal</span><span class="o">::</span><span class="nn">lpc40</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">class</span><span class="w"> </span><span class="nc">uart</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">register_map</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">control1</span><span class="p">;</span>
+<span class="w">      </span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">control2</span><span class="p">;</span>
+<span class="w">      </span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">data</span><span class="p">;</span>
+<span class="w">      </span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">status</span><span class="p">;</span>
+<span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">control1_register</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">baud_divisor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">bit_mask</span><span class="o">::</span><span class="n">from</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">15</span><span class="p">);</span>
+<span class="w">      </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">enable</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">bit_mask</span><span class="o">::</span><span class="n">from</span><span class="p">(</span><span class="mi">16</span><span class="p">);</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>In general these implementation details should be entirely within the module
+implementation .cpp file. Anything defined there is invisible to consumers
+regardless of whether it carries export, keeping the interface file and
+namespace focused solely on the public API.</p>
+<h2 id="s9-third-party-libraries">S.9 Third-Party Libraries</h2>
+<h3 id="s91-prefer-package-manager-integration">S.9.1 Prefer package manager integration</h3>
+<p>Add third-party dependencies as <code>requires</code> entries in <code>conanfile.py</code>. Source
+integration adds maintenance burden and complicates license tracking. Reserve it
+for libraries not available through Conan Center or the libhal Conan registry.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># ✅ Declared as a package dependency</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">requirements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">requires</span><span class="p">(</span><span class="s2">&quot;etl/20.38.17&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">requires</span><span class="p">(</span><span class="s2">&quot;strong_ptr/1.0.0&quot;</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code># ❌ Vendored source when a package is available
+third_party/
+  etl/   ← avoid when a Conan package exists
+</code></pre></div>
+<h3 id="s92-source-integration-rules">S.9.2 Source integration rules</h3>
+<p>When a library has no suitable package, vendor it into <code>third_party/&lt;name&gt;/</code> at
+the repository root. The first commit must be the pristine upstream source with
+no modifications. This keeps future diffs against upstream unambiguous.</p>
+<div class="highlight"><pre><span></span><code>third_party/
+  minimp3/          ← committed unmodified at upstream v0.9.9.0
+    minimp3.h
+</code></pre></div>
+<p>Add the directory to CMake's include path so it can be used in the global module
+fragment (see <a href="./#s44-global-module-fragment">S.4.4</a>):</p>
+<div class="highlight"><pre><span></span><code><span class="nb">target_include_directories</span><span class="p">(</span><span class="s">hal</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">third_party/minimp3</span><span class="p">)</span>
+</code></pre></div>
+<p>If a modification becomes necessary, add a block at the top of the modified file
+listing every change:</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * [libhal] modifications:</span>
+<span class="cm"> *</span>
+<span class="cm"> *   1. Replaced malloc/free with user-provided allocator callbacks.</span>
+<span class="cm"> *   2. Removed use of POSIX file I/O.</span>
+<span class="cm"> */</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * &lt;ORIGINAL LICENSE&gt;</span>
+<span class="cm"> */</span>
+</code></pre></div>
+<p>Verify that the library's license permits distribution and modification before
+integrating it.</p>
+<h3 id="s93-compatibility-requirements">S.9.3 Compatibility requirements</h3>
+<p>Any third-party library used outside a platform library must compile and operate
+correctly on all libhal targets: baremetal 32-bit MCUs, Linux, macOS, and
+Windows. A library fails this requirement if it:</p>
+<p><strong>Allocates after construction.</strong> Allocation must happen at construction time
+through <code>std::pmr::polymorphic_allocator&lt;&gt;</code>. Libraries that call <code>malloc</code>,
+<code>new</code>, or <code>free</code> during normal operation (reads, writes, callbacks) are not
+permitted. If source integration is used, those allocation sites must be
+replaced and tracked as modifications per <a href="#s92-source-integration-rules">S.9.2</a>.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ Allocation during operation - incompatible with real-time memory budgets</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">codec_process</span><span class="p">(</span><span class="n">frame_t</span><span class="o">*</span><span class="w"> </span><span class="n">p_frame</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">uint8_t</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span><span class="w">   </span><span class="c1">// forbidden</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="p">}</span>
+
+<span class="c1">// ✅ PMR allocation at construction time</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">codec</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">codec</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">pmr</span><span class="o">::</span><span class="n">polymorphic_allocator</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">p_resource</span><span class="p">)</span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">m_buffer</span><span class="p">(</span><span class="n">p_resource</span><span class="p">,</span><span class="w"> </span><span class="mi">256</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">  </span><span class="n">hal</span><span class="o">::</span><span class="n">allocated_buffer</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_buffer</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+<p><strong>Calls platform-specific APIs.</strong> POSIX file I/O (<code>open</code>, <code>read</code>, <code>write</code>),
+Windows APIs (<code>CreateFile</code>, <code>VirtualAlloc</code>), or Linux-specific syscalls are
+forbidden. See <a href="../philosophy/#d6-portable">D.6 Portable</a>.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ POSIX - does not compile on baremetal</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">open</span><span class="p">(</span><span class="s">&quot;/dev/ttyUSB0&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDWR</span><span class="p">);</span>
+
+<span class="c1">// ❌ Windows API - does not compile outside Windows</span>
+<span class="n">HANDLE</span><span class="w"> </span><span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CreateFileA</span><span class="p">(</span><span class="s">&quot;COM3&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">GENERIC_READ</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">GENERIC_WRITE</span><span class="p">,</span><span class="w"> </span><span class="p">...);</span>
+</code></pre></div>
+<p><strong>Contains architecture-specific intrinsics or inline assembly.</strong> ARM CMSIS
+intrinsics, x86 SIMD, RISC-V CSR access, or any inline assembly must not appear
+outside a platform library.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ ARM-only - breaks on RISC-V and host targets</span>
+<span class="n">__DSB</span><span class="p">();</span>
+<span class="kt">uint32_t</span><span class="w"> </span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">__get_PRIMASK</span><span class="p">();</span>
+
+<span class="c1">// ❌ x86 SIMD - breaks on 32-bit MCUs</span>
+<span class="kr">__m128i</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_mm_add_epi32</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">);</span>
+</code></pre></div>
+<h3 id="s94-exceptions">S.9.4 Exceptions</h3>
+<p>The following categories are exempt from the portability requirement because
+they are inherently platform-specific:</p>
+<ul>
+<li><strong>RTOS libraries</strong> (FreeRTOS, Zephyr RTOS kernel): permitted only inside
+  platform libraries where the target is known. Never a dependency of a device
+  library or interface library.</li>
+<li><strong>Platform Specific API</strong> (POSIX, Win32 APIs): permitted only inside
+  platform libraries where the target is known.</li>
+<li><strong>Exception handling and runtime libraries</strong> (<code>libexcept</code>, <code>libunwind</code>): core
+  infrastructure with dedicated ports per target, vetted separately from the
+  normal compatibility review.</li>
+<li>**</li>
+</ul>
+<hr />
+<h2 id="s10-headers-legacy-compatibility">S.10 Headers (Legacy / Compatibility)</h2>
+<p>libhal v5 uses C++20 modules as the primary compilation model. All new library
+code must be written as module files. Headers exist only for:</p>
+<ul>
+<li>wrapping third-party C APIs for use in the global module fragment (see
+  <a href="./#s44-global-module-fragment">S.4.4</a>)</li>
+<li>compatibility builds targeting toolchains without module support</li>
+</ul>
+<p>Do not create new <code>.hpp</code> headers for library code. When working in a
+compatibility context, follow the rules below.</p>
+<h3 id="s101-self-contained-and-extension">S.10.1 Self-contained and extension</h3>
+<p>Every header must compile correctly on its own without relying on symbols
+provided by a prior include in whatever translation unit includes it.</p>
+<p>Use <code>.hpp</code> for C++ headers and <code>.h</code> for C headers.</p>
+<h3 id="s102-include-guards">S.10.2 Include guards</h3>
+<p>Use <code>#pragma once</code>. Do not use <code>#ifndef</code> guards.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ Verbose and collision-prone</span>
+<span class="cp">#ifndef HAL_GPIO_HPP_</span>
+<span class="cp">#define HAL_GPIO_HPP_</span>
+<span class="c1">// ...</span>
+<span class="cp">#endif  </span><span class="c1">// HAL_GPIO_HPP_</span>
+
+<span class="c1">// ✅ Simple and sufficient</span>
+<span class="cp">#pragma once</span>
+</code></pre></div>
+<h3 id="s103-include-what-you-use">S.10.3 Include what you use</h3>
+<p>Include a header for every symbol used directly. Do not rely on transitive
+includes. A symbol appearing because another header pulls it in is not part of
+that header's API contract and may disappear at any time.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ Assumes &lt;cstdint&gt; arrives transitively</span>
+<span class="cp">#pragma once</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">set_baud</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">p_rate</span><span class="p">);</span>
+
+<span class="c1">// ✅ Declares its own dependency</span>
+<span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">set_baud</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">p_rate</span><span class="p">);</span>
+</code></pre></div>
+<p>Also remember to remove unused headers.</p>
+<h3 id="s104-include-order">S.10.4 Include order</h3>
+<p>Group includes in the order below, separated by blank lines. Within each group,
+<code>clang-format</code> sorts alphabetically, do not do it manually.</p>
+<ol>
+<li>C standard library headers, using <code>&lt;&gt;</code> (<code>&lt;cstdint&gt;</code>, <code>&lt;cstring&gt;</code>)</li>
+<li>C third-party headers, using <code>&lt;&gt;</code> (<code>&lt;minimp3.h&gt;</code>)</li>
+<li>C++ standard library headers, using <code>&lt;&gt;</code> (<code>&lt;array&gt;</code>, <code>&lt;span&gt;</code>)</li>
+<li>C++ third-party and libhal ecosystem headers, using <code>&lt;&gt;</code> (<code>&lt;libhal-util/serial.hpp&gt;</code>)</li>
+<li>Local project headers, using <code>""</code> (<code>"resource_list.hpp"</code>)</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="cp">#pragma once</span>
+
+<span class="c1">// 1. C standard library</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstring&gt;</span>
+
+<span class="c1">// 2. C third-party</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;minimp3.h&gt;</span>
+
+<span class="c1">// 3. C++ standard library</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;array&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;span&gt;</span>
+
+<span class="c1">// 4. C++ third-party / libhal ecosystem</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;libhal-util/serial.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;libhal-util/steady_clock.hpp&gt;</span>
+
+<span class="c1">// 5. Local project</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;resource_list.hpp&quot;</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In test files, <code>boost.ut</code> must always be the last include. It overloads
+<code>operator&lt;&lt;</code> for <code>ostream</code> and must see prior type declarations to generate
+correct output for test failures.</p>
+</div>
+<h2 id="s11-memory-mapped-io">S.11 Memory-Mapped I/O</h2>
+<p>Peripheral registers on microcontrollers are accessed by reading and writing
+to fixed physical addresses. This section covers how to declare, address, and
+access those registers correctly and safely.</p>
+<h3 id="s111-declare-register-maps-as-volatile-structs">S.11.1 Declare register maps as <code>volatile</code> structs</h3>
+<p>Model a peripheral's register block as a plain struct where every hardware
+register is a <code>volatile</code> unsigned integer member. The struct must be
+standard-layout so that <code>sizeof</code> and <code>offsetof</code> are reliable.</p>
+<div class="highlight"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">register_map</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">volatile</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">control</span><span class="p">;</span><span class="w">    </span><span class="c1">// offset 0x00</span>
+<span class="w">  </span><span class="k">volatile</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">status</span><span class="p">;</span><span class="w">     </span><span class="c1">// offset 0x04</span>
+<span class="w">  </span><span class="k">volatile</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">data</span><span class="p">;</span><span class="w">       </span><span class="c1">// offset 0x08</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w">          </span><span class="n">reserved0</span><span class="p">;</span><span class="w">  </span><span class="c1">// offset 0x0C - unused, not volatile</span>
+<span class="w">  </span><span class="k">volatile</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">baud_rate</span><span class="p">;</span><span class="w">  </span><span class="c1">// offset 0x10</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>Every readable or writable hardware register must be <code>volatile</code>. Reserved or
+unused registers that are never accessed do not need to be <code>volatile</code>, but
+must still be present to maintain correct offsets.</p>
+<p>Use <code>std::uint32_t</code>, <code>std::uint16_t</code>, or <code>std::uint8_t</code> to match the register
+width specified in the datasheet. Never use <code>int</code> or <code>unsigned int</code> directly
+as their width is implementation-defined.</p>
+<h3 id="s112-why-volatile-is-mandatory">S.11.2 Why <code>volatile</code> is mandatory</h3>
+<p>Without <code>volatile</code>, the compiler may cache a register's value in a CPU register
+and skip subsequent reads, or eliminate writes it considers redundant. Hardware
+registers change independently of the CPU, via peripherals, DMA engines, or
+interrupts, so every access must reach the hardware.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ Without volatile, the compiler may hoist the read out of the loop</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">register_map</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">status</span><span class="p">;</span><span class="w">   </span><span class="c1">// missing volatile</span>
+<span class="p">};</span>
+
+<span class="c1">// The compiler sees no writes to status and may transform this into:</span>
+<span class="c1">//   if (reg-&gt;status &amp; ready_bit) { while(true) {} }</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">reg</span><span class="o">-&gt;</span><span class="n">status</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">ready_bit</span><span class="p">))</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="c1">// ✅ volatile forces every iteration to re-read from the hardware address</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">register_map</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">volatile</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">status</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+<h3 id="s113-obtain-the-register-pointer-via-reinterpret_cast">S.11.3 Obtain the register pointer via <code>reinterpret_cast</code></h3>
+<p>Declare the peripheral base address as a <code>constexpr std::uintptr_t</code> and cast
+it to a pointer once. Store and pass the typed pointer, never the raw integer.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// ✅ Address constant is named and traced to the datasheet</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uintptr_t</span><span class="w"> </span><span class="n">uart0_base</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x4000&#39;C000</span><span class="p">;</span>
+
+<span class="n">register_map</span><span class="o">*</span><span class="w"> </span><span class="n">reg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">register_map</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">uart0_base</span><span class="p">);</span>
+
+<span class="n">hal</span><span class="o">::</span><span class="n">bit_modify</span><span class="p">(</span><span class="n">reg</span><span class="o">-&gt;</span><span class="n">control</span><span class="p">).</span><span class="n">set</span><span class="o">&lt;</span><span class="n">enable</span><span class="o">&gt;</span><span class="p">();</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1">// ❌ Casting at every use site - type is implicit, address is not named</span>
+<span class="o">*</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="o">*&gt;</span><span class="p">(</span><span class="mh">0x4000&#39;C004</span><span class="p">)</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="mh">0x1</span><span class="p">;</span>
+</code></pre></div>
+<p><code>reinterpret_cast</code> is the only sanctioned cast for this operation. Do not use
+C-style casts.</p>
+<h3 id="s114-scope-register-maps-to-the-translation-unit">S.11.4 Scope register maps to the translation unit</h3>
+<p>Register map structs and their associated bit mask definitions belong in an
+anonymous namespace inside the module implementation <code>.cpp</code> file. Anonymous
+namespace linkage makes them invisible outside the translation unit, so no
+naming ceremony is required. Use plain descriptive names.</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// In gpio.cpp (module implementation - not visible to consumers)</span>
+<span class="k">module</span><span class="w"> </span><span class="n">hal</span><span class="o">:</span><span class="n">gpio</span><span class="p">;</span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="p">{</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">register_map</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">volatile</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">direction</span><span class="p">;</span>
+<span class="w">  </span><span class="k">volatile</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">mask</span><span class="p">;</span>
+<span class="w">  </span><span class="k">volatile</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">pin</span><span class="p">;</span>
+<span class="w">  </span><span class="k">volatile</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">set</span><span class="p">;</span>
+<span class="w">  </span><span class="k">volatile</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">clear</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">direction_register</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hal</span><span class="o">::</span><span class="n">bit_mask</span><span class="o">::</span><span class="n">from</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="p">}</span><span class="w"> </span><span class="c1">// namespace</span>
+</code></pre></div>
+<h3 id="s115-assert-layout-with-static_assert">S.11.5 Assert layout with <code>static_assert</code></h3>
+<p>Use <code>static_assert</code> on <code>sizeof</code> and <code>offsetof</code> to verify that the struct layout
+matches the datasheet. Accidental padding shifts every subsequent register by
+the padding amount, producing silent hardware bugs.</p>
+<div class="highlight"><pre><span></span><code><span class="k">static_assert</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">register_map</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">0x14</span><span class="p">,</span>
+<span class="w">              </span><span class="s">&quot;register_map size does not match datasheet&quot;</span><span class="p">);</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">offsetof</span><span class="p">(</span><span class="n">register_map</span><span class="p">,</span><span class="w"> </span><span class="n">baud_rate</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">0x10</span><span class="p">,</span>
+<span class="w">              </span><span class="s">&quot;baud_rate offset does not match datasheet&quot;</span><span class="p">);</span>
+</code></pre></div>
+<p>Add one <code>static_assert</code> per register that has a known offset in the datasheet.
+This is the only mechanical check that catches struct layout errors at compile
+time.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../organization/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 🗃️ Organization">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                🗃️ Organization
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../interface_design/interface_design/" class="md-footer__link md-footer__link--next" aria-label="Next: Interface Design Philosophy">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Interface Design Philosophy
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "content.tabs.link", "toc.integrate", "navigation.tracking", "navigation.footer"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
