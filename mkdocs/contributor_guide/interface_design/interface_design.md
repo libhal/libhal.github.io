@@ -164,7 +164,6 @@ private:
 ```
 
 !!! note
-
     This change is backwards API compatible and ABI compatible but may not be
     link time compatible, since there may be two definitions of the same class
     function between statically linked binaries.
@@ -223,36 +222,6 @@ internal states and behaviors.
 **Consider:**
 
 That you do not actually need to add a data member to the interface.
-
-## Must not be a template
-
-A templated interface is a class template that is also an interface like so:
-
-```C++
-template<class PacketSize>
-class my_interface {
-private:
-  virtual void write(std::span<const PacketSize> p_payload) = 0;
-};
-```
-
-**Why?**
-
-The above example may seem like a great way to broaden an interface to an
-unlimited scale, but that is actually a problem. (insert reasons here).
-
-Template interfaces widen the scope and number of interfaces available in
-libhal in an unbounded way. This can result in additional v-tables for each
-interface implementation.
-
-Interface instances with different template types will not compatible with each
-other. Meaning an adaptor of sources would be needed to convert one to another.
-
-**Consider:**
-
-That this is not necessary. Consider that there exists a generic and specific
-implementation of an interface. Consider making two interfaces if a single
-interface would not suffice.
 
 ## Prefer wide API contracts
 

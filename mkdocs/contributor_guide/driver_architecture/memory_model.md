@@ -6,8 +6,10 @@ libhal's memory model is built on **reference-counted smart pointers**, **polymo
 
 Every driver and adapter in libhal manages memory through three core principles:
 
-1. **Allocation is always explicit** — Application code provides the allocator; drivers never call `new` or `malloc`
-2. **Ownership is always clear** — Smart pointers prevent use-after-free and resource leaks
+1. **Allocation is always explicit** — Application code provides the allocator;
+   drivers never call `new` or `malloc`
+2. **Ownership is always clear** — Smart pointers prevent use-after-free and
+   resource leaks
 3. **Lifetime is always safe** — Reference counting prevents dangling pointers
 
 ## Core Types from `strong_ptr`
@@ -25,9 +27,12 @@ using ptr = mem::strong_ptr<T>;
 **Properties:**
 
 - **Never null** — Cannot be default-constructed or assigned `nullptr`
-- **Reference-counted** — Tracks shared ownership; object lives as long as any `ptr` references it
-- **Move acts as copy** — Moving a `ptr` doesn't invalidate the source, preventing use-after-move bugs
-- **Explicit allocator** — Requires a `hal::allocator` (alias of `std::pmr::polymorphic_allocate<>`) at construction
+- **Reference-counted** — Tracks shared ownership; object lives as long as any
+  `ptr` references it
+- **Move acts as copy** — Moving a `ptr` doesn't invalidate the source,
+  preventing use-after-move bugs
+- **Explicit allocator** — Requires a `hal::allocator` (alias of
+  `std::pmr::polymorphic_allocate<>`) at construction
 
 **Usage:**
 
@@ -45,19 +50,19 @@ auto another = std::move(sensor);  // source remains valid
 assert(sensor.use_count() == 3);   // there are now 3 references to this object
 ```
 
-### `hal::deferred_ptr<T>` (async factory result)
+### `hal::future_ptr<T>` (async factory result)
 
 ```cpp
-// hal::deferred_ptr is an alias for async::future<hal::ptr<T>>
+// hal::future_ptr is an alias for async::future<hal::ptr<T>>
 template<typename T>
-using deferred_ptr = async::future<hal::ptr<T>>;
+using future_ptr = async::future<hal::ptr<T>>;
 ```
 
 Used by factory functions that perform async initialization:
 
 ```cpp
 // Factory that performs async work
-[[nodiscard]] static hal::deferred_ptr<my_driver> my_driver::create(
+[[nodiscard]] static hal::future_ptr<my_driver> my_driver::create(
   async::context& p_context,
   hal::allocator p_resource,
   hal::ptr<hal::i2c> p_bus);
@@ -73,8 +78,8 @@ auto driver = co_await my_driver::create(ctx, alloc, bus);
 ```cpp
 mem::weak_ptr<sensor> weak = my_sensor;  // doesn't extend lifetime
 
-// Try to lock - returns optional_ptr
-mem::optional_ptr<sensor> maybe = weak.lock();
+// Try to lock hal::opt_ptr
+hal::opt_ptr<sensor> maybe = weak.lock();
 if (maybe) {
   maybe->read_data();
 }
@@ -84,20 +89,20 @@ Useful in situations where the manager would like to have a registry of
 children that it has access to. Holding a strong_ptr to a child object will
 result in a cycle which will result in a memory leak.
 
-### `mem::optional_ptr<T>` (nullable smart pointer)
+### `hal::opt_ptr<T>` (nullable smart pointer)
 
 The **only** way to represent "no value" in this library. Implicitly converts
 to `ptr<T>` and throws `mem::nullptr_access` if empty.
 
 ```cpp
-mem::optional_ptr<sensor> maybe = weak.lock();  // valid or empty
+hal::opt_ptr<sensor> maybe = weak.lock();  // valid or empty
 
 if (maybe) {
   maybe->read();  // safe - converts to ptr<sensor>
 }
 
 // Throws if empty
-auto ref = mem::optional_ptr<sensor>{};
+auto ref = hal::opt_ptr<sensor>{};
 auto danger = static_cast<hal::ptr<sensor>>(ref);  // throws nullptr_access
 ```
 
@@ -119,16 +124,16 @@ public:
 
 ## Allocation: PMR (Polymorphic Memory Resource)
 
-All heap allocation in libhal goes through `hal::allocator`. The caller provides the memory resource, giving applications full control over where memory comes from.
+All heap allocation in libhal goes through `hal::allocator`. The caller provides
+the memory resource, giving applications full control over where memory comes
+from.
 
 **Why PMR?**
 
-- Works on systems with no heap (embedded)
+- Works on systems with no global heap (embedded)
 - Enables custom allocators for specific memory regions (DMA-safe RAM)
 - Makes allocation explicit and auditable
-- Supports both heap and stack-allocated regions
-- Objects with type erased allocators play well with each other.
-- Additional types are created when
+- Objects with type erased allocators play well with each other
 
 ### Common Allocators
 
@@ -136,11 +141,8 @@ All heap allocation in libhal goes through `hal::allocator`. The caller provides
 // Stack-allocated monotonic bump allocator (calls std::terminate on leaks)
 auto stack_alloc = mem::make_monotonic_allocator<4096>();
 
-// Polymorphic allocator wrapping a memory resource
-hal::allocator alloc(&my_resource);
-
 // Use in driver creation
-auto driver = hal::lpc40::i2c::create(alloc, port, settings);
+auto driver = hal::lpc40::i2c::create(stack_alloc, port, settings);
 ```
 
 ### Memory Management Rules
@@ -149,7 +151,7 @@ auto driver = hal::lpc40::i2c::create(alloc, port, settings);
 | ----------------------- | ------------------------------------ | ----------------------------------------- |
 | **Heap allocation**     | `new`/`delete`, `malloc`/`free`      | `hal::allocator`                          |
 | **Stored dependencies** | Raw pointers `T*` or references `T&` | `hal::ptr<T>`                             |
-| **Return "no value"**   | `nullptr` or `std::optional`         | `mem::optional_ptr<T>`                    |
+| **Return "no value"**   | `nullptr` or `std::optional`         | `hal::opt_ptr<T>`                         |
 | **Self-references**     | Manual lifetime tracking             | `mem::enable_strong_from_this<T>`         |
 | **Buffers**             | `std::vector` or `std::pmr::vector`  | `hal::allocated_buffer<T>` for fixed-size |
 
@@ -157,7 +159,8 @@ auto driver = hal::lpc40::i2c::create(alloc, port, settings);
 
 ### 🏗️ Managers: Own Hardware
 
-Managers hold hardware state in an implementation struct and hand out resources to users.
+Managers hold hardware state in an implementation struct and hand out resources
+to users.
 
 **Constructor example:**
 
@@ -192,11 +195,12 @@ public:
 
 ### 📦 Resources: Implement Interfaces
 
-Resources are returned by managers and implement hal interfaces. The concrete resource type is hidden.
+Resources are returned by managers and implement hal interfaces. The concrete
+resource type is hidden.
 
 ```cpp
-// Manager returns type-erased interface
 auto manager = hal::lpc40::i2c::create(alloc, 2, {});
+// Manager returns type-erased implementations of the i2c interface
 hal::ptr<hal::i2c> bus = manager->acquire_i2c();
 
 // Application only knows it's a hal::i2c
@@ -205,25 +209,33 @@ hal::ptr<hal::i2c> bus = manager->acquire_i2c();
 
 **Lifetime and co-ownership:**
 
-Every resource co-owns its manager through a reference count. The manager cannot be destroyed while any resources are live.
+Every resource co-owns its manager through a reference count. The manager cannot
+be destroyed while any resources are live.
 
 ```cpp
-auto manager = hal::lpc40::i2c::create(alloc, 2, {});
+hal::opt_ptr<hal::lpc40::i2c> manager = hal::lpc40::i2c::create(alloc, 2, {});
 assert(manager.use_count() == 1);
 
-auto resource = manager->acquire_i2c();
-assert(manager.use_count() == 2);  // manager and resource both hold a ptr
+hal::opt_ptr<hal::i2c> resource = manager->acquire_i2c();
+// The `manager` object and the `resource` objects both hold a ptr
+assert(manager.use_count() == 2);
 
 // If we drop the original manager pointer, the object stays alive
 manager = nullptr;
 resource->write(data);  // still works - manager is kept alive by resource
+
+// Drop the resource, resource is destroyed, which destroys the last manager
+// reference which destroys the manager as well.
+resource = nullptr;
 ```
 
-This co-ownership pattern ensures **resources outlive their manager pointers** in application code.
+This co-ownership pattern ensures **resources outlive their manager pointers**
+in application code.
 
 ### 🔌 Adapters: Transform Interfaces
 
-Adapters take hal interfaces and present different ones. They store their dependencies as `hal::ptr<T>` members.
+Adapters take hal interfaces and present different ones. They store their
+dependencies as `hal::ptr<T>` members.
 
 ```cpp
 namespace hal {
@@ -252,9 +264,8 @@ private:
 
 **Memory ownership:**
 
-- Adapter does not own hardware directly
-- Adapter owns its dependencies through `hal::ptr` members
-- If all external references are dropped, the adapter can be destroyed
+- Adapter does not control hardware directly
+- Adapter defers hardware control to it dependencies through `hal::ptr` members
 - Dependencies remain alive as long as the adapter holds them
 
 ## Allocation Patterns
@@ -266,7 +277,7 @@ For buffers of known size at construction time, use `hal::allocated_buffer<T>`:
 ```cpp
 // ❌ Vector allows runtime resizing during operation
 class my_driver {
-  std::pmr::vector<uint8_t> m_buffer;  // can allocate during reads!
+  std::pmr::vector<uint8_t> m_buffer;  // can allocate if push_back is called!
 };
 
 // ✅ Allocated buffer - fixed size, allocates only at construction
@@ -274,11 +285,13 @@ class my_driver {
   my_driver(hal::allocator alloc, std::size_t size)
     : m_buffer(alloc, size) {}
 
-  hal::allocated_buffer<uint8_t> m_buffer;  // no allocation during operation
+  // No APIs of this object are capable of allocation during operation.
+  // This also means this driver saves memory by not needing a "size" member.
+  hal::allocated_buffer<uint8_t> m_buffer;
 };
 ```
 
-### Storing Hal Interface Dependencies
+### Storing HAL Interface Dependencies
 
 Always use `hal::ptr<T>` for stored dependencies:
 
@@ -299,7 +312,8 @@ class mpu6050 {
 };
 ```
 
-Parameters that are **not stored** can be raw references:
+Passing an object by reference is allowed if the object's address is not
+stored/captured:
 
 ```cpp
 // ✅ Reference OK - consumed within the call, not retained
@@ -334,29 +348,12 @@ struct handler : mem::enable_strong_from_this<handler> {
 };
 ```
 
-### Self-References in Callbacks
-
-When an object needs to reference itself in a callback or async operation:
-
-```cpp
-// ✅ Use enable_strong_from_this
-class sensor : public mem::enable_strong_from_this<sensor> {
-public:
-  async::future<void> start_reading(async::context& ctx) {
-    auto self = strong_from_this();
-    timer->on_interrupt([self, ctx]() mutable {
-      co_await self->read_sample(ctx);
-    });
-    co_return;
-  }
-};
-```
-
 ## Design Guidelines
 
 ### ✅ Good Practices
 
-- **Allocate at construction time** — Never allocate during operations
+- Allocation is only permitted at object construction.
+- Deallocation is only permitted at object destruction.
 - **Use type erasure** — Return `hal::ptr<hal::interface>`, not concrete types
 - **Share interfaces, not implementations** — Depend on `hal::i2c`, not `lpc40::i2c`
 - **Let reference counting work** — Simplifies lifetime management automatically
@@ -364,9 +361,7 @@ public:
 
 ### ❌ Anti-Patterns
 
-- **Raw pointers as members** — Doesn't express ownership or lifetime
-- **Mixing `ptr` and raw pointers** — Breaks safety guarantees
-- **Reference members** — Deletes copy/move, limits flexibility
+- **Reference or pointers as members** — Doesn't express ownership or lifetime
 - **Allocating during operation** — Incompatible with real-time guarantees
 - **Circular ownership via `ptr`** — Use `weak_ptr` to break cycles
 
@@ -386,9 +381,13 @@ public:
 
 ## See Also
 
-- [Driver Types](driver_types.md) — How managers, resources, and adapters use memory
+- [Driver Types](driver_types.md) — How managers, resources, and adapters use
+  memory
 - [Pimpl Pattern](pimpl.md) — Hiding implementation details
-- [Construction Pattern](construction_pattern.md) — Factory pattern for safe creation
-- [Style Guide: S.6.2](../style.md#s62-storing-dependencies) — Storing dependencies as `hal::ptr<T>`
-- [Style Guide: S.7.3](../style.md#s73-use-pmr-for-allocation) — PMR allocation rules
+- [Construction Pattern](construction_pattern.md) — Factory pattern for safe
+  creation
+- [Style Guide: S.6.2](../style.md#s62-storing-dependencies) — Storing
+  dependencies as `hal::ptr<T>`
+- [Style Guide: S.7.3](../style.md#s73-use-pmr-for-allocation) — PMR allocation
+  rules
 - [`strong_ptr` API Docs](https://libhal.github.io/api/strong_ptr/main/)

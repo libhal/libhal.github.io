@@ -44,7 +44,7 @@ application use it.
 interface and have no virtual functions. The application holds them by
 `hal::ptr<ManagerType>` and interacts with them directly.
 
-**Hidden implementation via `enable_pimpl`.** All platform-specific state lives
+**Hidden implementation via `hal::pimpl<T>`.** All platform-specific state lives
 in a nested `impl` struct defined only in the module implementation file. The
 manager's public interface file forward-declares `struct impl` and derives from
 `hal::pimpl<T>`. See [Pimpl Pattern](pimpl.md).
