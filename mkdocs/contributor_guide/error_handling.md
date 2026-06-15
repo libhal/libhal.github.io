@@ -1,7 +1,7 @@
 # ‼️ Error Handling Design Philosophy
 
 !!! warning
-    These docs are with respect to libhal v4 and do not represent v5.
+    These docs use libhal v4 and do not represent v5.
 
 ## Core Principle
 
