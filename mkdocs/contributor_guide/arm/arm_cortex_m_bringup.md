@@ -1,7 +1,7 @@
 # 🧠 ARM Cortex-M Series Platform Bringup
 
 !!! warning
-    These docs are with respect to libhal v4 and do not represent v5.
+    These docs use libhal v4 and do not represent v5.
 
 To fully bring up an ARM Cortex-M series microcontroller for libhal, several
 critical elements need to be implemented:

@@ -110,13 +110,7 @@ libhal v5 organizes every driver into one of three architectural categories.
 Understanding the distinction keeps drivers composable and prevents ownership
 mistakes.
 
-![Driver Types](assets/driver_types.svg)
-
-| Type         | Owns hardware | Has vtable | Produced by         |
-| ------------ | ------------- | ---------- | ------------------- |
-| **Manager**  | ✅             | ❌          | `create()` factory  |
-| **Resource** | ❌             | ✅          | Manager acquisition |
-| **Adapter**  | ❌             | ✅          | `create()` factory  |
+![Driver Types](../assets/driver_types.svg)
 
 ### Managers
 
@@ -137,7 +131,7 @@ configuration, and vend resource objects to the rest of the application.
 Managers are constructed exclusively through a static `create()` factory that
 returns `hal::ptr<ManagerType>`. If initialization requires hardware
 communication (e.g., reading a sensor ID over I2C), `create()` is an
-coroutine and returns `hal::deferred_ptr<ManagerType>` instead.
+coroutine and returns `hal::future_ptr<ManagerType>` instead.
 Constructors are not directly accessible. Constructors require a `private_key`
 parameter that only the `create()` factory can provide.
 
@@ -166,8 +160,8 @@ is an implementation detail which is usually hidden in the manager's `.cpp`
 file.
 
 ```cpp
-hal::ptr<hal::i2c>         bus   = i2c_manager->acquire_i2c();
-hal::ptr<hal::output_pin>  led   = gpio_manager->acquire_output_pin(2);
+hal::ptr<hal::i2c>           i2c   = i2c_manager->acquire_i2c();
+hal::ptr<hal::output_pin>    led   = gpio_manager->acquire_output_pin(2);
 hal::ptr<hal::accelerometer> accel = imu->acquire_accelerometer();
 ```
 

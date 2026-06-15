@@ -27,20 +27,14 @@
   - [TBD](education/tbd.md)
 - 📚 Contributor Guides
   - [📜 Design Philosophy](contributor_guide/philosophy.md)
-  - [🗃️ Organization](contributor_guide/organization.md)
   - [🎨 Style Guide](contributor_guide/style.md)
-  - 🔗 Interface Design
-    - [Interface Design Philosophy](contributor_guide/interface_design/interface_design.md)
-    - [‼️ Error Handling Philosophy](contributor_guide/interface_design/error_handling.md)
-  - 🏗️ Driver Architecture
-    - [⚪️ Managers, Resources & Adapters](contributor_guide/driver_architecture/driver_types.md)
-    - [🔐 Pimpl Pattern](contributor_guide/driver_architecture/pimpl.md)
-    - [💾 Memory Model: hal::ptr & Allocators](contributor_guide/driver_architecture/memory_model.md)
-    - [🏗️ Construction Pattern](contributor_guide/driver_architecture/construction_pattern.md)
-    - [⚡ Async Policy & Coroutines](contributor_guide/driver_architecture/async_policy.md)
-  - 📦 Library Packaging
-    - [C++ Library Guide](contributor_guide/packaging/cpp_library.md)
-    - [Board Library Guide](contributor_guide/packaging/board_library.md)
+  - [✍️ Writing a Driver](contributor_guide/writing_a_driver.md)
+  - [⚡ Async Policy & Coroutines](contributor_guide/async_policy.md)
+  - [📦 C++ Conan Library Guide](contributor_guide/cpp_library.md)
+  - [‼️ Error Handling Philosophy](contributor_guide/error_handling.md)
+  - [📦 Conan Board Library Guide](contributor_guide/board_library.md)
+  - [🔗 Interface Design Philosophy](contributor_guide/interface_design.md)
+  - [🗃️ Ecosystem Organization](contributor_guide/organization.md)
   - [🏗️ Architectural Design Decisions](contributor_guide/architecture.md)
   - ARM
     - [🧠 ARM Cortex-M Bring Up](contributor_guide/arm/arm_cortex_m_bringup.md)

@@ -1,5 +1,8 @@
 # 🏗️ Architectural Design Decisions
 
+!!! warning
+    These docs use libhal v4 and do not represent v5.
+
 ## A.1 Always use modern C++
 
 libhal uses the modern C++. Meaning that libhal is will follow the most modern
@@ -363,27 +366,27 @@ take any callable type as input and call it when its `operator()` is called.
 The options for these callbacks are:
 
 - `std::function`
-    - PROS
-        - Part of the standard library
-        - Can take any callable type without restrictions
-    - CONS
-        - Allocating (compiler implementations will use SBO but the size of
-          those buffers are not specified in the standard and should not be
-          relied upon)
-        - Can be quite large in size (40 bytes on 32-bit arm)
+  - PROS
+    - Part of the standard library
+    - Can take any callable type without restrictions
+  - CONS
+    - Allocating (compiler implementations will use SBO but the size of
+      those buffers are not specified in the standard and should not be
+      relied upon)
+    - Can be quite large in size (40 bytes on 32-bit arm)
 - `function_ref`
-    - PROS
-        - Very lightweight (very fast construction)
-        - Very small size (2 pointers in size)
-    - CONS
-        - For this to work as a callback, the callable passed to the
-          `function_ref` must have a lifetime that is greater than the object
-          implementing the interface.
+  - PROS
+    - Very lightweight (very fast construction)
+    - Very small size (2 pointers in size)
+  - CONS
+    - For this to work as a callback, the callable passed to the
+        `function_ref` must have a lifetime that is greater than the object
+        implementing the interface.
 - `inplace_function`
-    - PROS
-        - Works and behaves just like `std::function`
-    - CONS
-        - Fixed callable size limit
+  - PROS
+    - Works and behaves just like `std::function`
+  - CONS
+    - Fixed callable size limit
 
 `std::function` is automatically out because it is allocating. Using
 `std::function` for any interface API would ensure that applications that
@@ -480,7 +483,6 @@ In order to provide the best experience for our developers as well as necessary
 features of the platform, libhal emphasizes prebuilt libraries over header only.
 
 !!! note
-
     Why the sudden change from A.4 to this? Supporting header-only made bringing
     up libhal much easier. The process of implementing prebuilt binaries
     required adding additional architecture settings, required the use of
