@@ -392,7 +392,7 @@ constexpr auto default_pin_config = hal::bit_value(0U)
   .insert<mode>(0x04)
   .clear<high_slew_rate>()
   .set<high_speed_mode>()
-  .to<std::uint32_t>();
+  .to<hal::u32>();
 ```
 
 **Tail chaining** - calling the next method directly on the return value of the
@@ -426,7 +426,7 @@ commonly arises when combining bytes read from a sensor over I2C or SPI.
 ```cpp
 // ✅ Readable concatenation with native syntax
 auto data = hal::write_then_read<2>(m_i2c, 0x11, addr, timeout);
-std::uint32_t val = data[0] << 4 | data[1] >> 4;
+hal::u32 val = data[0] << 4 | data[1] >> 4;
 ```
 
 Choose whichever form is clearer for the specific operation. The goal is
@@ -532,9 +532,9 @@ bool m_inverted;
 bool m_open_drain;
 
 // ✅ Three bits packed into one word
-static constexpr std::size_t enabled_bit    = 0;
-static constexpr std::size_t inverted_bit   = 1;
-static constexpr std::size_t open_drain_bit = 2;
+static constexpr hal::usize enabled_bit    = 0;
+static constexpr hal::usize inverted_bit   = 1;
+static constexpr hal::usize open_drain_bit = 2;
 std::bitset<3> m_flags;
 ```
 
@@ -621,7 +621,7 @@ variables, `constexpr` functions, or templates.
 #define CLAMP(x, lo, hi) ((x) < (lo) ? (lo) : (x) > (hi) ? (hi) : (x))
 
 // ✅ constexpr equivalents
-constexpr std::size_t max_channels = 8;
+constexpr hal::usize max_channels = 8;
 
 template<typename T>
 constexpr T clamp(T x, T lo, T hi) {
@@ -663,17 +663,17 @@ comes from.
 // ❌ Raw heap allocation - bypasses caller's memory strategy
 class my_driver {
   my_driver() {
-    m_buffer = new std::byte[256];
+    m_buffer = new hal::byte[256];
   }
-  std::byte* m_buffer;
+  hal::byte* m_buffer;
 };
 
 // ✅ PMR allocation - caller controls where memory comes from
 class my_driver {
-  my_driver(std::pmr::polymorphic_allocator<> p_resource, std::size_t p_size)
+  my_driver(std::pmr::polymorphic_allocator<> p_resource, hal::usize p_size)
     : m_buffer(p_resource, p_size)
   {}
-  hal::allocated_buffer<std::byte> m_buffer;
+  hal::allocated_buffer<hal::byte> m_buffer;
 };
 ```
 
@@ -781,7 +781,7 @@ if (!initialized) {
 }
 
 // ❌ Spin loop with no exit - hangs the system permanently
-while (!(reg->status & ready_bit)) {}
+while (true) {}
 
 // ✅ Throw and let the application handle it
 if (!initialized) {
@@ -803,10 +803,10 @@ Committing to `noexcept` prematurely closes that door.
 
 ```cpp
 // ❌ ABI commitment - cannot be un-noexcept without breaking callers
-[[nodiscard]] hal::result<std::uint16_t> read_sample() noexcept;
+[[nodiscard]] hal::u16 read_sample() noexcept;
 
 // ✅ No annotation - unannotated functions are implicitly potentially-throwing
-[[nodiscard]] hal::result<std::uint16_t> read_sample();
+[[nodiscard]] hal::u16 read_sample();
 ```
 
 ## S.8 Namespace Hygiene
@@ -818,56 +818,20 @@ namespace. Never place symbols in the global namespace or in `std`.
 
 ```cpp
 // ❌ Global namespace pollution
-class output_pin { ... };
-void configure_pin(output_pin& p_pin);
+export class output_pin { ... };
+export void configure_pin(output_pin& p_pin);
+export void configure_pin_mux(pin_t p_pin, u8 p_value);
 
 // ✅ Scoped to the library namespace
 namespace hal::lpc40 {
-  class output_pin { ... };
-  void configure_pin(output_pin& p_pin);
+  export class output_pin { ... };
+  export void configure_pin_mux(pin_t p_pin, u8 p_value);
 }
 ```
 
 Headers included via the global module fragment may introduce global
 namespace symbols. Do not re-expose them and do not rely on their names
 being available outside the translation unit that includes them.
-
-### S.8.2 Keep the `hal` namespace clean
-
-The `hal` namespace is shared across the entire ecosystem. Keep it clean by
-nesting implementation details, register maps, and bit mask definitions inside
-the class that uses them rather than placing them directly in `hal`.
-
-```cpp
-// ❌ Register and mask types pollute the shared namespace
-namespace hal {
-  struct uart_register_map { ... };
-  struct uart_control1 { ... };
-  class uart { ... };
-}
-
-// ✅ Implementation details are nested inside the class
-namespace hal::lpc40 {
-  class uart {
-    struct register_map {
-      std::uint32_t control1;
-      std::uint32_t control2;
-      std::uint32_t data;
-      std::uint32_t status;
-    };
-
-    struct control1_register {
-      static constexpr auto baud_divisor = hal::bit_mask::from(0, 15);
-      static constexpr auto enable       = hal::bit_mask::from(16);
-    };
-  };
-}
-```
-
-In general these implementation details should be entirely within the module
-implementation .cpp file. Anything defined there is invisible to consumers
-regardless of whether it carries export, keeping the interface file and
-namespace focused solely on the public API.
 
 ## S.9 Third-Party Libraries
 
@@ -951,7 +915,7 @@ void codec_process(frame_t* p_frame) {
 class codec {
   codec(std::pmr::polymorphic_allocator<> p_resource)
     : m_buffer(p_resource, 256) {}
-  hal::allocated_buffer<std::uint8_t> m_buffer;
+  hal::allocated_buffer<hal::u8> m_buffer;
 };
 ```
 
@@ -1040,12 +1004,12 @@ that header's API contract and may disappear at any time.
 ```cpp
 // ❌ Assumes <cstdint> arrives transitively
 #pragma once
-void set_baud(std::uint32_t p_rate);
+void set_baud(hal::u32 p_rate);
 
 // ✅ Declares its own dependency
 #pragma once
 #include <cstdint>
-void set_baud(std::uint32_t p_rate);
+void set_baud(hal::u32 p_rate);
 ```
 
 Also remember to remove unused headers.
@@ -1102,11 +1066,11 @@ standard-layout so that `sizeof` and `offsetof` are reliable.
 
 ```cpp
 struct register_map {
-  volatile std::uint32_t control;    // offset 0x00
-  volatile std::uint32_t status;     // offset 0x04
-  volatile std::uint32_t data;       // offset 0x08
-  std::uint32_t          reserved0;  // offset 0x0C - unused, not volatile
-  volatile std::uint32_t baud_rate;  // offset 0x10
+  volatile hal::u32 control;    // offset 0x00
+  volatile hal::u32 status;     // offset 0x04
+  volatile hal::u32 data;       // offset 0x08
+  hal::u32          reserved0;  // offset 0x0C - unused, not volatile
+  volatile hal::u32 baud_rate;  // offset 0x10
 };
 ```
 
@@ -1114,7 +1078,7 @@ Every readable or writable hardware register must be `volatile`. Reserved or
 unused registers that are never accessed do not need to be `volatile`, but
 must still be present to maintain correct offsets.
 
-Use `std::uint32_t`, `std::uint16_t`, or `std::uint8_t` to match the register
+Use `hal::u32`, `hal::u16`, or `hal::u8` to match the register
 width specified in the datasheet. Never use `int` or `unsigned int` directly
 as their width is implementation-defined.
 
@@ -1128,27 +1092,31 @@ interrupts, so every access must reach the hardware.
 ```cpp
 // ❌ Without volatile, the compiler may hoist the read out of the loop
 struct register_map {
-  std::uint32_t status;   // missing volatile
+  hal::u32 status;   // missing volatile
 };
 
 // The compiler sees no writes to status and may transform this into:
+//
 //   if (reg->status & ready_bit) { while(true) {} }
-while (!(reg->status & ready_bit)) {}
+//
+while (!(reg->status & ready_bit)) {
+  // Do some work that doesn't touch the status variable directly...
+}
 
 // ✅ volatile forces every iteration to re-read from the hardware address
 struct register_map {
-  volatile std::uint32_t status;
+  volatile hal::u32 status;
 };
 ```
 
 ### S.11.3 Obtain the register pointer via `reinterpret_cast`
 
-Declare the peripheral base address as a `constexpr std::uintptr_t` and cast
+Declare the peripheral base address as a `constexpr hal::uptr` and cast
 it to a pointer once. Store and pass the typed pointer, never the raw integer.
 
 ```cpp
 // ✅ Address constant is named and traced to the datasheet
-constexpr std::uintptr_t uart0_base = 0x4000'C000;
+constexpr hal::uptr uart0_base = 0x4000'C000;
 
 register_map* reg = reinterpret_cast<register_map*>(uart0_base);
 
@@ -1157,7 +1125,7 @@ hal::bit_modify(reg->control).set<enable>();
 
 ```cpp
 // ❌ Casting at every use site - type is implicit, address is not named
-*reinterpret_cast<std::uint32_t*>(0x4000'C004) |= 0x1;
+*reinterpret_cast<hal::u32*>(0x4000'C004) |= 0x1;
 ```
 
 `reinterpret_cast` is the only sanctioned cast for this operation. Do not use
@@ -1177,11 +1145,11 @@ module hal:gpio;
 namespace {
 
 struct register_map {
-  volatile std::uint32_t direction;
-  volatile std::uint32_t mask;
-  volatile std::uint32_t pin;
-  volatile std::uint32_t set;
-  volatile std::uint32_t clear;
+  volatile hal::u32 direction;
+  volatile hal::u32 mask;
+  volatile hal::u32 pin;
+  volatile hal::u32 set;
+  volatile hal::u32 clear;
 };
 
 struct direction_register {
