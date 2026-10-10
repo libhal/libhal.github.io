@@ -134,7 +134,14 @@ example. Lets clone the `libhal-arm-mcu` repo.
 
 ```bash
 git clone https://github.com/libhal/libhal-arm-mcu.git
-cd libhal-arm-mcu
+```
+
+The repo holds two major versions of the library side by side: `v1/` is the
+current stable release and `v2/` is in development. This guide uses `v1`, so
+move into that directory:
+
+```bash
+cd libhal-arm-mcu/v1
 ```
 
 To build a libhal demo, you must first create the latest version of the library
@@ -167,9 +174,16 @@ the demo applications:
     conan build demos -pr:a hal/tc/gcc -pr hal/mcu/lpc4078
     ```
 
-You can find binaries of your application within the
-`demos/build/lpc4078/MinSizeRel/` for `lpc4078` and
-`demos/build/stm32f103c8/MinSizeRel/` for the `stm32f103c8`
+Binaries are placed in `demos/build/<platform>-<compiler>-<version>/<build_type>/`.
+With the commands above, that is `demos/build/stm32f103c8-gcc-14/MinSizeRel/`
+for the `stm32f103c8` and `demos/build/lpc4078-gcc-14/MinSizeRel/` for the
+`lpc4078`. Each demo produces a `.elf`, `.elf.bin`, and `.elf.hex` file.
+
+!!! tip
+
+    To build with LLVM instead of GCC, replace `hal/tc/gcc` with
+    `hal/tc/llvm` in both commands. The build directory name changes to
+    match, e.g. `demos/build/stm32f103c8-clang-20/MinSizeRel/`.
 
 !!! error
 
@@ -215,8 +229,8 @@ In order to complete this tutorial you'll one of these devices:
     Replace `/dev/tty.usbserial-10` with the correct port
     name of the device plugged into your computer via USB.
 
-    Use `demos/build/stm32f103c8/Debug/uart.elf.bin` or replace it with any
-    other application to be uploaded.
+    Replace `uart.elf.bin` with any other application found in the
+    `demos/applications/` directory.
 
 === "LPC4078"
 
