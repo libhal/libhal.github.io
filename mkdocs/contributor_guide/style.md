@@ -160,6 +160,68 @@ Internal implementation details and private members do not require Doxygen
 comments, but non-obvious logic should have inline `//` comments explaining
 intent.
 
+### S.3.5 Make operator precedence explicit
+
+Do not rely on operator precedence. When an expression combines operators that
+bind at different levels, wrap each inner operation in parentheses so the
+grouping can be read without the precedence table. Safety-critical coding
+standards such as MISRA C++ require the same, because a misread precedence
+compiles cleanly and does the wrong thing.
+
+```cpp
+// ❌ The grouping depends on precedence
+auto const mask = 1U << width - 1U;  // Shifts by (width - 1)
+if (rate == 0 or frequency < min_frequency) {
+auto const divider = has_remainder ? whole_divider + 1U : whole_divider;
+
+// ✅ The grouping is written out
+auto const mask = (1U << width) - 1U;
+if ((rate == 0) or (frequency < min_frequency)) {
+auto const divider = has_remainder ? (whole_divider + 1U) : whole_divider;
+```
+
+Wrap:
+
+- An arithmetic, shift or bitwise operation inside an operation of a different
+  level: `(flags & mask) != 0`, `(a * b) + c`.
+- Each arithmetic operation inside another, even at the same level:
+  `(a + b) - c`, `(total / count) * scale`.
+- Each comparison joined by `and` or `or`: `(count != 0) and (index < size)`.
+- An `and` inside an `or`: `ready or (enabled and idle)`.
+- The condition and results of `?:` when they are operations:
+  `(index < size) ? data[index] : (filler + 1)`.
+- An operation under `not`: `not (a == b)`.
+
+Parentheses are not needed for:
+
+- A chain of one logical or bitwise operator: `a and b and c`, `a | b | c`.
+- Unary operators, calls, member access and subscripts: `not ready()`,
+  `-offset`, `*pointer`, `data[index + 1]`.
+- A whole function argument, subscript, return value, initializer, or right
+  side of an assignment: `f(a + b)`, `return a < b;`, `x = a * b;`.
+- Operator overloads that a library defines as its own notation, where the
+  precedence is part of how the notation reads. Write these the way the
+  library documents them, such as Boost.UT's
+  `expect(that % 180 == timing.ccr)`.
+
+### S.3.6 Write logical operators as words
+
+Use `and`, `or` and `not` for logical operators, never `&&`, `||` and `!`.
+Words are harder to misread or mistype: `&&` and `&` differ by one character,
+as do `||` and `|`, and a `!` in front of a call is easy to miss.
+
+```cpp
+// ❌
+if (!transmit.empty() && (count != 0) || retry) {
+
+// ✅
+if ((not transmit.empty() and (count != 0)) or retry) {
+```
+
+Only the logical operators become words. References keep `&` and `&&`
+(`T&&`, `spi(spi&&) = delete`, `auto& regs`), and address-of, the bitwise
+operators and `!=` stay as symbols.
+
 ## S.4 Modules
 
 libhal v5 and all libraries in the ecosystem use C++20 modules as the primary
