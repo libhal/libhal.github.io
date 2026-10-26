@@ -12,7 +12,7 @@ libhal will increment its major number to indicate that it has upgraded compiler
 versions.
 
 This decision exists to escape the issues of vendor and toolchain lock in thats
-prevalant in the C++ and embedded industry. With sufficient testing, upgrading
+prevalent in the C++ and embedded industry. With sufficient testing, upgrading
 compilers shouldn't result in bugs in applications.
 
 ## A.2 Interface Design Choices
@@ -198,7 +198,7 @@ input parameters to allow libraries to customize and control how the CI works.
 
 libhal's CI attempts to use as many tools as reasonable to make sure that the
 C++ source code follows the style guide, C++ core guidelines and retains a
-certain level of quality. All offical libhal libaries must opt in to the common
+certain level of quality. All official libhal libraries must opt in to the common
 libhal/libhal workflow.
 
 This helps to ensure that all projects are held to the same standard and
@@ -392,7 +392,7 @@ The options for these callbacks are:
 `std::function` for any interface API would ensure that applications that
 disallow dynamic allocations after boot or in general could never use them.
 
-`function_ref` has two great PROS but the largets CON is lifetime issues that
+`function_ref` has two great PROS but the largest CON is lifetime issues that
 are really easy to fall into. Specifically something like this:
 
 ```C++
@@ -417,7 +417,7 @@ pointers (`sizeof(std::intptr_t) * 2`). This size was chosen in order to be
 small and easily storable. Two pointers worth of size should be enough to hold
 a pointer to `this` in classes as well a pointer to some sort of state object.
 
-The size of the callback object was not choosen in order to improve the
+The size of the callback object was not chosen in order to improve the
 performance of calling callback setting class functions. Even with the small
 size of `hal::callback`, its too large to take advantage of register based
 parameter passing. Thus the size of 2 pointers was mostly to help in keeping
@@ -449,7 +449,7 @@ compile time checks as well.
 This amends architectural component A.4 and pivots away from header only
 libraries over to prebuilt binaries.
 
-The following are the reasons why supporting, producing and distibuting prebuilt
+The following are the reasons why supporting, producing and distributing prebuilt
 binaries is critical to libhal.
 
 - ⏱️ **Faster compilation times**: When a project grows in size, compiling
@@ -488,7 +488,7 @@ features of the platform, libhal emphasizes prebuilt libraries over header only.
     required adding additional architecture settings, required the use of
     conan profiles to make the arm-gnu-toolchain available globally for all
     packages, figuring out how to insert architectural compiler flags and ensure
-    they propogate to all packages took time and was a complex process. And
+    they propagate to all packages took time and was a complex process. And
     header-only libraries allowed the initial version of libhal to bypass all
     of this.
 
@@ -523,7 +523,7 @@ remove that, your unwind time is deterministic.
 
 The issue with massive code bloat when you enable `-fexceptions` only comes
 from the linux version of `std::terminate` which uses `<iostream>` and some
-other locale related stuff. Simply overriding this with your own implmentation
+other locale related stuff. Simply overriding this with your own implementation
 fixes this issue and reduces code size by ~100kB.
 
 A link to a paper written by Khalil Estell will be linked here to describe in

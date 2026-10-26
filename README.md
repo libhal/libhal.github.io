@@ -9,7 +9,7 @@ our static documentation and [sphinx](https://www.sphinx-doc.org/en/master/)
 for our API documentation
 
 If you'd like to contribute to the libhal website and documentation you can do
-so by quickly setting up the enviornement by running the following commands.
+so by quickly setting up the environment by running the following commands.
 Please note that the build script is designed for a bash environment and is
 intended to be used on unix-based operating systems. The documentation is fully
 compatible with Windows, however you will need to write your own `.bat` install
