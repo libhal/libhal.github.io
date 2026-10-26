@@ -199,6 +199,10 @@ Parentheses are not needed for:
   `-offset`, `*pointer`, `data[index + 1]`.
 - A whole function argument, subscript, return value, initializer, or right
   side of an assignment: `f(a + b)`, `return a < b;`, `x = a * b;`.
+- Operator overloads that a library defines as its own notation, where the
+  precedence is part of how the notation reads. Write these the way the
+  library documents them, such as Boost.UT's
+  `expect(that % 180 == timing.ccr)`.
 
 ### S.3.6 Write logical operators as words
 
