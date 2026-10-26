@@ -23,13 +23,13 @@ pipx install pyocd
     - For SWD (most common):
         - Connect GND (Ground)
         - Connect SWDIO (Data line)
-        - Connect SWDCLK (Clock line)
+        - Connect SWCLK (Clock line)
     - If your board uses JTAG:
         - Connect GND, TDI, TMS, TCK, and TDO pins
     - If you have a JTAG device that supports SWD
         - Connect GND
         - Connect JTAG TMS to MCU SWDIO
-        - Connect JTAG TCK to MCU SWDCLCK
+        - Connect JTAG TCK to MCU SWCLK
 
 !!! important
     Double-check all connections! Incorrect wiring can damage your board,

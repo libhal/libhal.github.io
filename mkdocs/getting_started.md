@@ -105,7 +105,7 @@ pipx install "conan>=2.18.0"
 
 ## 🔧 Setting up Conan
 
-First install the libhal's conan configuration which is done via the commnd below.
+First install the libhal's conan configuration which is done via the command below.
 
 ```bash
 conan config install https://github.com/libhal/conan-config2.git

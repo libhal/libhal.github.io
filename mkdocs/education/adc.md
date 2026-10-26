@@ -733,7 +733,7 @@ void application()
 }
 ```
 
-All tests executed on an stm32f103c8 which featues a Cortex-M3 processor which
+All tests executed on an stm32f103c8 which features a Cortex-M3 processor which
 does not include a floating point unit. Using GCC 12.3.1.
 
 Built using the following commands:

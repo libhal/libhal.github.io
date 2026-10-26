@@ -207,7 +207,7 @@ application.
 The finer details about linker scripts and how they work can be found in the
 resources below:
 
-- [Mastering the GNU linker script by AllThingsEmbeddd](https://allthingsembedded.com/post/2020-04-11-mastering-the-gnu-linker-script/): Easy to learn 13 min read
+- [Mastering the GNU linker script by AllThingsEmbedded](https://allthingsembedded.com/post/2020-04-11-mastering-the-gnu-linker-script/): Easy to learn 13 min read
 - ["The most thoroughly commented linker script (probably)" by Thea "Stargirl" Flowers](https://blog.thea.codes/the-most-thoroughly-commented-linker-script/):
   A very thoroughly documented and easy read on linker scripts
 - [GNU Linker Scripts](https://ftp.gnu.org/old-gnu/Manuals/ld-2.9.1/html_chapter/ld_3.html): Full user specification, if you need or want those details
