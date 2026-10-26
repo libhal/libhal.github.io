@@ -184,6 +184,8 @@ Wrap:
 
 - An arithmetic, shift or bitwise operation inside an operation of a different
   level: `(flags & mask) != 0`, `(a * b) + c`.
+- Each arithmetic operation inside another, even at the same level:
+  `(a + b) - c`, `(total / count) * scale`.
 - Each comparison joined by `and` or `or`: `(count != 0) and (index < size)`.
 - An `and` inside an `or`: `ready or (enabled and idle)`.
 - The condition and results of `?:` when they are operations:
@@ -192,7 +194,7 @@ Wrap:
 
 Parentheses are not needed for:
 
-- A chain of operators at one level: `a + b - c`, `a and b and c`, `a | b | c`.
+- A chain of one logical or bitwise operator: `a and b and c`, `a | b | c`.
 - Unary operators, calls, member access and subscripts: `not ready()`,
   `-offset`, `*pointer`, `data[index + 1]`.
 - A whole function argument, subscript, return value, initializer, or right
