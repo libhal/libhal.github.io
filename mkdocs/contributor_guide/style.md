@@ -222,6 +222,43 @@ Only the logical operators become words. References keep `&` and `&&`
 (`T&&`, `spi(spi&&) = delete`, `auto& regs`), and address-of, the bitwise
 operators and `!=` stay as symbols.
 
+### S.3.7 Leave an infinite loop's body empty
+
+When a loop with a constant condition, such as `while (true)`, has nothing to
+do, leave its body empty and put a comment inside the braces saying why. Do not
+write `continue;` in it.
+
+The compiler may assume that a loop ends unless it performs I/O, a `volatile`
+access, or an atomic or synchronization operation. A body of `continue;` does
+none of these, so Clang deletes the loop, and execution falls through into
+whatever code follows it. An empty body with a constant condition is exempt
+(P2809), so that loop stays.
+
+```cpp
+// ❌ Clang deletes this loop and falls into the next function
+while (true) {
+  continue;
+}
+
+// ✅ Spins forever
+while (true) {
+  // Halt here and wait for a debugger to connect.
+}
+```
+
+A loop whose condition reads `volatile` or atomic memory, such as polling a
+register or a spin lock, can keep `continue;`. The read is a side effect, so
+the loop stays.
+
+```cpp
+while (hal::bit_extract<state>(reg->status) == states::busy) {
+  continue;
+}
+```
+
+Google's C++ style guide allows either `{}` or `continue` for an empty loop
+body. For a loop with a constant condition, only `{}` is safe.
+
 ## S.4 Modules
 
 libhal v5 and all libraries in the ecosystem use C++20 modules as the primary

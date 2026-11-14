@@ -72,7 +72,6 @@ supported by the `libhal-micromod` project.
       } catch (...) {
         while (true) {
           // halt here and wait for a debugger to connect
-          continue;
         }
       }
 

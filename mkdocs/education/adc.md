@@ -400,9 +400,8 @@ resource_list resources{};
   bool valid = resources.status_led && resources.clock;
 
   if (not valid) {
-    // spin here until debugger is connected
     while (true) {
-      continue;
+      // spin here until debugger is connected
     }
   }
 
